@@ -1,7 +1,5 @@
 package pl.harvestubezpieczenia.harvestapp.domain.ports;
 
-import pl.harvestubezpieczenia.harvestapp.domain.model.CropKind;
-
 import java.util.List;
 
 public interface CrudRepo<T> {
