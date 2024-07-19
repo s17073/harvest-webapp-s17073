@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pl.harvestubezpieczenia.harvestapp.domain.model.CropKind;
-import pl.harvestubezpieczenia.harvestapp.domain.services.CropKindService;
+import pl.harvestubezpieczenia.harvestapp.domain.services.GenericService;
 
 import java.util.List;
 
@@ -12,26 +12,34 @@ import java.util.List;
 @RequestMapping("cropkind")
 public class CropKindController {
 
-    private final CropKindService cropKindService;
+
+    private final GenericService<CropKind> genericService;
+
 
     @Autowired
-    public CropKindController(CropKindService cropKindService) {
-        this.cropKindService = cropKindService;
+    public CropKindController(GenericService<CropKind> genericService) {
+        this.genericService = genericService;
     }
 
+
     @GetMapping
-    public ResponseEntity<List<CropKind>> getAllCropKinds() {
-        return cropKindService.getAllCropKinds();
+    public ResponseEntity<List<CropKind>> getAllItems() {
+        return genericService.getAllItems();
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<CropKind> getItemByID(@PathVariable int id){
+        return genericService.getItemByID(id);
     }
 
     @PostMapping
-    public ResponseEntity<String> addCropKind(@RequestBody CropKind cropKind){
-        return cropKindService.addCropKind(cropKind);
+    public ResponseEntity<String> addItem(@RequestBody CropKind cropKind){
+        return genericService.addItem(cropKind);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> removeCropKindById(@PathVariable int id){
-        return cropKindService.removeCropKindById(id);
+    public ResponseEntity<String> removeItemById(@PathVariable int id){
+        return genericService.removeItemById(id);
     }
 
 }

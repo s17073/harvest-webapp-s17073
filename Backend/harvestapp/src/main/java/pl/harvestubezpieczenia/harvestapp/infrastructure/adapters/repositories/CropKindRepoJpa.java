@@ -5,7 +5,7 @@ import pl.harvestubezpieczenia.harvestapp.domain.model.CropKind;
 import pl.harvestubezpieczenia.harvestapp.domain.ports.CropKindRepo;
 
 @Repository
-public interface CropKindRepoJpa extends CrudRepoJpa<CropKind, Long>, CropKindRepo {
+public interface CropKindRepoJpa extends GenericCrudRepoJpa<CropKind, Long>, CropKindRepo {
 
 
 }
