@@ -10,6 +10,4 @@ public interface GenericCrudRepo<T> {
 
     void addItem(T t);
 
-    void removeItemById(T t);
-
 }

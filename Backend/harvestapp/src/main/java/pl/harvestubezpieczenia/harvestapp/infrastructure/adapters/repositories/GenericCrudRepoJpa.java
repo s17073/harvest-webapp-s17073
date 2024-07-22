@@ -17,9 +17,4 @@ public interface GenericCrudRepoJpa<T, ID> extends JpaRepository<T, ID>, Generic
         save(t);
     }
 
-    default void removeItemById(T t){
-        delete(t);
-    }
-
-
 }

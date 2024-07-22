@@ -42,4 +42,9 @@ public class CropKindController {
         return genericService.removeItemById(id);
     }
 
+    @PutMapping("/{id}")
+    public ResponseEntity<String> updateItem(@RequestBody CropKind cropKind, @PathVariable int id){
+        return genericService.updateItem(cropKind, id);
+    }
+
 }

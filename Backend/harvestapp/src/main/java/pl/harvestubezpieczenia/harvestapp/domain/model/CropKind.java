@@ -1,5 +1,6 @@
 package pl.harvestubezpieczenia.harvestapp.domain.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -21,9 +22,12 @@ public class CropKind implements GenericCrudModel{
     Timestamp dataDodania;
     Timestamp dataUsuniecia;
 
+    @JsonIgnore
     public String getName(){
         return nazwaUprawy;
     }
+
+    @JsonIgnore
     public int getId(){
         return idRodzajUprawy;
     }
