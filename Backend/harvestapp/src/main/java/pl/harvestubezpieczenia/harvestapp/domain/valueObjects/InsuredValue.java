@@ -10,8 +10,11 @@ public record InsuredValue(double wartoscRynkowa, double wartoscMax) {
     }
 
     public InsuredValue{
-        if(wartoscRynkowa > wartoscMax && wartoscMax > 0){
-            throw new IllegalArgumentException("wartoscRynkowa: " + wartoscRynkowa + " > wartoscMax: " + wartoscMax);
+        if(wartoscRynkowa > wartoscMax && wartoscMax > 0) {
+            throw new IllegalArgumentException("The maximum value (" + wartoscMax + ") cannot be lower than the market value (" + wartoscRynkowa + ")");
+        }
+        if(wartoscRynkowa < 0 || wartoscMax < 0) {
+            throw new IllegalArgumentException("The value cannot be less than 0.");
         }
     }
 

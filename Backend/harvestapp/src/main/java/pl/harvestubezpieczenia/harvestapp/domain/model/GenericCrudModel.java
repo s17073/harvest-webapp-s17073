@@ -4,9 +4,8 @@ import pl.harvestubezpieczenia.harvestapp.domain.valueObjects.ModificationDate;
 
 public interface GenericCrudModel {
 
-    String getName();
     int getId();
-
+    String getName();
     void setDataModyfikacji(ModificationDate modificationDate);
     ModificationDate getDataModyfikacji();
 
