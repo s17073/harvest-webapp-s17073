@@ -24,20 +24,20 @@ public class GenericService<E extends GenericCrudModel, D extends CropKindDTO> {
         this.genericMapper = genericMapper;
     }
 
-    public ResponseEntity<List<E>> getAllItems() {
-        List<E> activeItems = new ArrayList<>();
+    public ResponseEntity<List<D>> getAllItems() {
+        List<D> activeItemsDto = new ArrayList<>();
 
         for(E e: genericCrudRepo.getAllItems()){
-            if (e.getDataModyfikacji().dataUsuniecia() == null) activeItems.add(e);
+            if (e.getDataModyfikacji().dataUsuniecia() == null) activeItemsDto.add(genericMapper.mapToDto(e));
         }
 
-        return new ResponseEntity<>(activeItems, HttpStatus.OK);
+        return new ResponseEntity<>(activeItemsDto, HttpStatus.OK);
     }
 
-    public ResponseEntity<E> getItemByID(int id) {
-        for(E t: genericCrudRepo.getAllItems()){
-            if(t.getId() == id){
-                return new ResponseEntity<>(t, HttpStatus.OK);
+    public ResponseEntity<D> getItemByID(int id) {
+        for(E e: genericCrudRepo.getAllItems()){
+            if(e.getId() == id){
+                return new ResponseEntity<>(genericMapper.mapToDto(e), HttpStatus.OK);
             }
         }
         return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);

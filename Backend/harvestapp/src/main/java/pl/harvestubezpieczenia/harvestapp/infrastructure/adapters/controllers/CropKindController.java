@@ -27,12 +27,12 @@ public class CropKindController {
 
 
     @GetMapping
-    public ResponseEntity<List<CropKind>> getAllItems() {
+    public ResponseEntity<List<CropKindDTO>> getAllItems() {
         return genericService.getAllItems();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<CropKind> getItemByID(@PathVariable int id){
+    public ResponseEntity<CropKindDTO> getItemByID(@PathVariable int id){
         return genericService.getItemByID(id);
     }
 

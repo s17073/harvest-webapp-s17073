@@ -23,4 +23,16 @@ public class CropKindMapper implements GenericMapper<CropKind, CropKindDTO> {
         return cropKind;
     }
 
+    @Override
+    public CropKindDTO mapToDto(CropKind cropKind) {
+        CropKindDTO cropKindDto = new CropKindDTO();
+        cropKindDto.setNazwaUprawy(cropKind.getNazwaUprawy().nazwaUprawy());
+        cropKindDto.setTaryfa(cropKind.getTaryfa().taryfa());
+        cropKindDto.setCzyAktywna(cropKind.isCzyAktywna());
+        cropKindDto.setWartoscRynkowa(cropKind.getWartoscUbezpieczenia().wartoscRynkowa());
+        cropKindDto.setWartoscMax(cropKind.getWartoscUbezpieczenia().wartoscMax());
+
+        return cropKindDto;
+    }
+
 }

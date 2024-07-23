@@ -9,5 +9,6 @@ public class CropKindDTO implements GenericDTO{
     private String taryfa;
     private boolean czyAktywna;
     private double wartoscRynkowa;
+    private double wartoscMax;
 
 }

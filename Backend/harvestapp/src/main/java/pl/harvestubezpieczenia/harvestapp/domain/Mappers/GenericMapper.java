@@ -8,4 +8,6 @@ public interface GenericMapper<E extends GenericCrudModel, D> {
 
     E mapToEntity(D dto);
 
+    D mapToDto(E entity);
+
 }
