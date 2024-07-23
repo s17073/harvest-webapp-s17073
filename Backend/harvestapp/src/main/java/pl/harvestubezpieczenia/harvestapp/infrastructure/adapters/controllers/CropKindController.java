@@ -3,7 +3,9 @@ package pl.harvestubezpieczenia.harvestapp.infrastructure.adapters.controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import pl.harvestubezpieczenia.harvestapp.domain.DTOs.CropKindDTO;
 import pl.harvestubezpieczenia.harvestapp.domain.model.CropKind;
+import pl.harvestubezpieczenia.harvestapp.domain.services.CropKindService;
 import pl.harvestubezpieczenia.harvestapp.domain.services.GenericService;
 
 import java.util.List;
@@ -13,12 +15,14 @@ import java.util.List;
 public class CropKindController {
 
 
-    private final GenericService<CropKind> genericService;
+    private final GenericService<CropKind, CropKindDTO> genericService;
+    private final CropKindService cropKindService;
 
 
     @Autowired
-    public CropKindController(GenericService<CropKind> genericService) {
+    public CropKindController(GenericService<CropKind, CropKindDTO> genericService, CropKindService cropKindService) {
         this.genericService = genericService;
+        this.cropKindService = cropKindService;
     }
 
 
@@ -33,8 +37,8 @@ public class CropKindController {
     }
 
     @PostMapping
-    public ResponseEntity<String> addItem(@RequestBody CropKind cropKind){
-        return genericService.addItem(cropKind);
+    public ResponseEntity<String> addItem(@RequestBody CropKindDTO cropKindDTO) {
+        return cropKindService.addItem(cropKindDTO);
     }
 
     @DeleteMapping("/{id}")
@@ -43,8 +47,8 @@ public class CropKindController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<String> updateItem(@RequestBody CropKind cropKind, @PathVariable int id){
-        return genericService.updateItem(cropKind, id);
+    public ResponseEntity<String> updateItem(@RequestBody CropKindDTO cropKindDTO, @PathVariable int id){
+        return genericService.updateItem(cropKindDTO, id);
     }
 
 }

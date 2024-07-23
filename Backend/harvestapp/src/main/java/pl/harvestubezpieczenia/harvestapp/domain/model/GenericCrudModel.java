@@ -1,13 +1,13 @@
 package pl.harvestubezpieczenia.harvestapp.domain.model;
 
-
-import java.sql.Timestamp;
+import pl.harvestubezpieczenia.harvestapp.domain.valueObjects.ModificationDate;
 
 public interface GenericCrudModel {
 
     String getName();
     int getId();
-    void setDataUsuniecia(Timestamp dataUsuniecia);
-    Timestamp getDataUsuniecia();
+
+    void setDataModyfikacji(ModificationDate modificationDate);
+    ModificationDate getDataModyfikacji();
 
 }

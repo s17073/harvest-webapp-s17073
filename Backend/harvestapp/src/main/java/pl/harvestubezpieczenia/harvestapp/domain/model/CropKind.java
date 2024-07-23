@@ -3,8 +3,8 @@ package pl.harvestubezpieczenia.harvestapp.domain.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
-
-import java.sql.Timestamp;
+import pl.harvestubezpieczenia.harvestapp.domain.valueObjects.InsuredValue;
+import pl.harvestubezpieczenia.harvestapp.domain.valueObjects.ModificationDate;
 
 @Data
 @Entity
@@ -17,10 +17,11 @@ public class CropKind implements GenericCrudModel{
     private String nazwaUprawy;
     private String taryfa;
     private boolean czyAktywna;
-    double wartoscRynkowa;
-    double wartoscMax;
-    Timestamp dataDodania;
-    Timestamp dataUsuniecia;
+
+    @Embedded
+    private InsuredValue wartoscUbezpieczenia;
+    @Embedded
+    private ModificationDate dataModyfikacji;
 
     @JsonIgnore
     public String getName(){

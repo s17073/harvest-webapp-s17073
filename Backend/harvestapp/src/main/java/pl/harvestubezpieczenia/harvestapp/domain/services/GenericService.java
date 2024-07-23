@@ -4,35 +4,38 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import pl.harvestubezpieczenia.harvestapp.domain.DTOs.CropKindDTO;
+import pl.harvestubezpieczenia.harvestapp.domain.Mappers.GenericMapper;
 import pl.harvestubezpieczenia.harvestapp.domain.model.GenericCrudModel;
 import pl.harvestubezpieczenia.harvestapp.domain.ports.GenericCrudRepo;
-
-import java.sql.Timestamp;
+import pl.harvestubezpieczenia.harvestapp.domain.valueObjects.ModificationDate;
 import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class GenericService<T extends GenericCrudModel> {
+public class GenericService<E extends GenericCrudModel, D extends CropKindDTO> {
 
-    private final GenericCrudRepo<T> genericCrudRepo;
+    private final GenericCrudRepo<E> genericCrudRepo;
+    private final GenericMapper<E,D> genericMapper;
 
     @Autowired
-    public GenericService(GenericCrudRepo<T> genericCrudRepo) {
+    public GenericService(GenericCrudRepo<E> genericCrudRepo, GenericMapper<E, D> genericMapper) {
         this.genericCrudRepo = genericCrudRepo;
+        this.genericMapper = genericMapper;
     }
 
-    public ResponseEntity<List<T>> getAllItems() {
-        List<T> activeItems = new ArrayList<>();
+    public ResponseEntity<List<E>> getAllItems() {
+        List<E> activeItems = new ArrayList<>();
 
-        for(T t: genericCrudRepo.getAllItems()){
-            if (t.getDataUsuniecia() == null) activeItems.add(t);
+        for(E e: genericCrudRepo.getAllItems()){
+            if (e.getDataModyfikacji().dataUsuniecia() == null) activeItems.add(e);
         }
 
         return new ResponseEntity<>(activeItems, HttpStatus.OK);
     }
 
-    public ResponseEntity<T> getItemByID(int id) {
-        for(T t: genericCrudRepo.getAllItems()){
+    public ResponseEntity<E> getItemByID(int id) {
+        for(E t: genericCrudRepo.getAllItems()){
             if(t.getId() == id){
                 return new ResponseEntity<>(t, HttpStatus.OK);
             }
@@ -40,63 +43,64 @@ public class GenericService<T extends GenericCrudModel> {
         return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
     }
 
-    public ResponseEntity<String> addItem(T t) {
-        genericCrudRepo.addItem(t);
-        return new ResponseEntity<>(t.getName() + " successfully added to the database.", HttpStatus.CREATED);
+    public ResponseEntity<String> addItem(D dto) {
+
+        E ItemToAdd = genericMapper.mapToEntity(dto);
+
+        genericCrudRepo.addItem(ItemToAdd);
+        return new ResponseEntity<>(ItemToAdd.getName() + " successfully added to the database.", HttpStatus.CREATED);
     }
 
     public ResponseEntity<String> removeItemById(int id) {
-        String NameOfDeleted;
-        T itemToUpdate = null;
+        String NameOfRemovedItem;
+        E itemToRemove = null;
 
-        for(T t: genericCrudRepo.getAllItems()){
-            if(t.getId() == id) {
-                itemToUpdate = t;
+        for(E e: genericCrudRepo.getAllItems()){
+            if(e.getId() == id) {
+                itemToRemove = e;
                 break;
             }
         }
 
-        if(itemToUpdate == null){
+        if(itemToRemove == null){
             return new ResponseEntity<>("ID: " + id + " not found.", HttpStatus.NOT_FOUND);
-        } else if (itemToUpdate.getDataUsuniecia() != null){
+        } else if (itemToRemove.getDataModyfikacji().dataUsuniecia() != null){
             return new ResponseEntity<>("ID: " + id + " has already been deleted.", HttpStatus.FORBIDDEN);
         }
 
-        NameOfDeleted = itemToUpdate.getName();
-        itemToUpdate.setDataUsuniecia(new Timestamp(System.currentTimeMillis()));
-        genericCrudRepo.addItem(itemToUpdate);
+        NameOfRemovedItem = itemToRemove.getName();
+        itemToRemove.setDataModyfikacji(new ModificationDate(itemToRemove.getDataModyfikacji().dataDodania()));
 
-        return new ResponseEntity<>(NameOfDeleted + " successfully deleted from the database", HttpStatus.OK);
+        genericCrudRepo.addItem(itemToRemove);
+
+        return new ResponseEntity<>(NameOfRemovedItem + " successfully deleted from the database", HttpStatus.OK);
     }
 
-    public ResponseEntity<String> updateItem(T t, int id) {
-        String NameOfDeleted;
-        T itemToUpdate = null;
+    public ResponseEntity<String> updateItem(D dto, int id) {
+        String NameOfRemovedItem;
+        E itemToUpdate = null;
 
-        for(T i: genericCrudRepo.getAllItems()){
+        for(E i: genericCrudRepo.getAllItems()){
             if(i.getId() == id) {
                 itemToUpdate = i;
                 break;
             }
         }
 
-        try {
-            t.getClass().getMethod("getEntityName");
-        } catch (NoSuchMethodException e) {
-            throw new RuntimeException(e);
-        }
-
         if(itemToUpdate == null){
             return new ResponseEntity<>("ID: " + id + " not found.", HttpStatus.NOT_FOUND);
-        } else if (itemToUpdate.getDataUsuniecia() != null){
+        } else if (itemToUpdate.getDataModyfikacji().dataUsuniecia() != null){
             return new ResponseEntity<>("ID: " + id + " has already been deleted.", HttpStatus.FORBIDDEN);
         }
 
-        NameOfDeleted = itemToUpdate.getName();
-        itemToUpdate.setDataUsuniecia(new Timestamp(System.currentTimeMillis()));
-        genericCrudRepo.addItem(itemToUpdate);
-        genericCrudRepo.addItem(t);
+        NameOfRemovedItem = itemToUpdate.getName();
 
-        return new ResponseEntity<>(NameOfDeleted + " successfully updated.", HttpStatus.OK);
+        E itemToAdd = genericMapper.mapToEntity(dto);
+
+        itemToUpdate.setDataModyfikacji(new ModificationDate(itemToUpdate.getDataModyfikacji().dataDodania()));
+        genericCrudRepo.addItem(itemToUpdate);
+        genericCrudRepo.addItem(itemToAdd);
+
+        return new ResponseEntity<>(NameOfRemovedItem + " successfully updated.", HttpStatus.OK);
     }
 }
