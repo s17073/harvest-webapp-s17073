@@ -5,7 +5,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 import pl.harvestubezpieczenia.harvestapp.domain.valueObjects.InsuredValue;
 import pl.harvestubezpieczenia.harvestapp.domain.valueObjects.ModificationDate;
-import pl.harvestubezpieczenia.harvestapp.domain.valueObjects.Name;
+import pl.harvestubezpieczenia.harvestapp.domain.valueObjects.CropKindName;
 import pl.harvestubezpieczenia.harvestapp.domain.valueObjects.Season;
 
 @Data
@@ -18,7 +18,7 @@ public class CropKind implements GenericCrudModel{
     private int idRodzajUprawy;
 
     @Embedded
-    private Name nazwaUprawy;
+    private CropKindName nazwaUprawy;
     @Embedded
     private Season taryfa;
 

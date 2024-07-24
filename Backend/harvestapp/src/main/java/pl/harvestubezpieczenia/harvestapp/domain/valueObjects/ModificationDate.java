@@ -15,4 +15,17 @@ public record ModificationDate(Timestamp dataDodania, Timestamp dataUsuniecia) {
         this(dataDodania, new Timestamp(System.currentTimeMillis()));
     }
 
+    public ModificationDate{
+        if(dataDodania == null)
+            throw new IllegalArgumentException("'dataDodania' cannot be null");
+
+        if(dataUsuniecia == null){
+            if(dataDodania.after(new Timestamp(System.currentTimeMillis())))
+                throw new IllegalArgumentException("'dataDodania' cannot be after current Timestamp");
+        } else{
+            if(dataUsuniecia.before(dataDodania))
+                throw new IllegalArgumentException("'dataUsuniecia' cannot be before 'dataDodania'");
+        }
+    }
+
 }
