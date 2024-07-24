@@ -1,6 +1,9 @@
 package pl.harvestubezpieczenia.harvestapp.domain.valueObjects;
 
 import jakarta.persistence.Embeddable;
+import pl.harvestubezpieczenia.harvestapp.domain.exceptions.MarketValueBelowMinimumException;
+import pl.harvestubezpieczenia.harvestapp.domain.exceptions.MaxValueBelowMinimumException;
+import pl.harvestubezpieczenia.harvestapp.domain.exceptions.MaxValueLowerThanMarketValueException;
 
 @Embeddable
 public record InsuredValue(double wartoscRynkowa, double wartoscMax) {
@@ -11,11 +14,11 @@ public record InsuredValue(double wartoscRynkowa, double wartoscMax) {
 
     public InsuredValue{
         if(wartoscRynkowa > wartoscMax && wartoscMax > 0)
-            throw new IllegalArgumentException("The maximum value (" + wartoscMax + ") cannot be lower than the market value (" + wartoscRynkowa + ")");
+            throw new MaxValueLowerThanMarketValueException(wartoscMax, wartoscRynkowa);
         if(wartoscRynkowa < 100)
-            throw new IllegalArgumentException("The value of 'wartoscRynkowa' (" + wartoscRynkowa + ") cannot be less than 100.");
+            throw new MarketValueBelowMinimumException(wartoscRynkowa);
         if(wartoscMax < 120)
-            throw new IllegalArgumentException("The value of 'wartoscMax' (" + wartoscMax + ") cannot be less than 120.");
+            throw new MaxValueBelowMinimumException(wartoscMax);
     }
 
 }
