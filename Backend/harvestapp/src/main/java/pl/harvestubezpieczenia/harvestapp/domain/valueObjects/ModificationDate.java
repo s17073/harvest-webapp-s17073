@@ -3,6 +3,7 @@ package pl.harvestubezpieczenia.harvestapp.domain.valueObjects;
 import jakarta.persistence.Embeddable;
 import pl.harvestubezpieczenia.harvestapp.domain.exceptions.AdditionDateInFutureException;
 import pl.harvestubezpieczenia.harvestapp.domain.exceptions.DeletionDateBeforeAdditionDateException;
+import pl.harvestubezpieczenia.harvestapp.domain.exceptions.DeletionDateInFutureException;
 import pl.harvestubezpieczenia.harvestapp.domain.exceptions.EmptyAdditionDateException;
 
 import java.sql.Timestamp;
@@ -19,13 +20,15 @@ public record ModificationDate(Timestamp dataDodania, Timestamp dataUsuniecia) {
     }
 
     public ModificationDate{
-        if(dataDodania == null)
+        if(dataDodania == null || dataDodania.getTime() == 0)
             throw new EmptyAdditionDateException();
 
         if(dataUsuniecia == null){
             if(dataDodania.after(new Timestamp(System.currentTimeMillis())))
                 throw new AdditionDateInFutureException();
         } else{
+            if(dataUsuniecia.after(new Timestamp(System.currentTimeMillis())))
+                throw new DeletionDateInFutureException();
             if(dataUsuniecia.before(dataDodania))
                 throw new DeletionDateBeforeAdditionDateException();
         }

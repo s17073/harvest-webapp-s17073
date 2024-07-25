@@ -8,12 +8,12 @@ import pl.harvestubezpieczenia.harvestapp.domain.exceptions.InvalidSeasonExcepti
 public record Season(String taryfa) {
 
     public Season {
-        if(taryfa == null || taryfa.isEmpty()){
+        if(taryfa == null || taryfa.trim().isEmpty()){
             throw new EmptySeasonException();
-        } if (!(taryfa.equalsIgnoreCase("WIOSNA") || taryfa.equalsIgnoreCase("ZIMA"))) {
+        } if (!(taryfa.trim().equalsIgnoreCase("WIOSNA") || taryfa.trim().equalsIgnoreCase("ZIMA"))) {
             throw new InvalidSeasonException();
         }
 
-        taryfa = taryfa.toUpperCase();
+        taryfa = taryfa.trim().toUpperCase();
     }
 }
