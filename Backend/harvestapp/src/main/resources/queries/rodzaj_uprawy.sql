@@ -12,6 +12,8 @@ values
     ('rzepik', 'WIOSNA', true, 18100 , 18100*1.2, current_timestamp, null),
     ('kukurydza', 'WIOSNA', true, 17600, 17600*1.2, current_timestamp, null),
     ('chmiel', 'WIOSNA', true, 60000, 60000*1.2, current_timestamp, null),
-    ('tytoń', 'WIOSNA', true, 46800, 60000*1.2, current_timestamp, null);
+    ('tytoń', 'WIOSNA', true, 46800, 60000*1.2, current_timestamp, null),
+    ('drzewa', 'WIOSNA', true, 130900, 130900*1.2, current_timestamp, null),
+    ('krzewy', 'WIOSNA', true, 130900, 130900*1.2, current_timestamp, null);
 
 table harvest.rodzaj_uprawy;

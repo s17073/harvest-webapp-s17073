@@ -74,10 +74,9 @@ CREATE TABLE Dzialka (
 CREATE TABLE Gatunek (
     id_gatunek int GENERATED ALWAYS AS IDENTITY NOT NULL,
     nazwa_gatunku varchar(30)  NOT NULL,
-    czy_aktywna varchar(10)  NOT NULL,
-    taryfa varchar(10)  NOT NULL,
+    czy_aktywna boolean  NOT NULL,
     data_dodania timestamp  NOT NULL,
-    data_usuniecia timestamp  NOT NULL,
+    data_usuniecia timestamp  NULL,
     CONSTRAINT Gatunek_pk PRIMARY KEY (id_gatunek)
 );
 

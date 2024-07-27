@@ -1,8 +1,10 @@
 package pl.harvestubezpieczenia.harvestapp.domain.valueObjects;
 
+import jakarta.persistence.Embeddable;
 import pl.harvestubezpieczenia.harvestapp.domain.exceptions.EmptyInsuranceClassException;
 import pl.harvestubezpieczenia.harvestapp.domain.exceptions.InvalidInsuranceClassException;
 
+@Embeddable
 public record InsuranceClass(String grupaMinisterialna) {
 
     public InsuranceClass{
