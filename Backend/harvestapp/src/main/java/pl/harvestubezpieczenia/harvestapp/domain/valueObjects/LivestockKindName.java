@@ -4,12 +4,12 @@ import jakarta.persistence.Embeddable;
 import pl.harvestubezpieczenia.harvestapp.domain.exceptions.EmptyCropKindNameException;
 
 @Embeddable
-public record CropKindName(String nazwaUprawy) {
+public record LivestockKindName(String nazwa) {
 
-    public CropKindName {
-        if(nazwaUprawy == null)
+    public LivestockKindName {
+        if(nazwa == null)
             throw new EmptyCropKindNameException();
-        if(nazwaUprawy.trim().isEmpty())
+        if(nazwa.trim().isEmpty())
             throw new EmptyCropKindNameException();
     }
 

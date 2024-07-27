@@ -5,7 +5,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pl.harvestubezpieczenia.harvestapp.domain.DTOs.CropKindDTO;
 import pl.harvestubezpieczenia.harvestapp.domain.model.CropKind;
-import pl.harvestubezpieczenia.harvestapp.domain.services.CropKindService;
 import pl.harvestubezpieczenia.harvestapp.domain.services.GenericService;
 
 import java.util.List;
@@ -16,39 +15,35 @@ public class CropKindController {
 
 
     private final GenericService<CropKind, CropKindDTO> genericService;
-    private final CropKindService cropKindService;
-
 
     @Autowired
-    public CropKindController(GenericService<CropKind, CropKindDTO> genericService, CropKindService cropKindService) {
+    public CropKindController(GenericService<CropKind, CropKindDTO> genericService) {
         this.genericService = genericService;
-        this.cropKindService = cropKindService;
     }
-
 
     @GetMapping
     public ResponseEntity<List<CropKindDTO>> getAllItems() {
-        return genericService.getAllItems();
+        return genericService.getAllItems("cropKindMapper", "cropKindRepoJpa");
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<CropKindDTO> getItemByID(@PathVariable int id){
-        return genericService.getItemByID(id);
+        return genericService.getItemByID("cropKindMapper", "cropKindRepoJpa", id);
     }
 
     @PostMapping
     public ResponseEntity<String> addItem(@RequestBody CropKindDTO cropKindDTO) {
-        return cropKindService.addItem(cropKindDTO);
+        return genericService.addItem("cropKindMapper", "cropKindRepoJpa", cropKindDTO);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<String> removeItemById(@PathVariable int id){
-        return genericService.removeItemById(id);
+        return genericService.removeItemById("cropKindRepoJpa", id);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<String> updateItem(@RequestBody CropKindDTO cropKindDTO, @PathVariable int id){
-        return genericService.updateItem(cropKindDTO, id);
+        return genericService.updateItem("cropKindMapper", "cropKindRepoJpa", cropKindDTO, id);
     }
 
 }

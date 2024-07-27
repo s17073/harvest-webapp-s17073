@@ -14,7 +14,7 @@ public record InsuredValue(double wartoscRynkowa, double wartoscMax) {
     public InsuredValue{
         if(wartoscRynkowa > wartoscMax)
             throw new MaxValueLowerThanMarketValueException(wartoscMax, wartoscRynkowa);
-        if(wartoscRynkowa < 100)
+        if(wartoscRynkowa <= 0)
             throw new MarketValueBelowMinimumException(wartoscRynkowa);
     }
 

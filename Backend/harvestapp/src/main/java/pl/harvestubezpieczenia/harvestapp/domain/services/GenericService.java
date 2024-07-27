@@ -4,58 +4,87 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import pl.harvestubezpieczenia.harvestapp.domain.DTOs.CropKindDTO;
+import pl.harvestubezpieczenia.harvestapp.domain.DTOs.GenericDTO;
 import pl.harvestubezpieczenia.harvestapp.domain.Mappers.GenericMapper;
 import pl.harvestubezpieczenia.harvestapp.domain.model.GenericCrudModel;
 import pl.harvestubezpieczenia.harvestapp.domain.ports.GenericCrudRepo;
 import pl.harvestubezpieczenia.harvestapp.domain.valueObjects.ModificationDate;
+
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @Service
-public class GenericService<E extends GenericCrudModel, D extends CropKindDTO> {
+public class GenericService<E extends GenericCrudModel, D extends GenericDTO> {
 
-    private final GenericCrudRepo<E> genericCrudRepo;
-    private final GenericMapper<E,D> genericMapper;
+    private final Map<String, GenericCrudRepo<E>> genericCrudRepos;
+    private final Map<String, GenericMapper<E, D>> genericMappers;
 
     @Autowired
-    public GenericService(GenericCrudRepo<E> genericCrudRepo, GenericMapper<E, D> genericMapper) {
-        this.genericCrudRepo = genericCrudRepo;
-        this.genericMapper = genericMapper;
+    public GenericService(Map<String, GenericCrudRepo<E>> genericCrudRepos, Map<String, GenericMapper<E, D>> genericMappers) {
+        this.genericCrudRepos = genericCrudRepos;
+        this.genericMappers = genericMappers;
     }
 
-    public ResponseEntity<List<D>> getAllItems() {
+    private GenericMapper<E, D> getMapper(String mapperType) {
+        GenericMapper<E, D> mapper = genericMappers.get(mapperType);
+        if (mapper == null) {
+            throw new IllegalArgumentException("No mapper found for type: " + mapperType);
+        }
+
+        return mapper;
+    }
+
+    private GenericCrudRepo<E> getRepo(String repoType) {
+        GenericCrudRepo<E> repo = genericCrudRepos.get(repoType);
+        if(repo == null) {
+            throw new IllegalArgumentException("No repository found for type: " + repoType);
+        }
+        return repo;
+    }
+
+    public ResponseEntity<List<D>> getAllItems(String mapperType, String repoType) {
+        GenericCrudRepo<E> repo = getRepo(repoType);
+        GenericMapper<E, D> mapper = getMapper(mapperType);
         List<D> activeItemsDto = new ArrayList<>();
 
-        for(E e: genericCrudRepo.getAllItems()){
-            if (e.getDataModyfikacji().dataUsuniecia() == null) activeItemsDto.add(genericMapper.mapToDto(e));
+        for(E e: repo.getAllItems()){
+            if (e.getDataModyfikacji().dataUsuniecia() == null) activeItemsDto.add(mapper.mapToDto(e));
         }
+
+        if(activeItemsDto.isEmpty()) return new ResponseEntity<>(activeItemsDto, HttpStatus.NOT_FOUND);
 
         return new ResponseEntity<>(activeItemsDto, HttpStatus.OK);
     }
 
-    public ResponseEntity<D> getItemByID(int id) {
-        for(E e: genericCrudRepo.getAllItems()){
+    public ResponseEntity<D> getItemByID(String mapperType, String repoType, int id) {
+        GenericCrudRepo<E> repo = getRepo(repoType);
+        GenericMapper<E, D> mapper = getMapper(mapperType);
+
+        for(E e: repo.getAllItems()){
             if(e.getId() == id){
-                return new ResponseEntity<>(genericMapper.mapToDto(e), HttpStatus.OK);
+                return new ResponseEntity<>(mapper.mapToDto(e), HttpStatus.OK);
             }
         }
         return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
     }
 
-    public ResponseEntity<String> addItem(D dto) {
+    public ResponseEntity<String> addItem(String mapperType, String repoType, D dto) {
+        GenericCrudRepo<E> repo = getRepo(repoType);
+        GenericMapper<E, D> mapper = getMapper(mapperType);
 
-        E ItemToAdd = genericMapper.mapToEntity(dto);
+        E ItemToAdd = mapper.mapToEntity(dto);
 
-        genericCrudRepo.addItem(ItemToAdd);
+        repo.addItem(ItemToAdd);
         return new ResponseEntity<>(ItemToAdd.getName() + " successfully added to the database.", HttpStatus.CREATED);
     }
 
-    public ResponseEntity<String> removeItemById(int id) {
+    public ResponseEntity<String> removeItemById(String repoType, int id) {
+        GenericCrudRepo<E> repo = getRepo(repoType);
         String NameOfRemovedItem;
         E itemToRemove = null;
 
-        for(E e: genericCrudRepo.getAllItems()){
+        for(E e: repo.getAllItems()){
             if(e.getId() == id) {
                 itemToRemove = e;
                 break;
@@ -71,16 +100,18 @@ public class GenericService<E extends GenericCrudModel, D extends CropKindDTO> {
         NameOfRemovedItem = itemToRemove.getName();
         itemToRemove.setDataModyfikacji(new ModificationDate(itemToRemove.getDataModyfikacji().dataDodania()));
 
-        genericCrudRepo.addItem(itemToRemove);
+        repo.addItem(itemToRemove);
 
         return new ResponseEntity<>(NameOfRemovedItem + " successfully deleted from the database", HttpStatus.OK);
     }
 
-    public ResponseEntity<String> updateItem(D dto, int id) {
+    public ResponseEntity<String> updateItem(String mapperType, String repoType, D dto, int id) {
+        GenericCrudRepo<E> repo = getRepo(repoType);
+        GenericMapper<E, D> mapper = getMapper(mapperType);
         String NameOfRemovedItem;
         E itemToUpdate = null;
 
-        for(E i: genericCrudRepo.getAllItems()){
+        for(E i: repo.getAllItems()){
             if(i.getId() == id) {
                 itemToUpdate = i;
                 break;
@@ -95,11 +126,11 @@ public class GenericService<E extends GenericCrudModel, D extends CropKindDTO> {
 
         NameOfRemovedItem = itemToUpdate.getName();
 
-        E itemToAdd = genericMapper.mapToEntity(dto);
+        E itemToAdd = mapper.mapToEntity(dto);
 
         itemToUpdate.setDataModyfikacji(new ModificationDate(itemToUpdate.getDataModyfikacji().dataDodania()));
-        genericCrudRepo.addItem(itemToUpdate);
-        genericCrudRepo.addItem(itemToAdd);
+        repo.addItem(itemToUpdate);
+        repo.addItem(itemToAdd);
 
         return new ResponseEntity<>(NameOfRemovedItem + " successfully updated.", HttpStatus.OK);
     }

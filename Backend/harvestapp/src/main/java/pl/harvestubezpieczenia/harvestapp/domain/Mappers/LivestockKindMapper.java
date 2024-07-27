@@ -2,21 +2,22 @@ package pl.harvestubezpieczenia.harvestapp.domain.Mappers;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
-import pl.harvestubezpieczenia.harvestapp.domain.DTOs.CropKindDTO;
-import pl.harvestubezpieczenia.harvestapp.domain.model.CropKind;
+import pl.harvestubezpieczenia.harvestapp.domain.DTOs.LivestockKindDTO;
+import pl.harvestubezpieczenia.harvestapp.domain.model.LivestockKind;
 import pl.harvestubezpieczenia.harvestapp.domain.valueObjects.InsuredValue;
+import pl.harvestubezpieczenia.harvestapp.domain.valueObjects.LivestockKindName;
 import pl.harvestubezpieczenia.harvestapp.domain.valueObjects.ModificationDate;
-import pl.harvestubezpieczenia.harvestapp.domain.valueObjects.CropKindName;
 import pl.harvestubezpieczenia.harvestapp.domain.valueObjects.Season;
 
 @Component
-@Qualifier("cropKindMapper")
-public class CropKindMapper implements GenericMapper<CropKind, CropKindDTO> {
+@Qualifier("livestockKindMapper")
+public class LivestockKindMapper implements GenericMapper<LivestockKind, LivestockKindDTO> {
 
     @Override
-    public CropKind mapToEntity(CropKindDTO dto) {
-        CropKind entity = new CropKind();
-        entity.setNazwaUprawy(new CropKindName(dto.getNazwaUprawy()));
+    public LivestockKind mapToEntity(LivestockKindDTO dto) {
+        LivestockKind entity = new LivestockKind();
+
+        entity.setNazwa(new LivestockKindName(dto.getNazwaZwierzecia()));
         entity.setTaryfa(new Season(dto.getTaryfa()));
         entity.setCzyAktywna(dto.isCzyAktywna());
         entity.setWartoscUbezpieczenia(new InsuredValue(dto.getWartoscRynkowa()));
@@ -26,10 +27,10 @@ public class CropKindMapper implements GenericMapper<CropKind, CropKindDTO> {
     }
 
     @Override
-    public CropKindDTO mapToDto(CropKind entity) {
-        CropKindDTO dto = new CropKindDTO();
+    public LivestockKindDTO mapToDto(LivestockKind entity) {
+        LivestockKindDTO dto = new LivestockKindDTO();
 
-        dto.setNazwaUprawy(entity.getNazwaUprawy().nazwaUprawy());
+        dto.setNazwaZwierzecia(entity.getName());
         dto.setTaryfa(entity.getTaryfa().taryfa());
         dto.setCzyAktywna(entity.isCzyAktywna());
         dto.setWartoscRynkowa(entity.getWartoscUbezpieczenia().wartoscRynkowa());
@@ -37,5 +38,4 @@ public class CropKindMapper implements GenericMapper<CropKind, CropKindDTO> {
 
         return dto;
     }
-
 }

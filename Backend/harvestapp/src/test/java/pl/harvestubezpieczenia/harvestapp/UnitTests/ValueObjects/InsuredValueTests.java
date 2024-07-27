@@ -54,7 +54,7 @@ public class InsuredValueTests {
 
     @ParameterizedTest
     @CsvSource({
-      "12, 1000",
+      "-0.5, 1000",
       "0, 120",
       "-100, 100"
     })
