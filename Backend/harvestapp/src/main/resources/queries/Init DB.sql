@@ -17,11 +17,13 @@ CREATE TABLE Agent (
     nazwa varchar(50)  NOT NULL,
     kod_agencji varchar(10)  NOT NULL,
     nip varchar(10)  NOT NULL,
-    krs varchar(10)  NOT NULL,
+    krs varchar(10)  NULL,
     id_adres int  NOT NULL,
     liczba_posrednikow smallint  NOT NULL,
-    czy_aktywny boolean  NOT NULL,
     numer_telefonu_agencji varchar(13)  NOT NULL,
+    czy_aktywny boolean  NOT NULL,
+    data_dodania timestamp  NOT NULL,
+    data_usuniecia timestamp NULL,
     CONSTRAINT Agent_pk PRIMARY KEY (id_agent)
 );
 
@@ -111,12 +113,12 @@ CREATE TABLE Ochrona (
     nazwa varchar(30)  NOT NULL,
     grupa_ministerialna varchar(2)  NOT NULL,
     taryfa varchar(10)  NOT NULL,
-    opis text  NOT NULL,
-    czy_aktywna boolean  NOT NULL,
-    data_dodania timestamp  NOT NULL,
-    data_usuniecia timestamp  NOT NULL,
+    opis text NULL,
     czy_uprawa boolean  NOT NULL,
     czy_zwierze boolean  NOT NULL,
+    czy_aktywna boolean  NOT NULL,
+    data_dodania timestamp  NOT NULL,
+    data_usuniecia timestamp  NULL,
     CONSTRAINT Ochrona_pk PRIMARY KEY (id_ochrona)
 );
 
