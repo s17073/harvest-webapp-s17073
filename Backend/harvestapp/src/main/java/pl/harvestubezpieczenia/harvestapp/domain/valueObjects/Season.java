@@ -10,7 +10,7 @@ public record Season(String taryfa) {
     public Season {
         if(taryfa == null || taryfa.trim().isEmpty()){
             throw new EmptySeasonException();
-        } if (!(taryfa.trim().equalsIgnoreCase("WIOSNA") || taryfa.trim().equalsIgnoreCase("ZIMA"))) {
+        } if (!(taryfa.trim().equalsIgnoreCase("WIOSNA") || taryfa.trim().equalsIgnoreCase("ZIMA") || taryfa.trim().equalsIgnoreCase("CAŁOROCZNA"))) {
             throw new InvalidSeasonException();
         }
 
