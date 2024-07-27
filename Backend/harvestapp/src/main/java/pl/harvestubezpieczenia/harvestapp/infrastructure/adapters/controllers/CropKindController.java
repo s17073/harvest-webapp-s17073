@@ -13,6 +13,8 @@ import java.util.List;
 @RequestMapping("cropkind")
 public class CropKindController {
 
+    private final String mapper = "CropKindMapper";
+    private final String repository = "CropKindRepoJpa";
 
     private final GenericService<CropKind, CropKindDTO> genericService;
 
@@ -23,27 +25,27 @@ public class CropKindController {
 
     @GetMapping
     public ResponseEntity<List<CropKindDTO>> getAllItems() {
-        return genericService.getAllItems("cropKindMapper", "cropKindRepoJpa");
+        return genericService.getAllItems(mapper, repository);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<CropKindDTO> getItemByID(@PathVariable int id){
-        return genericService.getItemByID("cropKindMapper", "cropKindRepoJpa", id);
+        return genericService.getItemByID(mapper, repository, id);
     }
 
     @PostMapping
-    public ResponseEntity<String> addItem(@RequestBody CropKindDTO cropKindDTO) {
-        return genericService.addItem("cropKindMapper", "cropKindRepoJpa", cropKindDTO);
+    public ResponseEntity<String> addItem(@RequestBody CropKindDTO dto) {
+        return genericService.addItem(mapper, repository, dto);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<String> removeItemById(@PathVariable int id){
-        return genericService.removeItemById("cropKindRepoJpa", id);
+        return genericService.removeItemById(repository, id);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<String> updateItem(@RequestBody CropKindDTO cropKindDTO, @PathVariable int id){
-        return genericService.updateItem("cropKindMapper", "cropKindRepoJpa", cropKindDTO, id);
+    public ResponseEntity<String> updateItem(@RequestBody CropKindDTO dto, @PathVariable int id){
+        return genericService.updateItem(mapper, repository, dto, id);
     }
 
 }

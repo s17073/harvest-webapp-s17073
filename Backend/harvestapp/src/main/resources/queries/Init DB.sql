@@ -40,9 +40,10 @@ CREATE TABLE Agent_ubezpieczyciel (
 CREATE TABLE Apk (
     id_apk int GENERATED ALWAYS AS IDENTITY NOT NULL,
     pytanie text  NOT NULL,
+    komunikat text NULL,
     czy_aktywna boolean  NOT NULL,
-    data_dodania date  NOT NULL,
-    data_usuniecia date  NOT NULL,
+    data_dodania timestamp  NOT NULL,
+    data_usuniecia timestamp NULL,
     CONSTRAINT Apk_pk PRIMARY KEY (id_apk)
 );
 

@@ -1,5 +1,6 @@
 package pl.harvestubezpieczenia.harvestapp.infrastructure.adapters.controllers;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pl.harvestubezpieczenia.harvestapp.domain.DTOs.SoilClassDTO;
@@ -17,7 +18,7 @@ public class SoilClassController {
 
     private final GenericService <SoilClass, SoilClassDTO> genericService;
 
-
+    @Autowired
     public SoilClassController(GenericService<SoilClass, SoilClassDTO> genericService) {
         this.genericService = genericService;
     }
