@@ -19,6 +19,7 @@ public class InsuranceCompanyMapper implements GenericMapper<InsuranceCompany, I
         entity.setNumerKonta(new BankAccountNumber(dto.getNumerKonta()));
         entity.setCzyAktywna(dto.isCzyAktywna());
         entity.setDataModyfikacji(new ModificationDate());
+        entity.setAddress(dto.getAddress());
 
         return entity;
     }
@@ -34,6 +35,7 @@ public class InsuranceCompanyMapper implements GenericMapper<InsuranceCompany, I
         dto.setNip(entity.getNip().nip());
         dto.setKrs(entity.getKrs().krs());
         dto.setCzyAktywna(entity.isCzyAktywna());
+        dto.setAddress(entity.getAddress());
 
         return dto;
     }

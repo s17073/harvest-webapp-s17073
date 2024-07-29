@@ -54,7 +54,7 @@ public class GenericService<E extends GenericCrudModel, D extends GenericDTO> {
             if (e.getDataModyfikacji().dataUsuniecia() == null) activeItemsDto.add(mapper.mapToDto(e));
         }
 
-        if(activeItemsDto.isEmpty()) return new ResponseEntity<>(activeItemsDto, HttpStatus.NOT_FOUND);
+        if(activeItemsDto.isEmpty()) return new ResponseEntity<>(activeItemsDto, HttpStatus.NO_CONTENT);
 
         return new ResponseEntity<>(activeItemsDto, HttpStatus.OK);
     }
@@ -67,6 +67,7 @@ public class GenericService<E extends GenericCrudModel, D extends GenericDTO> {
             if(e.getId() == id){
                 return new ResponseEntity<>(mapper.mapToDto(e), HttpStatus.OK);
             }
+            break;
         }
         return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
     }

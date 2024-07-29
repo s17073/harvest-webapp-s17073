@@ -187,7 +187,7 @@ CREATE TABLE Rodzaj_zwierzecia (
 
 -- Table: Teryt
 CREATE TABLE Teryt (
-    id_teryt int GENERATED ALWAYS AS IDENTITY NOT NULL,
+    id_teryt int NOT NULL,
     kod_teryt varchar(20)  NOT NULL,
     wojewodztwo varchar(19)  NOT NULL,
     powiat varchar(30)  NOT NULL,

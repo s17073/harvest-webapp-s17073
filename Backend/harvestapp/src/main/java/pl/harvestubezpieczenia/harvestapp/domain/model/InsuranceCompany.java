@@ -12,7 +12,6 @@ public class InsuranceCompany implements GenericCrudModel{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int idUbezpieczyciel;
-//    private Address address;
     @Embedded
     private InsuranceCompanyName nazwa;
     @Embedded
@@ -25,6 +24,10 @@ public class InsuranceCompany implements GenericCrudModel{
     private Nip nip;
     @Embedded
     private Krs krs;
+
+    @ManyToOne
+    @JoinColumn(name = "id_adres")
+    private Address address;
 
     private boolean czyAktywna;
     private ModificationDate dataModyfikacji;
