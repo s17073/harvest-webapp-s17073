@@ -3,6 +3,7 @@ package pl.harvestubezpieczenia.harvestapp.domain.Mappers;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import pl.harvestubezpieczenia.harvestapp.domain.DTOs.CropVarietyDto;
+import pl.harvestubezpieczenia.harvestapp.domain.model.CropKindVariety;
 import pl.harvestubezpieczenia.harvestapp.domain.model.CropVariety;
 import pl.harvestubezpieczenia.harvestapp.domain.valueObjects.CropVarietyName;
 import pl.harvestubezpieczenia.harvestapp.domain.valueObjects.ModificationDate;
@@ -27,6 +28,10 @@ public class CropVarietyMapper implements GenericMapper<CropVariety, CropVariety
 
         dto.setNazwaGatunku(entity.getNazwaGatunku().nazwaGatunku());
         dto.setCzyAktywna(entity.isCzyAktywna());
+
+        for(CropKindVariety ckv : entity.getCropKindVarieties()) {
+            dto.getLista().add(ckv);
+        }
 
         return dto;
     }

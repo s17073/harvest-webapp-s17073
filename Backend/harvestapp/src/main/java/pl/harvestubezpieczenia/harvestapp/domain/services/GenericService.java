@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import pl.harvestubezpieczenia.harvestapp.domain.DTOs.GenericDTO;
 import pl.harvestubezpieczenia.harvestapp.domain.Mappers.GenericMapper;
 import pl.harvestubezpieczenia.harvestapp.domain.model.GenericCrudModel;
@@ -26,7 +27,7 @@ public class GenericService<E extends GenericCrudModel, D extends GenericDTO> {
         this.genericMappers = genericMappers;
     }
 
-    private GenericMapper<E, D> getMapper(String mapperType) {
+    protected GenericMapper<E, D> getMapper(String mapperType) {
         GenericMapper<E, D> mapper = genericMappers.get(mapperType);
         if (mapper == null) {
             throw new IllegalArgumentException("No mapper found for type: " + mapperType);
@@ -35,7 +36,7 @@ public class GenericService<E extends GenericCrudModel, D extends GenericDTO> {
         return mapper;
     }
 
-    private GenericCrudRepo<E> getRepo(String repoType) {
+    protected GenericCrudRepo<E> getRepo(String repoType) {
         GenericCrudRepo<E> repo = genericCrudRepos.get(repoType);
         if(repo == null) {
             throw new IllegalArgumentException("No repository found for type: " + repoType);
@@ -43,6 +44,7 @@ public class GenericService<E extends GenericCrudModel, D extends GenericDTO> {
         return repo;
     }
 
+    @Transactional
     public ResponseEntity<List<D>> getAllItems(String mapperType, String repoType) {
         GenericCrudRepo<E> repo = getRepo(repoType);
         GenericMapper<E, D> mapper = getMapper(mapperType);

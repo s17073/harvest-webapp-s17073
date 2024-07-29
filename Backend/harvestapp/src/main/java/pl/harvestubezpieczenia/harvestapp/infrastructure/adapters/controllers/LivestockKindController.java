@@ -13,8 +13,8 @@ import java.util.List;
 @RequestMapping("livestockkind")
 public class LivestockKindController {
 
-    private final String mapper = "LivestockKindMapper";
-    private final String repository = "LivestockKindRepoJpa";
+    private final String mapper = "livestockKindMapper";
+    private final String repository = "livestockKindRepoJpa";
 
     private final GenericService<LivestockKind, LivestockKindDTO> genericService;
 

@@ -8,6 +8,9 @@ import pl.harvestubezpieczenia.harvestapp.domain.valueObjects.ModificationDate;
 import pl.harvestubezpieczenia.harvestapp.domain.valueObjects.CropKindName;
 import pl.harvestubezpieczenia.harvestapp.domain.valueObjects.Season;
 
+import java.util.HashSet;
+import java.util.Set;
+
 @Data
 @Entity
 @Table(name = "rodzaj_uprawy")
@@ -28,6 +31,9 @@ public class CropKind implements GenericCrudModel{
     private InsuredValue wartoscUbezpieczenia;
     @Embedded
     private ModificationDate dataModyfikacji;
+
+    @OneToMany(mappedBy = "cropKind", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private Set<CropKindVariety> cropKindVarieties = new HashSet<>();
 
     @JsonIgnore
     public String getName(){
