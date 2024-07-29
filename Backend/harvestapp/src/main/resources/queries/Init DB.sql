@@ -202,6 +202,11 @@ CREATE TABLE Ubezpieczyciel (
     id_adres int  NOT NULL,
     nazwa varchar(50)  NOT NULL,
     numer_zakladu varchar(10)  NOT NULL,
+    nip varchar(10) NOT NULL,
+    krs varchar(10) NULL,
+    czy_aktywna boolean NOT NULL,
+    data_dodania timestamp NOT NULL,
+    data_usuniecia timestamp NULL,
     numer_telefonu varchar(13)  NOT NULL,
     numer_konta varchar(26)  NOT NULL,
     CONSTRAINT Ubezpieczyciel_pk PRIMARY KEY (id_ubezpieczyciel)

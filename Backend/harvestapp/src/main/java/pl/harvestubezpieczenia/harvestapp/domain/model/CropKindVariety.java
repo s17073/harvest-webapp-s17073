@@ -22,8 +22,6 @@ public class CropKindVariety implements GenericCrudModel {
     @JoinColumn(name = "id_gatunek")
     private CropVariety cropVariety;
 
-    private String test;
-
 
     @Override
     public int getId() {
