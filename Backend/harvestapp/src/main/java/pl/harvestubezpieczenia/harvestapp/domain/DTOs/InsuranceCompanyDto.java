@@ -4,7 +4,7 @@ import lombok.Data;
 import pl.harvestubezpieczenia.harvestapp.domain.model.Address;
 
 @Data
-public class InsuranceCompanyDto implements GenericDTO{
+public class InsuranceCompanyDto implements GenericDto {
 
     private String nazwa;
     private String numerZakladu;

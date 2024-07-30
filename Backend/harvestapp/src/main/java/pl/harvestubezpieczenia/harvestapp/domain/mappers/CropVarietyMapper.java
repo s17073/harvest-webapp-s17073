@@ -1,4 +1,4 @@
-package pl.harvestubezpieczenia.harvestapp.domain.Mappers;
+package pl.harvestubezpieczenia.harvestapp.domain.mappers;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;

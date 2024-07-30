@@ -13,9 +13,6 @@ import java.util.List;
 @RequestMapping("cropkind")
 public class CropKindController {
 
-    private final String mapper = "cropKindMapper";
-    private final String repository = "cropKindRepoJpa";
-
     private final GenericService<CropKind, CropKindDto> genericService;
 
     @Autowired
@@ -25,27 +22,27 @@ public class CropKindController {
 
     @GetMapping
     public ResponseEntity<List<CropKindDto>> getAllItems() {
-        return genericService.getAllItems(mapper, repository);
+        return genericService.getAllItems();
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<CropKindDto> getItemByID(@PathVariable int id){
-        return genericService.getItemByID(mapper, repository, id);
+        return genericService.getItemByID(id);
     }
 
     @PostMapping
     public ResponseEntity<String> addItem(@RequestBody CropKindDto dto) {
-        return genericService.addItem(mapper, repository, dto);
+        return genericService.addItem(dto);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<String> removeItemById(@PathVariable int id){
-        return genericService.removeItemById(repository, id);
+        return genericService.removeItemById(id);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<String> updateItem(@RequestBody CropKindDto dto, @PathVariable int id){
-        return genericService.updateItem(mapper, repository, dto, id);
+        return genericService.updateItem(dto, id);
     }
 
 }

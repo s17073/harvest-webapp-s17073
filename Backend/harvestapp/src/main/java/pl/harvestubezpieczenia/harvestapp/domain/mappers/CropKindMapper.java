@@ -1,13 +1,13 @@
-package pl.harvestubezpieczenia.harvestapp.domain.Mappers;
+package pl.harvestubezpieczenia.harvestapp.domain.mappers;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import pl.harvestubezpieczenia.harvestapp.domain.DTOs.CropKindDto;
 import pl.harvestubezpieczenia.harvestapp.domain.model.CropKind;
 import pl.harvestubezpieczenia.harvestapp.domain.model.CropKindVariety;
+import pl.harvestubezpieczenia.harvestapp.domain.valueObjects.CropKindName;
 import pl.harvestubezpieczenia.harvestapp.domain.valueObjects.InsuredValue;
 import pl.harvestubezpieczenia.harvestapp.domain.valueObjects.ModificationDate;
-import pl.harvestubezpieczenia.harvestapp.domain.valueObjects.CropKindName;
 import pl.harvestubezpieczenia.harvestapp.domain.valueObjects.Season;
 
 @Component

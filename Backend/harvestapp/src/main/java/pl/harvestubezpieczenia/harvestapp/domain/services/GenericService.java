@@ -1,57 +1,33 @@
 package pl.harvestubezpieczenia.harvestapp.domain.services;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import pl.harvestubezpieczenia.harvestapp.domain.DTOs.GenericDTO;
-import pl.harvestubezpieczenia.harvestapp.domain.Mappers.GenericMapper;
+import pl.harvestubezpieczenia.harvestapp.domain.DTOs.GenericDto;
+import pl.harvestubezpieczenia.harvestapp.domain.mappers.GenericMapper;
 import pl.harvestubezpieczenia.harvestapp.domain.model.GenericCrudModel;
 import pl.harvestubezpieczenia.harvestapp.domain.ports.GenericCrudRepo;
 import pl.harvestubezpieczenia.harvestapp.domain.valueObjects.ModificationDate;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
-@Service
-public class GenericService<E extends GenericCrudModel, D extends GenericDTO> {
+public class GenericService<E extends GenericCrudModel, D extends GenericDto> {
 
-    private final Map<String, GenericCrudRepo<E>> genericCrudRepos;
-    private final Map<String, GenericMapper<E, D>> genericMappers;
+    private final GenericCrudRepo<E> repo;
+    private final GenericMapper<E, D> map;
 
-    @Autowired
-    public GenericService(Map<String, GenericCrudRepo<E>> genericCrudRepos, Map<String, GenericMapper<E, D>> genericMappers) {
-        this.genericCrudRepos = genericCrudRepos;
-        this.genericMappers = genericMappers;
-    }
-
-    protected GenericMapper<E, D> getMapper(String mapperType) {
-        GenericMapper<E, D> mapper = genericMappers.get(mapperType);
-        if (mapper == null) {
-            throw new IllegalArgumentException("No mapper found for type: " + mapperType);
-        }
-
-        return mapper;
-    }
-
-    protected GenericCrudRepo<E> getRepo(String repoType) {
-        GenericCrudRepo<E> repo = genericCrudRepos.get(repoType);
-        if(repo == null) {
-            throw new IllegalArgumentException("No repository found for type: " + repoType);
-        }
-        return repo;
+    public GenericService(GenericCrudRepo<E> repo, GenericMapper<E, D> map) {
+        this.repo = repo;
+        this.map = map;
     }
 
     @Transactional
-    public ResponseEntity<List<D>> getAllItems(String mapperType, String repoType) {
-        GenericCrudRepo<E> repo = getRepo(repoType);
-        GenericMapper<E, D> mapper = getMapper(mapperType);
+    public ResponseEntity<List<D>> getAllItems() {
         List<D> activeItemsDto = new ArrayList<>();
 
         for(E e: repo.getAllItems()){
-            if (e.getDataModyfikacji().dataUsuniecia() == null) activeItemsDto.add(mapper.mapToDto(e));
+            if (e.getDataModyfikacji().dataUsuniecia() == null) activeItemsDto.add(map.mapToDto(e));
         }
 
         if(activeItemsDto.isEmpty()) return new ResponseEntity<>(activeItemsDto, HttpStatus.NO_CONTENT);
@@ -59,40 +35,26 @@ public class GenericService<E extends GenericCrudModel, D extends GenericDTO> {
         return new ResponseEntity<>(activeItemsDto, HttpStatus.OK);
     }
 
-    public ResponseEntity<D> getItemByID(String mapperType, String repoType, int id) {
-        GenericCrudRepo<E> repo = getRepo(repoType);
-        GenericMapper<E, D> mapper = getMapper(mapperType);
-
+    public ResponseEntity<D> getItemByID(int id) {
         for(E e: repo.getAllItems()){
             if(e.getId() == id){
-                return new ResponseEntity<>(mapper.mapToDto(e), HttpStatus.OK);
+                return new ResponseEntity<>(map.mapToDto(e), HttpStatus.OK);
             }
             break;
         }
         return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
     }
 
-    public ResponseEntity<String> addItem(String mapperType, String repoType, D dto) {
-        GenericCrudRepo<E> repo = getRepo(repoType);
-        GenericMapper<E, D> mapper = getMapper(mapperType);
-
-        E ItemToAdd = mapper.mapToEntity(dto);
+    public ResponseEntity<String> addItem(D dto) {
+        E ItemToAdd = map.mapToEntity(dto);
 
         repo.addItem(ItemToAdd);
         return new ResponseEntity<>(ItemToAdd.getName() + " successfully added to the database.", HttpStatus.CREATED);
     }
 
-    public ResponseEntity<String> removeItemById(String repoType, int id) {
-        GenericCrudRepo<E> repo = getRepo(repoType);
+    public ResponseEntity<String> removeItemById(int id) {
         String NameOfRemovedItem;
-        E itemToRemove = null;
-
-        for(E e: repo.getAllItems()){
-            if(e.getId() == id) {
-                itemToRemove = e;
-                break;
-            }
-        }
+        E itemToRemove = findForModify(id);
 
         if(itemToRemove == null){
             return new ResponseEntity<>("ID: " + id + " not found.", HttpStatus.NOT_FOUND);
@@ -108,18 +70,9 @@ public class GenericService<E extends GenericCrudModel, D extends GenericDTO> {
         return new ResponseEntity<>(NameOfRemovedItem + " successfully deleted from the database", HttpStatus.OK);
     }
 
-    public ResponseEntity<String> updateItem(String mapperType, String repoType, D dto, int id) {
-        GenericCrudRepo<E> repo = getRepo(repoType);
-        GenericMapper<E, D> mapper = getMapper(mapperType);
+    public ResponseEntity<String> updateItem(D dto, int id) {
         String NameOfRemovedItem;
-        E itemToUpdate = null;
-
-        for(E i: repo.getAllItems()){
-            if(i.getId() == id) {
-                itemToUpdate = i;
-                break;
-            }
-        }
+        E itemToUpdate = findForModify(id);
 
         if(itemToUpdate == null){
             return new ResponseEntity<>("ID: " + id + " not found.", HttpStatus.NOT_FOUND);
@@ -129,12 +82,22 @@ public class GenericService<E extends GenericCrudModel, D extends GenericDTO> {
 
         NameOfRemovedItem = itemToUpdate.getName();
 
-        E itemToAdd = mapper.mapToEntity(dto);
+        E itemToAdd = map.mapToEntity(dto);
 
         itemToUpdate.setDataModyfikacji(new ModificationDate(itemToUpdate.getDataModyfikacji().dataDodania()));
         repo.addItem(itemToUpdate);
         repo.addItem(itemToAdd);
 
         return new ResponseEntity<>(NameOfRemovedItem + " successfully updated.", HttpStatus.OK);
+    }
+
+    private E findForModify(int id){
+        for(E e: repo.getAllItems()){
+            if(e.getId() == id) {
+                return e;
+            }
+            break;
+        }
+        return null;
     }
 }

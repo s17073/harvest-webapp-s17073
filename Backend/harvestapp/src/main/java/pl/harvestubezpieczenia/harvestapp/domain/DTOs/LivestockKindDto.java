@@ -3,7 +3,7 @@ package pl.harvestubezpieczenia.harvestapp.domain.DTOs;
 import lombok.Data;
 
 @Data
-public class LivestockKindDTO implements GenericDTO {
+public class LivestockKindDto implements GenericDto {
 
     private String nazwaZwierzecia;
     private String taryfa;

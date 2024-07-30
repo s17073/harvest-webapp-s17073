@@ -6,7 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pl.harvestubezpieczenia.harvestapp.domain.DTOs.TerytDto;
-import pl.harvestubezpieczenia.harvestapp.domain.Mappers.TerytMapper;
+import pl.harvestubezpieczenia.harvestapp.domain.mappers.TerytMapper;
 import pl.harvestubezpieczenia.harvestapp.domain.model.Teryt;
 import pl.harvestubezpieczenia.harvestapp.domain.ports.TerytRepo;
 

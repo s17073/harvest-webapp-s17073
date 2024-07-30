@@ -14,9 +14,6 @@ import java.util.List;
 @RequestMapping("cover")
 public class CoverController {
 
-    private final String mapper = "coverMapper";
-    private final String repository = "coverRepoJpa";
-
     private final GenericService<Cover, CoverDto> genericService;
 
     @Autowired
@@ -24,30 +21,29 @@ public class CoverController {
         this.genericService = genericService;
     }
 
-
     @GetMapping
     public ResponseEntity<List<CoverDto>> getAllItems() {
-        return genericService.getAllItems(mapper, repository);
+        return genericService.getAllItems();
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<CoverDto> getItemByID(@PathVariable int id){
-        return genericService.getItemByID(mapper, repository, id);
+        return genericService.getItemByID(id);
     }
 
     @PostMapping
     public ResponseEntity<String> addItem(@RequestBody CoverDto dto) {
-        return genericService.addItem(mapper, repository, dto);
+        return genericService.addItem(dto);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<String> removeItemById(@PathVariable int id){
-        return genericService.removeItemById(repository, id);
+        return genericService.removeItemById(id);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<String> updateItem(@RequestBody CoverDto dto, @PathVariable int id){
-        return genericService.updateItem(mapper, repository, dto, id);
+        return genericService.updateItem(dto, id);
     }
 
 }

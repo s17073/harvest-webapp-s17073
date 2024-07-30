@@ -4,7 +4,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import pl.harvestubezpieczenia.harvestapp.domain.DTOs.AddressDto;
-import pl.harvestubezpieczenia.harvestapp.domain.Mappers.AddressMapper;
+import pl.harvestubezpieczenia.harvestapp.domain.mappers.AddressMapper;
 import pl.harvestubezpieczenia.harvestapp.domain.model.Address;
 import pl.harvestubezpieczenia.harvestapp.domain.ports.AddressRepo;
 

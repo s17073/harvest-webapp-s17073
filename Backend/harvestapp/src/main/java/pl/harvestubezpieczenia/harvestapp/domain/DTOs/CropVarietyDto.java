@@ -6,7 +6,7 @@ import pl.harvestubezpieczenia.harvestapp.domain.model.CropKindVariety;
 import java.util.List;
 
 @Data
-public class CropVarietyDto implements GenericDTO{
+public class CropVarietyDto implements GenericDto {
 
     private String nazwaGatunku;
     private boolean czyAktywna;

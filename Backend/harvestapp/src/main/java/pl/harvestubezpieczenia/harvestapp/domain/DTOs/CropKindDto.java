@@ -5,7 +5,7 @@ import lombok.Data;
 import java.util.Set;
 
 @Data
-public class CropKindDto implements GenericDTO{
+public class CropKindDto implements GenericDto {
 
     private String nazwaUprawy;
     private String taryfa;

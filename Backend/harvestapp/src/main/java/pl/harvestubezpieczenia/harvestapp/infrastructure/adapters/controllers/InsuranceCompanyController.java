@@ -2,18 +2,15 @@ package pl.harvestubezpieczenia.harvestapp.infrastructure.adapters.controllers;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import pl.harvestubezpieczenia.harvestapp.domain.DTOs.InsuranceCompanyDto;
 import pl.harvestubezpieczenia.harvestapp.domain.model.InsuranceCompany;
 import pl.harvestubezpieczenia.harvestapp.domain.services.GenericService;
-import pl.harvestubezpieczenia.harvestapp.domain.DTOs.InsuranceCompanyDto;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("insurancecompany")
 public class InsuranceCompanyController {
-
-    private final String mapper = "insuranceCompanyMapper";
-    private final String repository = "insuranceCompanyRepoJpa";
 
     private final GenericService<InsuranceCompany, InsuranceCompanyDto> genericService;
 
@@ -23,27 +20,27 @@ public class InsuranceCompanyController {
 
     @GetMapping
     public ResponseEntity<List<InsuranceCompanyDto>> getAllItems() {
-        return genericService.getAllItems(mapper, repository);
+        return genericService.getAllItems();
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<InsuranceCompanyDto> getItemByID(@PathVariable int id){
-        return genericService.getItemByID(mapper, repository, id);
+        return genericService.getItemByID(id);
     }
 
     @PostMapping
     public ResponseEntity<String> addItem(@RequestBody InsuranceCompanyDto dto) {
-        return genericService.addItem(mapper, repository, dto);
+        return genericService.addItem(dto);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<String> removeItemById(@PathVariable int id){
-        return genericService.removeItemById(repository, id);
+        return genericService.removeItemById(id);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<String> updateItem(@RequestBody InsuranceCompanyDto dto, @PathVariable int id){
-        return genericService.updateItem(mapper, repository, dto, id);
+        return genericService.updateItem(dto, id);
     }
 
 }

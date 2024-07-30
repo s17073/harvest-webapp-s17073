@@ -3,7 +3,7 @@ package pl.harvestubezpieczenia.harvestapp.infrastructure.adapters.controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import pl.harvestubezpieczenia.harvestapp.domain.DTOs.LivestockKindDTO;
+import pl.harvestubezpieczenia.harvestapp.domain.DTOs.LivestockKindDto;
 import pl.harvestubezpieczenia.harvestapp.domain.model.LivestockKind;
 import pl.harvestubezpieczenia.harvestapp.domain.services.GenericService;
 
@@ -13,39 +13,36 @@ import java.util.List;
 @RequestMapping("livestockkind")
 public class LivestockKindController {
 
-    private final String mapper = "livestockKindMapper";
-    private final String repository = "livestockKindRepoJpa";
-
-    private final GenericService<LivestockKind, LivestockKindDTO> genericService;
+    private final GenericService<LivestockKind, LivestockKindDto> genericService;
 
     @Autowired
-    public LivestockKindController(GenericService<LivestockKind, LivestockKindDTO> genericService) {
+    public LivestockKindController(GenericService<LivestockKind, LivestockKindDto> genericService) {
         this.genericService = genericService;
     }
 
     @GetMapping
-    public ResponseEntity<List<LivestockKindDTO>> getAllItems() {
-        return genericService.getAllItems(mapper, repository);
+    public ResponseEntity<List<LivestockKindDto>> getAllItems() {
+        return genericService.getAllItems();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<LivestockKindDTO> getItemByID(@PathVariable int id){
-        return genericService.getItemByID(mapper, repository, id);
+    public ResponseEntity<LivestockKindDto> getItemByID(@PathVariable int id){
+        return genericService.getItemByID(id);
     }
 
     @PostMapping
-    public ResponseEntity<String> addItem(@RequestBody LivestockKindDTO dto) {
-        return genericService.addItem(mapper, repository, dto);
+    public ResponseEntity<String> addItem(@RequestBody LivestockKindDto dto) {
+        return genericService.addItem(dto);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<String> removeItemById(@PathVariable int id){
-        return genericService.removeItemById(repository, id);
+        return genericService.removeItemById(id);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<String> updateItem(@RequestBody LivestockKindDTO dto, @PathVariable int id){
-        return genericService.updateItem(mapper, repository, dto, id);
+    public ResponseEntity<String> updateItem(@RequestBody LivestockKindDto dto, @PathVariable int id){
+        return genericService.updateItem(dto, id);
     }
 
 

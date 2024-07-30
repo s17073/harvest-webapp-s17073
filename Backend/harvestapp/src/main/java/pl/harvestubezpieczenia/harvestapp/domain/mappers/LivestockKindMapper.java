@@ -1,8 +1,8 @@
-package pl.harvestubezpieczenia.harvestapp.domain.Mappers;
+package pl.harvestubezpieczenia.harvestapp.domain.mappers;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
-import pl.harvestubezpieczenia.harvestapp.domain.DTOs.LivestockKindDTO;
+import pl.harvestubezpieczenia.harvestapp.domain.DTOs.LivestockKindDto;
 import pl.harvestubezpieczenia.harvestapp.domain.model.LivestockKind;
 import pl.harvestubezpieczenia.harvestapp.domain.valueObjects.InsuredValue;
 import pl.harvestubezpieczenia.harvestapp.domain.valueObjects.LivestockKindName;
@@ -11,10 +11,10 @@ import pl.harvestubezpieczenia.harvestapp.domain.valueObjects.Season;
 
 @Component
 @Qualifier("livestockKindMapper")
-public class LivestockKindMapper implements GenericMapper<LivestockKind, LivestockKindDTO> {
+public class LivestockKindMapper implements GenericMapper<LivestockKind, LivestockKindDto> {
 
     @Override
-    public LivestockKind mapToEntity(LivestockKindDTO dto) {
+    public LivestockKind mapToEntity(LivestockKindDto dto) {
         LivestockKind entity = new LivestockKind();
 
         entity.setNazwa(new LivestockKindName(dto.getNazwaZwierzecia()));
@@ -27,8 +27,8 @@ public class LivestockKindMapper implements GenericMapper<LivestockKind, Livesto
     }
 
     @Override
-    public LivestockKindDTO mapToDto(LivestockKind entity) {
-        LivestockKindDTO dto = new LivestockKindDTO();
+    public LivestockKindDto mapToDto(LivestockKind entity) {
+        LivestockKindDto dto = new LivestockKindDto();
 
         dto.setNazwaZwierzecia(entity.getName());
         dto.setTaryfa(entity.getTaryfa().taryfa());
