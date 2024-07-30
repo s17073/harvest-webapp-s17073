@@ -9,12 +9,10 @@ import java.util.List;
 public interface GenericCrudRepoJpa<T> extends JpaRepository<T, Long> {
 
     default List<T> getAllItems(){
-        System.out.println("getAllItems");
         return findAll();
     }
 
     default void addItem(T t){
-        System.out.println("save");
         save(t);
     }
 

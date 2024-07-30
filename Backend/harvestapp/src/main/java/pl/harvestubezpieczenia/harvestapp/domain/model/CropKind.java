@@ -3,13 +3,13 @@ package pl.harvestubezpieczenia.harvestapp.domain.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
+import pl.harvestubezpieczenia.harvestapp.domain.valueObjects.CropKindName;
 import pl.harvestubezpieczenia.harvestapp.domain.valueObjects.InsuredValue;
 import pl.harvestubezpieczenia.harvestapp.domain.valueObjects.ModificationDate;
-import pl.harvestubezpieczenia.harvestapp.domain.valueObjects.CropKindName;
 import pl.harvestubezpieczenia.harvestapp.domain.valueObjects.Season;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @Entity
@@ -33,7 +33,7 @@ public class CropKind implements GenericCrudModel{
     private ModificationDate dataModyfikacji;
 
     @OneToMany(mappedBy = "cropKind", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private Set<CropKindVariety> cropKindVarieties = new HashSet<>();
+    private List<CropKindVariety> cropKindVarieties = new ArrayList<>();
 
     @JsonIgnore
     public String getName(){

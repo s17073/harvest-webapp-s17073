@@ -5,8 +5,8 @@ import lombok.Data;
 import pl.harvestubezpieczenia.harvestapp.domain.valueObjects.CropVarietyName;
 import pl.harvestubezpieczenia.harvestapp.domain.valueObjects.ModificationDate;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @Entity
@@ -25,7 +25,7 @@ public class CropVariety implements GenericCrudModel {
     private ModificationDate dataModyfikacji;
 
     @OneToMany(mappedBy = "cropVariety", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private Set<CropKindVariety> cropKindVarieties = new HashSet<>();
+    private List<CropKindVariety> cropKindVarieties = new ArrayList<>();
 
     @Override
     public int getId() {

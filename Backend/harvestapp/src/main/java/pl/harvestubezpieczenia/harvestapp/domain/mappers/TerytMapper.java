@@ -17,8 +17,10 @@ public class TerytMapper {
         dto.setGmina(entity.getGmina());
         dto.setTyp(entity.getTyp());
 
-        for(Address a : entity.getAddresses() ){
-            dto.getAdresy().add(a);
+        if (!entity.getAddresses().isEmpty()) {
+            for (Address a : entity.getAddresses()) {
+                dto.addAress(a);
+            }
         }
 
         return dto;

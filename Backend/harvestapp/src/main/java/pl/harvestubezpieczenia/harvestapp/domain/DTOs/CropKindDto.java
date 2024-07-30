@@ -2,7 +2,8 @@ package pl.harvestubezpieczenia.harvestapp.domain.DTOs;
 
 import lombok.Data;
 
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 public class CropKindDto implements GenericDto {
@@ -13,6 +14,6 @@ public class CropKindDto implements GenericDto {
     private double wartoscRynkowa;
     private double wartoscMax;
 
-    private Set<CropVarietyDto> gatunki;
+    private List<String> gatunki = new ArrayList<>();
 
 }

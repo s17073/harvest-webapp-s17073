@@ -14,11 +14,10 @@ import pl.harvestubezpieczenia.harvestapp.domain.valueObjects.Season;
 @Qualifier("cropKindMapper")
 public class CropKindMapper implements GenericMapper<CropKind, CropKindDto> {
 
-    private final CropVarietyMapper mapper = new CropVarietyMapper();
-
     @Override
     public CropKind mapToEntity(CropKindDto dto) {
         CropKind entity = new CropKind();
+
         entity.setNazwaUprawy(new CropKindName(dto.getNazwaUprawy()));
         entity.setTaryfa(new Season(dto.getTaryfa()));
         entity.setCzyAktywna(dto.isCzyAktywna());
@@ -38,15 +37,11 @@ public class CropKindMapper implements GenericMapper<CropKind, CropKindDto> {
         dto.setWartoscRynkowa(entity.getWartoscUbezpieczenia().wartoscRynkowa());
         dto.setWartoscMax(entity.getWartoscUbezpieczenia().wartoscMax());
 
-        System.out.println(entity.getCropKindVarieties());
-
-        for(CropKindVariety ckv : entity.getCropKindVarieties()){
-
-            System.out.println(mapper.mapToDto(ckv.getCropVariety()));
-//            dto.getGatunki().add(mapper.mapToDto(ckv.getCropVariety()));
-
+        if(!entity.getCropKindVarieties().isEmpty()) {
+            for (CropKindVariety ckv : entity.getCropKindVarieties()) {
+                dto.getGatunki().add(ckv.getCropVariety().getName());
+            }
         }
-
         return dto;
     }
 

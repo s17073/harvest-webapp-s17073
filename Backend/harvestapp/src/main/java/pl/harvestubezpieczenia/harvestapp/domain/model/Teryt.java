@@ -4,7 +4,8 @@ import jakarta.persistence.*;
 import lombok.Data;
 import pl.harvestubezpieczenia.harvestapp.domain.valueObjects.ModificationDate;
 
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @Entity
@@ -20,7 +21,7 @@ public class Teryt implements GenericCrudModel {
     private String typ;
 
     @OneToMany(mappedBy = "teryt", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private Set<Address> addresses;
+    private List<Address> addresses = new ArrayList<>();
 
     @Override
     public int getId() {

@@ -29,8 +29,10 @@ public class CropVarietyMapper implements GenericMapper<CropVariety, CropVariety
         dto.setNazwaGatunku(entity.getNazwaGatunku().nazwaGatunku());
         dto.setCzyAktywna(entity.isCzyAktywna());
 
-        for(CropKindVariety ckv : entity.getCropKindVarieties()) {
-            dto.getLista().add(ckv);
+        if (!entity.getCropKindVarieties().isEmpty()) {
+            for (CropKindVariety ckv : entity.getCropKindVarieties()) {
+                dto.getUprawy().add(ckv.getCropKind().getName());
+            }
         }
 
         return dto;
