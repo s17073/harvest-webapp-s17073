@@ -1,4 +1,5 @@
 module.exports = {
+  parser: "@typescript-eslint/parser",
   root: true,
   env: { browser: true, es2020: true },
   extends: [
@@ -13,6 +14,7 @@ module.exports = {
   parser: "@typescript-eslint/parser",
   plugins: ["react-refresh", "@typescript-eslint", "prettier"],
   rules: {
+    "react/prop-types": "off",
     "react-refresh/only-export-components": [
       "warn",
       { allowConstantExport: true },
