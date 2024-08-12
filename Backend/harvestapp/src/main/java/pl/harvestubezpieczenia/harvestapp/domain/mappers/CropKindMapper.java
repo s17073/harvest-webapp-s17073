@@ -31,6 +31,7 @@ public class CropKindMapper implements GenericMapper<CropKind, CropKindDto> {
     public CropKindDto mapToDto(CropKind entity) {
         CropKindDto dto = new CropKindDto();
 
+        dto.setId(entity.getId());
         dto.setNazwaUprawy(entity.getNazwaUprawy().nazwaUprawy());
         dto.setTaryfa(entity.getTaryfa().taryfa());
         dto.setCzyAktywna(entity.isCzyAktywna());

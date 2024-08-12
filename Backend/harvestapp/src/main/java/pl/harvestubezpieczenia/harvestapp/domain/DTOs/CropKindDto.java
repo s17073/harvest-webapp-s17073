@@ -8,6 +8,7 @@ import java.util.List;
 @Data
 public class CropKindDto implements GenericDto {
 
+    private int id;
     private String nazwaUprawy;
     private String taryfa;
     private boolean czyAktywna;

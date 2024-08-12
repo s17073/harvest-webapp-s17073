@@ -40,7 +40,6 @@ public class GenericService<E extends GenericCrudModel, D extends GenericDto> {
             if(e.getId() == id){
                 return new ResponseEntity<>(map.mapToDto(e), HttpStatus.OK);
             }
-            break;
         }
         return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
     }
@@ -96,7 +95,6 @@ public class GenericService<E extends GenericCrudModel, D extends GenericDto> {
             if(e.getId() == id) {
                 return e;
             }
-            break;
         }
         return null;
     }
