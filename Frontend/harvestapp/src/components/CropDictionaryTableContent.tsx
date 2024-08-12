@@ -2,6 +2,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 
 interface CropKindDataDict {
+  id: number;
   nazwaUprawy: string;
   taryfa: string;
   czyAktywna: boolean;
@@ -14,20 +15,40 @@ export const CropDictionaryTableContent: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get<CropKindDataDict[]>("api/cropkind");
-        setData(response.data);
-      } catch (err) {
-        setError((err as Error).message);
-      } finally {
-        setLoading(false);
-      }
-    };
+  const fetchData = async () => {
+    setLoading(true);
+    try {
+      const response = await axios.get<CropKindDataDict[]>("api/cropkind");
+      console.log("Crop kind data get method status: ", response.status);
+      setData(response.data);
+    } catch (err) {
+      setError((err as Error).message);
+    } finally {
+      setLoading(false);
+    }
+  };
 
+  useEffect(() => {
     fetchData();
   }, []);
+
+  const handleDelete = async (id: number) => {
+    try {
+      const response = await axios.delete(`api/cropkind/${id}`);
+      console.log(`Crop kind id: ${id} delete status: `, response.status);
+
+      if (response.status === 200) {
+        setData([]);
+        await fetchData();
+      }
+    } catch (err) {
+      setError(
+        `Wystąpił błąd podczasu usuwania elementu od id ${id}: ${
+          (err as Error).message
+        }`,
+      );
+    }
+  };
 
   if (loading) return <p>Ładowanie danych...</p>;
   if (error) return <p>Błąd: {error}</p>;
@@ -46,15 +67,19 @@ export const CropDictionaryTableContent: React.FC = () => {
         </tr>
       </thead>
       <tbody>
-        {data.map((crop, index) => (
-          <tr key={index} className={`row-${index + 1}`}>
+        {data.map((crop) => (
+          <tr key={crop.id} className={`row-${crop.id}`}>
             <td>{crop.nazwaUprawy}</td>
             <td>{crop.taryfa}</td>
             <td>{crop.wartoscRynkowa}</td>
             <td>{crop.wartoscMax}</td>
             <td>{crop.czyAktywna ? "AKTYWNA" : "NIEAKTYWNA"}</td>
-            <td>Edytujimg</td>
-            <td>Usunimg</td>
+            <td>Edytuj id: {crop.id}</td>
+            <td>
+              <div onClick={() => handleDelete(crop.id)}>
+                Usuń id: {crop.id}
+              </div>
+            </td>
           </tr>
         ))}
       </tbody>
