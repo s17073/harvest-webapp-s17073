@@ -21,7 +21,12 @@ public class CropKindMapper implements GenericMapper<CropKind, CropKindDto> {
         entity.setNazwaUprawy(new CropKindName(dto.getNazwaUprawy()));
         entity.setTaryfa(new Season(dto.getTaryfa()));
         entity.setCzyAktywna(dto.isCzyAktywna());
-        entity.setWartoscUbezpieczenia(new InsuredValue(dto.getWartoscRynkowa()));
+
+        if(dto.getWartoscMax() == 0.0) {
+            entity.setWartoscUbezpieczenia(new InsuredValue(dto.getWartoscRynkowa()));
+        } else {
+            entity.setWartoscUbezpieczenia(new InsuredValue(dto.getWartoscRynkowa(), dto.getWartoscMax()));
+        }
         entity.setDataModyfikacji(new ModificationDate());
 
         return entity;

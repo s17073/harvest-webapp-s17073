@@ -1,11 +1,11 @@
 import { AdminPanelNav } from "../components/AdminPanelNav";
-import { MainSection } from "../components/MainSection";
+import { CropDictMainSection } from "../components/sections/CropDictMainSection";
 
 export const AdminPanelCropKindData: React.FC = () => {
   return (
     <>
       <AdminPanelNav />
-      <MainSection />
+      <CropDictMainSection />
     </>
   );
 };
