@@ -12,7 +12,7 @@ export const CropDictionaryTableContent: React.FC = () => {
 
   const fetchCropKindData = () =>
     fetchDictionaryData(
-      "api/cropkind",
+      "/api/cropkind",
       setNoData,
       setData,
       setFetchError,

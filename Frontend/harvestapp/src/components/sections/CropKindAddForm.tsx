@@ -22,7 +22,7 @@ export const CropKindAddForm: React.FC<AddFormProps> = ({ id, isEdit }) => {
       id !== undefined
         ? fetchDictionaryDataById(
             id,
-            "api/cropkind",
+            "/api/cropkind",
             setAnnouncement,
             setCropKind,
           )
@@ -33,7 +33,7 @@ export const CropKindAddForm: React.FC<AddFormProps> = ({ id, isEdit }) => {
   const addCropKindData = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    const apiUrl = isEdit ? `api/cropkind/${id}` : "api/cropkind";
+    const apiUrl = isEdit ? `/api/cropkind/${id}` : "/api/cropkind";
     const method = isEdit ? "PUT" : "POST";
 
     handleDictionaryAdd(
@@ -57,7 +57,7 @@ export const CropKindAddForm: React.FC<AddFormProps> = ({ id, isEdit }) => {
         <div>
           <label>Nazwa uprawy:</label>
           <input
-            defaultValue={cropKind?.nazwaUprawy}
+            defaultValue={nazwaUprawy}
             type="text"
             onChange={(e) => setNazwaUprawy(e.target.value)}
             required
@@ -69,21 +69,21 @@ export const CropKindAddForm: React.FC<AddFormProps> = ({ id, isEdit }) => {
             <input
               type="radio"
               value="WIOSNA"
-              checked={cropKind?.taryfa === "WIOSNA"}
+              checked={taryfa === "WIOSNA"}
               onChange={() => setTaryfa("WIOSNA")}
             />
             <label>WIOSNA</label>
             <input
               type="radio"
               value="ZIMA"
-              checked={cropKind?.taryfa === "ZIMA"}
+              checked={taryfa === "ZIMA"}
               onChange={() => setTaryfa("ZIMA")}
             />
             <label>ZIMA</label>
             <input
               type="radio"
               value="CAŁOROCZNA"
-              checked={cropKind?.taryfa === "CAŁOROCZNA"}
+              checked={taryfa === "CAŁOROCZNA"}
               onChange={() => setTaryfa("CAŁOROCZNA")}
             />
             <label>CAŁOROCZNA</label>
@@ -93,7 +93,7 @@ export const CropKindAddForm: React.FC<AddFormProps> = ({ id, isEdit }) => {
           <label>Czy Aktywna:</label>
           <input
             type="checkbox"
-            checked={cropKind?.czyAktywna}
+            checked={czyAktywna}
             onChange={() => setCzyAktywna(!czyAktywna)}
           />
         </div>
@@ -101,7 +101,7 @@ export const CropKindAddForm: React.FC<AddFormProps> = ({ id, isEdit }) => {
           <label>Wartość rynkowa:</label>
           <input
             type="number"
-            defaultValue={cropKind?.wartoscRynkowa}
+            defaultValue={wartoscRynkowa}
             onChange={(e) => setWartoscRynkowa(parseFloat(e.target.value))}
             required
           />
@@ -110,7 +110,7 @@ export const CropKindAddForm: React.FC<AddFormProps> = ({ id, isEdit }) => {
           <label>Wartość maksymalna:</label>
           <input
             type="number"
-            defaultValue={cropKind?.wartoscMax}
+            defaultValue={wartoscMax}
             placeholder={
               wartoscRynkowa ? (wartoscRynkowa * 1.2).toString() : undefined
             }

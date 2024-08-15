@@ -1,11 +1,14 @@
 import { AdminPanelNav } from "../components/AdminPanelNav";
-import { CropDictMainSection } from "../components/sections/CropDictMainSection";
+import { CropDictionaryTableContent } from "../components/sections/CropDictionaryTableContent";
 
 export const AdminPanelCropKindData: React.FC = () => {
   return (
     <>
       <AdminPanelNav />
-      <CropDictMainSection />
+      <div>
+        <h1>UPRAWY</h1>
+        <CropDictionaryTableContent />
+      </div>
     </>
   );
 };
