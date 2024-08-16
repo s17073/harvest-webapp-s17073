@@ -1,6 +1,6 @@
 import axios from "axios";
 
-export const handleDictionaryAdd = async (
+export const handleDictionaryUpsert = async (
   event: React.FormEvent<HTMLFormElement>,
   api: string,
   method: string,
@@ -19,11 +19,11 @@ export const handleDictionaryAdd = async (
     } else {
       throw new Error("Unknown HTTP method.");
     }
-    console.log(response.data);
+    // console.log(response.data);
     setAnnouncement("Uprawa została dodana.");
-    console.log(response.status);
+    // console.log(response.status);
   } catch (err) {
     setAnnouncement("Wystąpił błąd przy próbie dodania rekordu.");
-    console.log((err as Error).message);
+    // console.log((err as Error).message);
   }
 };

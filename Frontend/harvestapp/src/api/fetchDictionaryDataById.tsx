@@ -8,20 +8,16 @@ export const fetchDictionaryDataById = async (
 ) => {
   try {
     const response = await axios.get<any>(`${url}/${id}`);
-    console.log(
-      `Crop kind data get by id: ${id} method status: `,
-      response.status,
-    );
     if (!response.data) {
       setAnnouncement(`Nie znaleziono rekordu o id ${id}.`);
     } else {
       setData(response.data);
-      console.log(response.data);
+      // console.log(response.data);
     }
   } catch (err) {
     setAnnouncement(`Wystąpił błąd przy próbie edycji danych dla id: ${id}`);
-    console.log(
-      `Crop kind data get y id: ${id} method error: ${(err as Error).message}`,
-    );
+    // console.log(
+    //   `Crop kind data get y id: ${id} method error: ${(err as Error).message}`,
+    // );
   }
 };

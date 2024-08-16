@@ -1,7 +1,7 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { AdminPanelCropKindData } from "./pages/AdminPanelCropKindData";
-import { AdminPanelCropKindAdd } from "./pages/AdminPanelCropKindAdd";
 import { AdminPanelMainPage } from "./pages/AdminPanelMainPage";
+import { AdminPanelCropKindUpsert } from "./pages/AdminPanelCropKindUpsert";
 
 function App() {
   return (
@@ -9,10 +9,13 @@ function App() {
       <Routes>
         <Route path="/admin" element={<AdminPanelMainPage />} />
         <Route path="/admin/cropkind" element={<AdminPanelCropKindData />} />
-        <Route path="/admin/cropkind/add" element={<AdminPanelCropKindAdd />} />
         <Route
-          path="/admin/cropkind/add/:id"
-          element={<AdminPanelCropKindAdd />}
+          path="/admin/cropkind/upsert"
+          element={<AdminPanelCropKindUpsert />}
+        />
+        <Route
+          path="/admin/cropkind/upsert/:id"
+          element={<AdminPanelCropKindUpsert />}
         />
       </Routes>
     </BrowserRouter>

@@ -1,16 +1,16 @@
 import { AdminPanelNav } from "../components/AdminPanelNav";
-import { CropKindData } from "../components/CropKindData";
+import { CropKindForm } from "../components/CropKindForm";
 
-export const AdminPanelCropKindData: React.FC = () => {
+export const AdminPanelCropKindUpsert: React.FC = () => {
   return (
     <>
       <AdminPanelNav />
       <div className="background">
         <div className="admin-content-space">
           <div className="admin-title-container">
-            <h1>UPRAWY</h1>
+            <h1>DODAJ UPRAWĘ</h1>
           </div>
-          <CropKindData />
+          <CropKindForm />
         </div>
       </div>
     </>
