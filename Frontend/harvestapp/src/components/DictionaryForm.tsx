@@ -2,15 +2,16 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { fetchDictionaryDataById } from "../api/fetchDictionaryDataById";
 import { handleDictionaryUpsert } from "../api/handleDictionaryUpsert";
+import * as yup from "yup";
 
-export interface IFormFieldConfig<T> {
+export interface IFormSchema<T> {
   name: keyof T;
   type:
     | "text"
     | "radio"
     | "marketValue"
     | "maxValue"
-    | "checkbox"
+    | "isActive"
     | "number"
     | "season";
   label: string;
@@ -22,7 +23,7 @@ export interface IFormFieldConfig<T> {
 interface IDictionaryFormProps<T> {
   apiEndpoint: string;
   initialData: T;
-  fields: IFormFieldConfig<T>[];
+  fields: IFormSchema<T>[];
 }
 
 export const DictionaryForm = <T extends {}>({
@@ -31,8 +32,13 @@ export const DictionaryForm = <T extends {}>({
   fields,
 }: IDictionaryFormProps<T>) => {
   const [data, setData] = useState<T>(initialData);
+  const [errors, setErrors] = useState<any>({});
   const [announcement, setAnnouncement] = useState<string | null>(null);
   const { id } = useParams();
+
+  const validationSchema = yup.object().shape({
+    nazwaUprawy: yup.string().required("name is required"),
+  });
 
   useEffect(() => {
     if (id !== undefined) {
@@ -49,13 +55,27 @@ export const DictionaryForm = <T extends {}>({
     setData({ ...data, [field]: value });
   };
 
-  const sendUpsertRequest = (event: React.FormEvent<HTMLFormElement>) => {
+  const sendUpsertRequest = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    const apiUrl = id !== undefined ? `${apiEndpoint}/${id}` : apiEndpoint;
-    const method = id !== undefined ? "PUT" : "POST";
+    try {
+      await validationSchema.validate(data, { abortEarly: false });
 
-    handleDictionaryUpsert(event, apiUrl, method, data, setAnnouncement);
+      const apiUrl = id !== undefined ? `${apiEndpoint}/${id}` : apiEndpoint;
+      const method = id !== undefined ? "PUT" : "POST";
+
+      handleDictionaryUpsert(event, apiUrl, method, data, setAnnouncement);
+    } catch (err) {
+      if (err instanceof yup.ValidationError) {
+        const fieldErrors: any = {};
+        err.inner.forEach((error) => {
+          if (error.path) {
+            fieldErrors[error.path] = error.message;
+          }
+        });
+        setErrors(fieldErrors);
+      }
+    }
   };
 
   const getMaxValuePlaceholder = () => {
@@ -73,7 +93,7 @@ export const DictionaryForm = <T extends {}>({
   };
 
   return (
-    <div>
+    <div className="admin-upsert-space">
       <form onSubmit={sendUpsertRequest}>
         {fields.map((field) => {
           const value = data[field.name];
@@ -81,26 +101,39 @@ export const DictionaryForm = <T extends {}>({
             <div key={field.name as string}>
               <label>{field.label}:</label>
               {field.type === "text" && (
-                <input
-                  type="text"
-                  value={value as string}
-                  onChange={(e) => handleOnChange(field.name, e.target.value)}
-                  placeholder={field.placeholder}
-                  required={field.required}
-                />
+                <>
+                  <input
+                    type="text"
+                    value={value as string}
+                    onChange={(e) => handleOnChange(field.name, e.target.value)}
+                    placeholder={field.placeholder}
+                  />
+                  {errors[field.name as string] && (
+                    <span className="error-message">
+                      {errors[field.name as string]}
+                    </span>
+                  )}
+                </>
               )}
               {field.type === "number" && (
-                <input
-                  type="number"
-                  value={value as number}
-                  onChange={(e) =>
-                    handleOnChange(field.name, parseFloat(e.target.value))
-                  }
-                  placeholder={field.placeholder}
-                  required={field.required}
-                />
+                <>
+                  <input
+                    type="number"
+                    value={value as number}
+                    onChange={(e) =>
+                      handleOnChange(field.name, parseFloat(e.target.value))
+                    }
+                    placeholder={field.placeholder}
+                    required={field.required}
+                  />
+                  {errors[field.name as string] && (
+                    <span className="error-message">
+                      {errors[field.name as string]}
+                    </span>
+                  )}
+                </>
               )}
-              {field.type === "checkbox" && (
+              {field.type === "isActive" && (
                 <input
                   type="checkbox"
                   checked={value as boolean}
@@ -156,40 +189,57 @@ export const DictionaryForm = <T extends {}>({
                 </div>
               )}
               {field.type === "marketValue" && (
-                <label>
-                  <input
-                    type="text"
-                    inputMode="numeric"
-                    pattern="\d*"
-                    value={value as number}
-                    onChange={(e) =>
-                      e.target.value
-                        ? handleOnChange(field.name, parseFloat(e.target.value))
-                        : handleOnChange(field.name, undefined)
-                    }
-                    placeholder={field.placeholder}
-                    required={field.required}
-                  />
-                </label>
+                <>
+                  <label>
+                    <input
+                      type="text"
+                      inputMode="numeric"
+                      pattern="\d*"
+                      value={value as number}
+                      onChange={(e) =>
+                        e.target.value
+                          ? handleOnChange(
+                              field.name,
+                              parseFloat(e.target.value),
+                            )
+                          : handleOnChange(field.name, 0)
+                      }
+                      placeholder={field.placeholder}
+                      required={field.required}
+                    />
+                  </label>
+                  {errors[field.name as string] && (
+                    <span className="error-message">
+                      {errors[field.name as string]}
+                    </span>
+                  )}
+                </>
               )}
               {field.type === "maxValue" && (
-                <label>
-                  <input
-                    type="text"
-                    inputMode="numeric"
-                    pattern="\d*"
-                    value={value as number}
-                    onChange={(e) =>
-                      e.target.value
-                        ? handleOnChange(
-                            field.name,
-                            Math.round(parseFloat(e.target.value)),
-                          )
-                        : handleOnChange(field.name, undefined)
-                    }
-                    placeholder={getMaxValuePlaceholder()}
-                  />
-                </label>
+                <>
+                  <label>
+                    <input
+                      type="text"
+                      inputMode="numeric"
+                      pattern="\d*"
+                      value={value as number}
+                      onChange={(e) =>
+                        !Number.isNaN(Math.round(parseFloat(e.target.value)))
+                          ? handleOnChange(
+                              field.name,
+                              Math.round(parseFloat(e.target.value)),
+                            )
+                          : handleOnChange(field.name, "")
+                      }
+                      placeholder={getMaxValuePlaceholder()}
+                    />
+                  </label>
+                  {errors[field.name as string] && (
+                    <span className="error-message">
+                      {errors[field.name as string]}
+                    </span>
+                  )}
+                </>
               )}
             </div>
           );

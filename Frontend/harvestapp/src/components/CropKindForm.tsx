@@ -1,4 +1,4 @@
-import { DictionaryForm, IFormFieldConfig } from "./DictionaryForm";
+import { DictionaryForm, IFormSchema } from "./DictionaryForm";
 
 interface ICropKindDict {
   nazwaUprawy: string;
@@ -9,14 +9,19 @@ interface ICropKindDict {
 }
 
 export const CropKindForm: React.FC = () => {
-  const fields: IFormFieldConfig<ICropKindDict>[] = [
-    { name: "nazwaUprawy", type: "text", label: "Nazwa", required: true },
+  const cropKindFields: IFormSchema<ICropKindDict>[] = [
+    {
+      name: "nazwaUprawy",
+      type: "text",
+      label: "Nazwa",
+      required: true,
+    },
     {
       name: "taryfa",
       type: "season",
       label: "Taryfa",
     },
-    { name: "czyAktywna", type: "checkbox", label: "Czy Aktywna" },
+    { name: "czyAktywna", type: "isActive", label: "Czy Aktywna" },
     {
       name: "wartoscRynkowa",
       type: "marketValue",
@@ -40,7 +45,7 @@ export const CropKindForm: React.FC = () => {
         wartoscRynkowa: 0,
         wartoscMax: "",
       }}
-      fields={fields}
+      fields={cropKindFields}
     />
   );
 };
