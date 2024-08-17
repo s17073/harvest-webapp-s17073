@@ -24,21 +24,40 @@ interface IDictionaryFormProps<T> {
   apiEndpoint: string;
   initialData: T;
   fields: IFormSchema<T>[];
+  additionalValidationSchema: yup.ObjectSchema<any>;
 }
 
 export const DictionaryForm = <T extends {}>({
   apiEndpoint,
   initialData,
   fields,
+  additionalValidationSchema,
 }: IDictionaryFormProps<T>) => {
   const [data, setData] = useState<T>(initialData);
   const [errors, setErrors] = useState<any>({});
   const [announcement, setAnnouncement] = useState<string | null>(null);
   const { id } = useParams();
 
-  const validationSchema = yup.object().shape({
-    nazwaUprawy: yup.string().required("name is required"),
+  const baseValidationSchema = yup.object().shape({
+    wartoscRynkowa: yup
+      .number()
+      .required()
+      .integer()
+      .min(1, "wartość rynkowa musi być powyżej 0"),
+    wartoscMax: yup
+      .number()
+      .typeError("Amount must be a number")
+      .transform((value) => (Number.isNaN(value) ? null : value))
+      .integer()
+      .min(1, "wartość maksymalna musi być powyżej 0")
+      .notRequired(),
+    taryfa: yup.string().required("Wybierz taryfę"),
+    czyAktywna: yup.bool(),
   });
+
+  const validationSchema = baseValidationSchema.concat(
+    additionalValidationSchema,
+  );
 
   useEffect(() => {
     if (id !== undefined) {
@@ -53,6 +72,12 @@ export const DictionaryForm = <T extends {}>({
 
   const handleOnChange = (field: keyof T, value: any) => {
     setData({ ...data, [field]: value });
+  };
+
+  const handleOnBlur = (field: keyof T) => {
+    const newErrors = { ...errors };
+    delete newErrors[field]; // Usunięcie błędu dla danego pola
+    setErrors(newErrors);
   };
 
   const sendUpsertRequest = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -107,6 +132,7 @@ export const DictionaryForm = <T extends {}>({
                     value={value as string}
                     onChange={(e) => handleOnChange(field.name, e.target.value)}
                     placeholder={field.placeholder}
+                    onBlur={() => handleOnBlur(field.name)}
                   />
                   {errors[field.name as string] && (
                     <span className="error-message">
@@ -123,6 +149,7 @@ export const DictionaryForm = <T extends {}>({
                     onChange={(e) =>
                       handleOnChange(field.name, parseFloat(e.target.value))
                     }
+                    onBlur={() => handleOnBlur(field.name)}
                     placeholder={field.placeholder}
                     required={field.required}
                   />
@@ -134,59 +161,83 @@ export const DictionaryForm = <T extends {}>({
                 </>
               )}
               {field.type === "isActive" && (
-                <input
-                  type="checkbox"
-                  checked={value as boolean}
-                  onChange={() =>
-                    handleOnChange(field.name, !(value as boolean))
-                  }
-                />
+                <>
+                  <input
+                    type="checkbox"
+                    checked={value as boolean}
+                    onChange={() =>
+                      handleOnChange(field.name, !(value as boolean))
+                    }
+                  />
+                  {errors[field.name as string] && (
+                    <span className="error-message">
+                      {errors[field.name as string]}
+                    </span>
+                  )}
+                </>
               )}
+
               {field.type === "radio" && field.options && (
-                <div>
-                  {field.options.map((option) => (
-                    <label key={option}>
-                      <input
-                        type="radio"
-                        value={option}
-                        checked={value === option}
-                        onChange={() => handleOnChange(field.name, option)}
-                      />
-                      {option}
-                    </label>
-                  ))}
-                </div>
+                <>
+                  <div>
+                    {field.options.map((option) => (
+                      <label key={option}>
+                        <input
+                          type="radio"
+                          value={option}
+                          checked={value === option}
+                          onChange={() => handleOnChange(field.name, option)}
+                        />
+                        {option}
+                      </label>
+                    ))}
+                  </div>
+                  {errors[field.name as string] && (
+                    <span className="error-message">
+                      {errors[field.name as string]}
+                    </span>
+                  )}
+                </>
               )}
               {field.type === "season" && (
-                <div>
-                  <label>
-                    <input
-                      type="radio"
-                      value={"WIOSNA"}
-                      checked={value === "WIOSNA"}
-                      onChange={() => handleOnChange(field.name, "WIOSNA")}
-                    />
-                    {"WIOSNA"}
-                  </label>
-                  <label>
-                    <input
-                      type="radio"
-                      value={"ZIMA"}
-                      checked={value === "ZIMA"}
-                      onChange={() => handleOnChange(field.name, "ZIMA")}
-                    />
-                    {"ZIMA"}
-                  </label>
-                  <label>
-                    <input
-                      type="radio"
-                      value={"CAŁOROCZNA"}
-                      checked={value === "CAŁOROCZNA"}
-                      onChange={() => handleOnChange(field.name, "CAŁOROCZNA")}
-                    />
-                    {"CAŁOROCZNA"}
-                  </label>
-                </div>
+                <>
+                  <div>
+                    <label>
+                      <input
+                        type="radio"
+                        value={"WIOSNA"}
+                        checked={value === "WIOSNA"}
+                        onChange={() => handleOnChange(field.name, "WIOSNA")}
+                      />
+                      {"WIOSNA"}
+                    </label>
+                    <label>
+                      <input
+                        type="radio"
+                        value={"ZIMA"}
+                        checked={value === "ZIMA"}
+                        onChange={() => handleOnChange(field.name, "ZIMA")}
+                      />
+                      {"ZIMA"}
+                    </label>
+                    <label>
+                      <input
+                        type="radio"
+                        value={"CAŁOROCZNA"}
+                        checked={value === "CAŁOROCZNA"}
+                        onChange={() =>
+                          handleOnChange(field.name, "CAŁOROCZNA")
+                        }
+                      />
+                      {"CAŁOROCZNA"}
+                    </label>
+                  </div>
+                  {errors[field.name as string] && (
+                    <span className="error-message">
+                      {errors[field.name as string]}
+                    </span>
+                  )}
+                </>
               )}
               {field.type === "marketValue" && (
                 <>
@@ -204,6 +255,7 @@ export const DictionaryForm = <T extends {}>({
                             )
                           : handleOnChange(field.name, 0)
                       }
+                      onBlur={() => handleOnBlur(field.name)}
                       placeholder={field.placeholder}
                       required={field.required}
                     />
@@ -231,6 +283,7 @@ export const DictionaryForm = <T extends {}>({
                             )
                           : handleOnChange(field.name, "")
                       }
+                      onBlur={() => handleOnBlur(field.name)}
                       placeholder={getMaxValuePlaceholder()}
                     />
                   </label>
