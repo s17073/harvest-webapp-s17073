@@ -14,11 +14,11 @@ public class CropKindVariety implements GenericCrudModel {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int idUprawaGatunek;
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "id_rodzaj_uprawy")
     private CropKind cropKind;
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "id_gatunek")
     private CropVariety cropVariety;
 
