@@ -30,6 +30,7 @@ public class LivestockKindMapper implements GenericMapper<LivestockKind, Livesto
     public LivestockKindDto mapToDto(LivestockKind entity) {
         LivestockKindDto dto = new LivestockKindDto();
 
+        dto.setId(entity.getId());
         dto.setNazwaZwierzecia(entity.getName());
         dto.setTaryfa(entity.getTaryfa().taryfa());
         dto.setCzyAktywna(entity.isCzyAktywna());

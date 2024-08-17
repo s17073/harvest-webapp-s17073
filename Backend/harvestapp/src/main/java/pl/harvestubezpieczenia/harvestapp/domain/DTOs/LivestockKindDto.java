@@ -5,6 +5,7 @@ import lombok.Data;
 @Data
 public class LivestockKindDto implements GenericDto {
 
+    private int id;
     private String nazwaZwierzecia;
     private String taryfa;
     private boolean czyAktywna;
