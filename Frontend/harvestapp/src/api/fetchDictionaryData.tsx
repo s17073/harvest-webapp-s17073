@@ -8,7 +8,7 @@ export const fetchDictionaryData = async (
   setLoading: any,
 ) => {
   setLoading("Ładowanie danych...");
-  await new Promise((resolve) => setTimeout(resolve, 1000)); //sztuczne opoznienie o 1 sec
+  // await new Promise((resolve) => setTimeout(resolve, 1000)); //sztuczne opoznienie o 1 sec
   try {
     const response = await axios.get<any[]>(url);
     // console.log("Crop kind data get method status: ", response.status);
