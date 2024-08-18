@@ -1,11 +1,13 @@
 package pl.harvestubezpieczenia.harvestapp.domain.DTOs;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
 import pl.harvestubezpieczenia.harvestapp.domain.model.Address;
 
 @Data
 public class InsuranceCompanyDto implements GenericDto {
 
+    private int id;
     private String nazwa;
     private String numerZakladu;
     private String numerTelefonu;
@@ -14,6 +16,10 @@ public class InsuranceCompanyDto implements GenericDto {
     private String krs;
     private boolean czyAktywna;
 
-    private Address address;
+    private int idAddress;
+    private String addres;
+
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    private Address addressObj;
 
 }

@@ -20,7 +20,7 @@ export const handleDictionaryUpsert = async (
       throw new Error("Unknown HTTP method.");
     }
     // console.log(response.data);
-    setAnnouncement("Uprawa została dodana.");
+    setAnnouncement("Rekord został dodany.");
     // console.log(response.status);
   } catch (err) {
     setAnnouncement("Wystąpił błąd przy próbie dodania rekordu.");

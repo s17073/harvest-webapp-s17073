@@ -30,6 +30,7 @@ public class SoilClassMapper implements GenericMapper<SoilClass, SoilClassDto> {
     public SoilClassDto mapToDto(SoilClass entity) {
         SoilClassDto dto = new SoilClassDto();
 
+        dto.setId(entity.getId());
         dto.setKlasaGleby(entity.getKlasaGleby().klasaGleby());
         dto.setOpis(entity.getOpis());
         dto.setTaryfa(entity.getTaryfa().taryfa());

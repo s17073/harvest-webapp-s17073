@@ -26,6 +26,7 @@ public class ApkQuestionMapper implements GenericMapper<ApkQuestion, ApkQuestion
     public ApkQuestionDto mapToDto(ApkQuestion entity) {
         ApkQuestionDto dto = new ApkQuestionDto();
 
+        dto.setId(entity.getId());
         dto.setPytanie(entity.getPytanie().pytanie());
         dto.setKomunikat(entity.getKomunikat());
         dto.setCzyAktywna(entity.isCzyAktywna());

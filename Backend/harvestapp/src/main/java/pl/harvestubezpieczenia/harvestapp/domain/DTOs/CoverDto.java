@@ -5,6 +5,7 @@ import lombok.Data;
 @Data
 public class CoverDto implements GenericDto {
 
+    private int id;
     private String nazwa;
     private String grupaMinisterialna;
     private String taryfa;

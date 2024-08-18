@@ -38,21 +38,33 @@ export const DictionaryForm = <T extends {}>({
   const [announcement, setAnnouncement] = useState<string | null>(null);
   const { id } = useParams();
 
+  const keyExists = (key: keyof T): boolean => {
+    return key in data;
+  };
+
   const baseValidationSchema = yup.object().shape({
-    wartoscRynkowa: yup
-      .number()
-      .required()
-      .integer()
-      .min(1, "wartość rynkowa musi być powyżej 0"),
-    wartoscMax: yup
-      .number()
-      .typeError("Amount must be a number")
-      .transform((value) => (Number.isNaN(value) ? null : value))
-      .integer()
-      .min(1, "wartość maksymalna musi być powyżej 0")
-      .notRequired(),
-    taryfa: yup.string().required("Wybierz taryfę"),
-    czyAktywna: yup.bool(),
+    ...(keyExists("wartoscRynkowa" as keyof T) && {
+      wartoscRynkowa: yup
+        .number()
+        .required()
+        .integer()
+        .min(1, "wartość rynkowa musi być powyżej 0"),
+    }),
+    ...(keyExists("wartoscMax" as keyof T) && {
+      wartoscMax: yup
+        .number()
+        .typeError("Amount must be a number")
+        .transform((value) => (Number.isNaN(value) ? null : value))
+        .integer()
+        .min(1, "wartość maksymalna musi być powyżej 0")
+        .notRequired(),
+    }),
+    ...(keyExists("taryfa" as keyof T) && {
+      taryfa: yup.string().required("Wybierz taryfę"),
+    }),
+    ...(keyExists("czyAktywna" as keyof T) && {
+      czyAktywna: yup.bool(),
+    }),
   });
 
   const validationSchema = baseValidationSchema.concat(

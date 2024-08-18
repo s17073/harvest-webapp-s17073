@@ -34,6 +34,7 @@ public class CoverMapper implements GenericMapper<Cover, CoverDto> {
     public CoverDto mapToDto(Cover entity) {
         CoverDto dto = new CoverDto();
 
+        dto.setId(entity.getId());
         dto.setNazwa(entity.getNazwa().nazwa());
         dto.setGrupaMinisterialna(entity.getGrupaMinisterialna().grupaMinisterialna());
         dto.setTaryfa(entity.getTaryfa().taryfa());

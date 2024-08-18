@@ -4,42 +4,44 @@ import { handleDictionaryDelete } from "../api/handleDictionaryDelete";
 import { Link } from "react-router-dom";
 import { AdminPanelNav } from "../components/AdminPanelNav";
 
-export interface ILivestockKindData {
+export interface ICoverData {
   id: number;
-  nazwaZwierzecia: string;
+  nazwa: string;
+  grupaMinisterialna: string;
   taryfa: string;
+  opis: string;
+  czyUprawa: boolean;
+  czyZwierze: boolean;
   czyAktywna: boolean;
-  wartoscRynkowa: number;
-  wartoscMax: number;
 }
 
-export const LivestockKindData: React.FC = () => {
-  const [data, setData] = useState<ILivestockKindData[]>([]);
+export const CoverData: React.FC = () => {
+  const [data, setData] = useState<ICoverData[]>([]);
   const [loading, setLoading] = useState<string | null>(null);
   const [noData, setNoData] = useState<string | null>(null);
   const [fetchError, setFetchError] = useState<string | null>(null);
   const [announcement, setAnnouncement] = useState<string | null>(null);
 
-  const fetchLivestockKindData = () =>
+  const fetchCoverData = () =>
     fetchDictionaryData(
-      "/api/livestockkind",
+      "/api/cover",
       setNoData,
       setData,
       setFetchError,
       setLoading,
     );
 
-  const deleteLivestockKindData = (id: number) =>
+  const deleteCoverData = (id: number) =>
     handleDictionaryDelete(
       id,
-      "/api/livestockkind",
+      "/api/cover",
       setData,
-      fetchLivestockKindData,
+      fetchCoverData,
       setAnnouncement,
     );
 
   useEffect(() => {
-    fetchLivestockKindData();
+    fetchCoverData();
   }, []);
 
   return (
@@ -56,10 +58,11 @@ export const LivestockKindData: React.FC = () => {
             <table className="admin-table">
               <thead>
                 <tr>
-                  <th>Nazwa zwierzecia</th>
+                  <th>Ochrona</th>
+                  <th>Grupa ministerialna</th>
                   <th>Taryfa</th>
-                  <th>Wartość rynkowa</th>
-                  <th>Wartość maksymalna</th>
+                  <th>CzyUprawa</th>
+                  <th>CzyZwierze</th>
                   <th>Status</th>
                   <th>Edytuj</th>
                   <th>Usuń</th>
@@ -68,20 +71,21 @@ export const LivestockKindData: React.FC = () => {
               <tbody>
                 {data.map((data) => (
                   <tr key={data.id} className={`row-${data.id}`}>
-                    <td>{data.nazwaZwierzecia}</td>
+                    <td>{data.nazwa}</td>
+                    <td>{data.grupaMinisterialna}</td>
                     <td>{data.taryfa}</td>
-                    <td>{data.wartoscRynkowa} zł</td>
-                    <td>{data.wartoscMax} zł</td>
+                    <td>{data.czyUprawa ? "TAK" : "NIE"}</td>
+                    <td>{data.czyZwierze ? "TAK" : "NIE"}</td>
                     <td>{data.czyAktywna ? "AKTYWNA" : "NIEAKTYWNA"}</td>
                     <td>
                       <div>
-                        <Link to={`/admin/LivestockKind/upsert/${data.id}`}>
+                        <Link to={`/admin/cover/upsert/${data.id}`}>
                           Edytuj id: {data.id}
                         </Link>
                       </div>
                     </td>
                     <td>
-                      <div onClick={() => deleteLivestockKindData(data.id)}>
+                      <div onClick={() => deleteCoverData(data.id)}>
                         Usuń id: {data.id}
                       </div>
                     </td>

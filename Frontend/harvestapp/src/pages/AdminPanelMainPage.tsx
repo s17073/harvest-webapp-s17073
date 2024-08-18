@@ -26,6 +26,35 @@ export const AdminPanelMainPage: React.FC = () => {
               <Link to="/admin/livestockkind/upsert">DODAJ ZWIERZĘ</Link>
             </h2>
           </div>
+          <div>
+            <h2>
+              <Link to="/admin/cover">EDYTUJ OCHRONY</Link>
+            </h2>
+            <h2>
+              <Link to="/admin/cover/upsert">DODAJ OCHRONĘ</Link>
+            </h2>
+          </div>
+          <div>
+            <h2>
+              <Link to="/admin/soilclass">EDYTUJ KLASY GLEBY</Link>
+            </h2>
+            <h2>
+              <Link to="/admin/soilclass/upsert">DODAJ KLASĘ GLEBY</Link>
+            </h2>
+          </div>
+          <div>
+            <h2>
+              <Link to="/admin/apk">EDYTUJ PYTANIA APK</Link>
+            </h2>
+            <h2>
+              <Link to="/admin/apk/upsert">DODAJ PYTANIE APK</Link>
+            </h2>
+          </div>
+          <div>
+            <h2>
+              <Link to="/admin/insurancecompany">PODGLĄD UBEZPIECZYCIELI</Link>
+            </h2>
+          </div>
         </div>
       </div>
     </>

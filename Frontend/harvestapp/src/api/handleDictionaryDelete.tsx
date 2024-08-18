@@ -2,12 +2,13 @@ import axios from "axios";
 
 export const handleDictionaryDelete = async (
   id: number,
+  api: string,
   setData: any,
   fetchDictionaryData: any,
   setAnnouncement: any,
 ) => {
   try {
-    const response = await axios.delete(`/api/cropkind/${id}`);
+    const response = await axios.delete(`${api}/${id}`);
     // console.log(`Crop kind id: ${id} delete method status: ${response.status}`);
     if (response.status === 200) {
       setData([]);

@@ -30,7 +30,13 @@ export const CropKindData: React.FC = () => {
     );
 
   const deleteCropKindData = (id: number) =>
-    handleDictionaryDelete(id, setData, fetchCropKindData, setAnnouncement);
+    handleDictionaryDelete(
+      id,
+      "/api/cropkind",
+      setData,
+      fetchCropKindData,
+      setAnnouncement,
+    );
 
   useEffect(() => {
     fetchCropKindData();
@@ -60,23 +66,23 @@ export const CropKindData: React.FC = () => {
                 </tr>
               </thead>
               <tbody>
-                {data.map((crop) => (
-                  <tr key={crop.id} className={`row-${crop.id}`}>
-                    <td>{crop.nazwaUprawy}</td>
-                    <td>{crop.taryfa}</td>
-                    <td>{crop.wartoscRynkowa} zł</td>
-                    <td>{crop.wartoscMax} zł</td>
-                    <td>{crop.czyAktywna ? "AKTYWNA" : "NIEAKTYWNA"}</td>
+                {data.map((data) => (
+                  <tr key={data.id} className={`row-${data.id}`}>
+                    <td>{data.nazwaUprawy}</td>
+                    <td>{data.taryfa}</td>
+                    <td>{data.wartoscRynkowa} zł</td>
+                    <td>{data.wartoscMax} zł</td>
+                    <td>{data.czyAktywna ? "AKTYWNA" : "NIEAKTYWNA"}</td>
                     <td>
                       <div>
-                        <Link to={`/admin/cropkind/upsert/${crop.id}`}>
-                          Edytuj id: {crop.id}
+                        <Link to={`/admin/cropkind/upsert/${data.id}`}>
+                          Edytuj id: {data.id}
                         </Link>
                       </div>
                     </td>
                     <td>
-                      <div onClick={() => deleteCropKindData(crop.id)}>
-                        Usuń id: {crop.id}
+                      <div onClick={() => deleteCropKindData(data.id)}>
+                        Usuń id: {data.id}
                       </div>
                     </td>
                   </tr>
