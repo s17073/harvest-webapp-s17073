@@ -30,7 +30,7 @@ DROP TABLE harvest.rodzaj_uprawy CASCADE;
 
 DROP TABLE harvest.rodzaj_zwierzecia CASCADE;
 
-DROP TABLE harvest.teryt CASCADE;
+-- DROP TABLE harvest.teryt CASCADE;
 
 DROP TABLE harvest.ubezpieczyciel CASCADE;
 

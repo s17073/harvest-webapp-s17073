@@ -2,7 +2,7 @@
 -- Table: Adres
 CREATE TABLE Adres (
     id_adres int GENERATED ALWAYS AS IDENTITY NOT NULL,
-    id_teryt int  NOT NULL,
+    id_teryt varchar(10)  NOT NULL,
     kod_pocztowy varchar(6)  NOT NULL,
     miejscowosc varchar(50)  NOT NULL,
     ulica varchar(60)  NOT NULL,
@@ -21,7 +21,7 @@ CREATE TABLE Agent (
     id_adres int  NOT NULL,
     liczba_posrednikow smallint  NOT NULL,
     numer_telefonu_agencji varchar(13)  NOT NULL,
-    czy_aktywny boolean  NOT NULL,
+    czy_aktywna boolean  NOT NULL,
     data_dodania timestamp  NOT NULL,
     data_usuniecia timestamp NULL,
     CONSTRAINT Agent_pk PRIMARY KEY (id_agent)
@@ -61,7 +61,7 @@ CREATE TABLE Apk_kalkulacja (
 -- Table: Dzialka
 CREATE TABLE Dzialka (
     id_dzialka int GENERATED ALWAYS AS IDENTITY NOT NULL,
-    id_teryt int  NOT NULL,
+    id_teryt varchar(10)  NOT NULL,
     id_uprawa int  NOT NULL,
     numer_dzialki varchar(10)  NOT NULL,
     obreb varchar(20)  NULL,
@@ -186,15 +186,17 @@ CREATE TABLE Rodzaj_zwierzecia (
 );
 
 -- Table: Teryt
-CREATE TABLE Teryt (
-    id_teryt int NOT NULL,
-    kod_teryt varchar(20)  NOT NULL,
-    wojewodztwo varchar(19)  NOT NULL,
-    powiat varchar(30)  NOT NULL,
-    gmina varchar(30)  NOT NULL,
-    typ varchar(30)  NOT NULL,
-    CONSTRAINT Teryt_pk PRIMARY KEY (id_teryt)
-);
+-- CREATE TABLE Teryt (
+--     id_teryt varchar(10) NOT NULL,
+--     kod_teryt varchar(20)  NOT NULL,
+--     wojewodztwo varchar(2)  NOT NULL,
+--     powiat varchar(2) NULL,
+--     gmina varchar(2) NULL,
+--     nazwa varchar(30) NOT NULL,
+--     typ_kod varchar(2) NULL,
+--     typ varchar(40) NULL,
+--     CONSTRAINT Teryt_pk PRIMARY KEY (id_teryt)
+-- );
 
 -- Table: Ubezpieczyciel
 CREATE TABLE Ubezpieczyciel (
