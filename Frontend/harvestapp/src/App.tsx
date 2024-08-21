@@ -11,6 +11,8 @@ import { SoilClassForm } from "./pages/SoilClassForm";
 import { ApkData } from "./pages/ApkData";
 import { ApkForm } from "./pages/ApkForm";
 import { InsuranceCompanyData } from "./pages/InsuraceCompanyData";
+import { AgentData } from "./pages/AgentData";
+import { AgentForm } from "./pages/AgentForm";
 
 function App() {
   return (
@@ -42,6 +44,9 @@ function App() {
           path="/admin/insurancecompany"
           element={<InsuranceCompanyData />}
         />
+        <Route path="/admin/agent" element={<AgentData />} />
+        <Route path="/admin/agent/upsert" element={<AgentForm />} />
+        <Route path="/admin/agent/upsert/:id" element={<AgentForm />} />
       </Routes>
     </BrowserRouter>
   );

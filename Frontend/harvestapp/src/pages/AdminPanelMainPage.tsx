@@ -52,6 +52,14 @@ export const AdminPanelMainPage: React.FC = () => {
           </div>
           <div>
             <h2>
+              <Link to="/admin/agent">EDYTUJ AGENTÓW</Link>
+            </h2>
+            <h2>
+              <Link to="/admin/agent/upsert">DODAJ AGENTA</Link>
+            </h2>
+          </div>
+          <div>
+            <h2>
               <Link to="/admin/insurancecompany">PODGLĄD UBEZPIECZYCIELI</Link>
             </h2>
           </div>

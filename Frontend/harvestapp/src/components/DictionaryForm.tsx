@@ -3,6 +3,8 @@ import { useParams } from "react-router-dom";
 import { fetchDictionaryDataById } from "../api/fetchDictionaryDataById";
 import { handleDictionaryUpsert } from "../api/handleDictionaryUpsert";
 import * as yup from "yup";
+import { Address } from "./Address";
+import { Teryt } from "./Teryt";
 
 export interface IFormSchema<T> {
   name: keyof T;
@@ -13,8 +15,10 @@ export interface IFormSchema<T> {
     | "maxValue"
     | "isActive"
     | "number"
-    | "season";
-  label: string;
+    | "season"
+    | "teryt"
+    | "address";
+  label?: string;
   options?: string[];
   placeholder?: string;
   required?: boolean;
@@ -88,7 +92,7 @@ export const DictionaryForm = <T extends {}>({
 
   const handleOnBlur = (field: keyof T) => {
     const newErrors = { ...errors };
-    delete newErrors[field]; // Usunięcie błędu dla danego pola
+    delete newErrors[field];
     setErrors(newErrors);
   };
 
@@ -305,6 +309,23 @@ export const DictionaryForm = <T extends {}>({
                     </span>
                   )}
                 </>
+              )}
+              {field.type === "address" && (
+                <Address
+                  addressData={value as any}
+                  onChange={(newAddressData) =>
+                    handleOnChange(field.name, newAddressData)
+                  }
+                  errors={errors[field.name]}
+                />
+              )}
+              {field.type === "teryt" && (
+                <Teryt
+                  onChange={(terytData) =>
+                    handleOnChange(field.name, terytData)
+                  }
+                  errors={errors[field.name]}
+                />
               )}
             </div>
           );
