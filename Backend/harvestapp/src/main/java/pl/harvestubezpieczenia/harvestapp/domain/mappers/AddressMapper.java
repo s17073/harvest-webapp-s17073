@@ -3,6 +3,7 @@ package pl.harvestubezpieczenia.harvestapp.domain.mappers;
 import org.springframework.stereotype.Component;
 import pl.harvestubezpieczenia.harvestapp.domain.DTOs.AddressDto;
 import pl.harvestubezpieczenia.harvestapp.domain.model.Address;
+import pl.harvestubezpieczenia.harvestapp.domain.valueObjects.AddressLocalization;
 
 @Component
 public class AddressMapper {
@@ -18,6 +19,22 @@ public class AddressMapper {
         dto.setTeryt(entity.getTeryt());
 
         return dto;
+    }
+
+    public Address mapToEntity(AddressDto dto){
+        Address entity = new Address();
+
+        entity.setTeryt(dto.getTeryt());
+        entity.setLokalizacja(
+           new AddressLocalization(
+                   dto.getKodPocztowy(),
+                   dto.getMiejscowosc(),
+                   dto.getUlica(),
+                   dto.getNumerDomu(),
+                   dto.getNumerMieszkania())
+        );
+
+        return entity;
     }
 
 }

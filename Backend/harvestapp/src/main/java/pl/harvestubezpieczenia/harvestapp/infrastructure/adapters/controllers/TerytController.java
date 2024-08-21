@@ -2,10 +2,8 @@ package pl.harvestubezpieczenia.harvestapp.infrastructure.adapters.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import pl.harvestubezpieczenia.harvestapp.domain.DTOs.PartOfTerytDto;
 import pl.harvestubezpieczenia.harvestapp.domain.DTOs.TerytDto;
 import pl.harvestubezpieczenia.harvestapp.domain.services.TerytService;
 
@@ -30,6 +28,20 @@ public class TerytController {
     @GetMapping("/{id}")
     public ResponseEntity<TerytDto> getItemById(@PathVariable int id){
         return service.getItemById(id);
+    }
+
+    @GetMapping("/wojewodztwa")
+    public ResponseEntity<List<PartOfTerytDto>> getWojewodztwa(){
+        return service.getWojewodztwa();
+    }
+
+    @GetMapping("/powiaty")
+    public ResponseEntity<List<PartOfTerytDto>> getPowiaty(@RequestParam(value = "teryt") String teryt){
+        return service.getPowiaty(teryt);
+    }
+    @GetMapping("/gminy")
+    public ResponseEntity<List<PartOfTerytDto>> getGminy(@RequestParam(value = "teryt") String teryt){
+        return service.getGminy(teryt);
     }
 
 }

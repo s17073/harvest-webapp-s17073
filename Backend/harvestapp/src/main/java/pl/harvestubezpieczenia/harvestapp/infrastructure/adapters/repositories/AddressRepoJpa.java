@@ -13,4 +13,8 @@ public interface AddressRepoJpa extends JpaRepository<Address, Long> {
         return findAll();
     }
 
+    default void addItem(Address itemToAdd) {
+        save(itemToAdd);
+    }
+
 }

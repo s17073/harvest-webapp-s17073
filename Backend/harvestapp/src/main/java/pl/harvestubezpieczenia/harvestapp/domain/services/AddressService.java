@@ -42,4 +42,12 @@ public class AddressService {
         }
         return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
     }
+
+    public ResponseEntity<String> addItem(AddressDto dto) {
+        Address itemToAdd = mapper.mapToEntity(dto);
+
+        repo.addItem(itemToAdd);
+        return new ResponseEntity<>("Address successfully added to the database.", HttpStatus.CREATED);
+    }
+
 }

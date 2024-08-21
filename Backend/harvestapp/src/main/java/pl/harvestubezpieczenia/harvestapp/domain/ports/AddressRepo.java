@@ -9,4 +9,5 @@ public interface AddressRepo {
 
     List<Address> getAllItems();
 
+    void addItem(Address itemToAdd);
 }

@@ -37,13 +37,7 @@ public class InsuranceCompanyMapper implements GenericMapper<InsuranceCompany, I
         dto.setKrs(entity.getKrs().krs());
         dto.setCzyAktywna(entity.isCzyAktywna());
         dto.setIdAddress(entity.getAddress().getIdAdres());
-        dto.setAddres(
-                entity.getAddress().getLokalizacja().kodPocztowy() + " " +
-                entity.getAddress().getLokalizacja().miejscowosc() + " " +
-                entity.getAddress().getLokalizacja().ulica() + " " +
-                entity.getAddress().getLokalizacja().numerDomu() + " " +
-                entity.getAddress().getLokalizacja().numerMieszkania()
-        );
+        dto.setAdres(entity.getAddress().getAdress());
 
         return dto;
     }

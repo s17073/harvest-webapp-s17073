@@ -22,10 +22,22 @@ public class Address {
     @OneToMany(mappedBy = "address", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<InsuranceCompany> insuranceCompany;
 
+    @OneToMany(mappedBy = "address", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private List<Agent> agents;
+
     @Embedded
     private AddressLocalization lokalizacja;
 
     public int getId(){
         return idAdres;
+    }
+
+    public String getAdress(){
+        return lokalizacja.kodPocztowy() + " " +
+                lokalizacja.miejscowosc() + " " +
+                lokalizacja.ulica() + " " +
+                lokalizacja.numerDomu() + " " +
+                (!lokalizacja.numerMieszkania().isEmpty() ? "/" + lokalizacja.numerMieszkania() : "");
+
     }
 }

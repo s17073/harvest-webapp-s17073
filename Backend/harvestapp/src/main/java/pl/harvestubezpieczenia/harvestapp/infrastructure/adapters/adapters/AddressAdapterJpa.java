@@ -22,4 +22,9 @@ public class AddressAdapterJpa implements AddressRepo {
     public List<Address> getAllItems() {
         return addressRepoJpa.getAllItems();
     }
+
+    @Override
+    public void addItem(Address itemToAdd) {
+        addressRepoJpa.addItem(itemToAdd);
+    }
 }

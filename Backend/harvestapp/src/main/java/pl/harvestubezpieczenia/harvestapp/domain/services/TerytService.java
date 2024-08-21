@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import pl.harvestubezpieczenia.harvestapp.domain.DTOs.PartOfTerytDto;
 import pl.harvestubezpieczenia.harvestapp.domain.DTOs.TerytDto;
 import pl.harvestubezpieczenia.harvestapp.domain.mappers.TerytMapper;
 import pl.harvestubezpieczenia.harvestapp.domain.model.Teryt;
@@ -46,5 +47,23 @@ public class TerytService {
             break;
         }
         return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+    }
+
+    public ResponseEntity<List<PartOfTerytDto>> getWojewodztwa() {
+        List<PartOfTerytDto> wojewodztwa = repo.getWojewodztwa();
+
+        return new ResponseEntity<>(wojewodztwa, HttpStatus.OK);
+    }
+
+    public ResponseEntity<List<PartOfTerytDto>> getPowiaty(String teryt) {
+        List<PartOfTerytDto> powiaty = repo.getPowiaty(teryt);
+
+        return new ResponseEntity<>(powiaty, HttpStatus.OK);
+    }
+
+    public ResponseEntity<List<PartOfTerytDto>> getGminy(String teryt) {
+        List<PartOfTerytDto> gminy = repo.getGminy(teryt);
+
+        return new ResponseEntity<>(gminy, HttpStatus.OK);
     }
 }

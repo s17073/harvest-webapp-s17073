@@ -52,7 +52,7 @@ public class GenericService<E extends GenericCrudModel, D extends GenericDto> {
     }
 
     public ResponseEntity<String> removeItemById(int id) {
-        String NameOfRemovedItem;
+        String nameOfRemovedItem;
         E itemToRemove = findForModify(id);
 
         if(itemToRemove == null){
@@ -61,16 +61,16 @@ public class GenericService<E extends GenericCrudModel, D extends GenericDto> {
             return new ResponseEntity<>("ID: " + id + " has already been deleted.", HttpStatus.FORBIDDEN);
         }
 
-        NameOfRemovedItem = itemToRemove.getName();
+        nameOfRemovedItem = itemToRemove.getName();
         itemToRemove.setDataModyfikacji(new ModificationDate(itemToRemove.getDataModyfikacji().dataDodania()));
 
         repo.addItem(itemToRemove);
 
-        return new ResponseEntity<>(NameOfRemovedItem + " successfully deleted from the database", HttpStatus.OK);
+        return new ResponseEntity<>(nameOfRemovedItem + " successfully deleted from the database", HttpStatus.OK);
     }
 
     public ResponseEntity<String> updateItem(D dto, int id) {
-        String NameOfRemovedItem;
+        String nameOfRemovedItem;
         E itemToUpdate = findForModify(id);
 
         if(itemToUpdate == null){
@@ -79,7 +79,7 @@ public class GenericService<E extends GenericCrudModel, D extends GenericDto> {
             return new ResponseEntity<>("ID: " + id + " has already been deleted.", HttpStatus.FORBIDDEN);
         }
 
-        NameOfRemovedItem = itemToUpdate.getName();
+        nameOfRemovedItem = itemToUpdate.getName();
 
         E itemToAdd = map.mapToEntity(dto);
 
@@ -87,10 +87,10 @@ public class GenericService<E extends GenericCrudModel, D extends GenericDto> {
         repo.addItem(itemToUpdate);
         repo.addItem(itemToAdd);
 
-        return new ResponseEntity<>(NameOfRemovedItem + " successfully updated.", HttpStatus.OK);
+        return new ResponseEntity<>(nameOfRemovedItem + " successfully updated.", HttpStatus.OK);
     }
 
-    private E findForModify(int id){
+    protected E findForModify(int id){
         for(E e: repo.getAllItems()){
             if(e.getId() == id) {
                 return e;

@@ -13,11 +13,13 @@ import java.util.List;
 public class Teryt implements GenericCrudModel {
 
     @Id
-    private int idTeryt;
+    private String idTeryt;
     private String kodTeryt;
     private String wojewodztwo;
     private String powiat;
     private String gmina;
+    private String nazwa;
+    private String typKod;
     private String typ;
 
     @OneToMany(mappedBy = "teryt", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
@@ -25,7 +27,7 @@ public class Teryt implements GenericCrudModel {
 
     @Override
     public int getId() {
-        return idTeryt;
+        return Integer.parseInt(idTeryt);
     }
 
     @Override

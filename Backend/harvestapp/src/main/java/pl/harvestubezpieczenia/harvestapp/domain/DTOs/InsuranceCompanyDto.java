@@ -17,7 +17,7 @@ public class InsuranceCompanyDto implements GenericDto {
     private boolean czyAktywna;
 
     private int idAddress;
-    private String addres;
+    private String adres;
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private Address addressObj;
