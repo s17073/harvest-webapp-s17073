@@ -50,7 +50,7 @@ public class AgentMapper implements GenericMapper<Agent, AgentDto> {
         dto.setKrs(entity.getKrs().krs());
         dto.setNrTel(entity.getNumerTelefonuAgencji().telNumber());
         dto.setCzyAktywna(entity.isCzyAktywna());
-        dto.setTeryt(entity.getAddress().getTeryt().getIdTeryt());
+        dto.setTeryt(entity.getAddress().getTeryt().getKodTeryt());
         dto.setLiczbaPosrednikow(entity.getLiczbaPosrednikow());
 
         address.setKodPocztowy(entity.getAddress().getLokalizacja().kodPocztowy());

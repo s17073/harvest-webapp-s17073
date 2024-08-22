@@ -16,7 +16,7 @@ public class AddressMapper {
         dto.setUlica(entity.getLokalizacja().ulica());
         dto.setNumerDomu(entity.getLokalizacja().numerDomu());
         dto.setNumerMieszkania(entity.getLokalizacja().numerMieszkania());
-        dto.setTeryt(entity.getTeryt());
+//        dto.setTeryt(entity.getTeryt());
 
         return dto;
     }
@@ -24,7 +24,7 @@ public class AddressMapper {
     public Address mapToEntity(AddressDto dto){
         Address entity = new Address();
 
-        entity.setTeryt(dto.getTeryt());
+//        entity.setTeryt(dto.getTeryt());
         entity.setLokalizacja(
            new AddressLocalization(
                    dto.getKodPocztowy(),

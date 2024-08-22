@@ -1,3 +1,4 @@
+import axios from "axios";
 import React, { useState, useEffect } from "react";
 
 interface PartOfTeryt {
@@ -12,11 +13,16 @@ interface IterytData {
 }
 
 interface TerytProps {
+  terytCode: string;
   onChange: (newTerytData: any) => void;
   errors?: any;
 }
 
-export const Teryt: React.FC<TerytProps> = ({ onChange, errors }) => {
+export const Teryt: React.FC<TerytProps> = ({
+  terytCode,
+  onChange,
+  errors,
+}) => {
   const [wojewodztwa, setWojewodztwa] = useState<PartOfTeryt[]>([]);
   const [powiaty, setPowiaty] = useState<PartOfTeryt[]>([]);
   const [gminy, setGminy] = useState<PartOfTeryt[]>([]);
@@ -25,6 +31,37 @@ export const Teryt: React.FC<TerytProps> = ({ onChange, errors }) => {
     powiat: "",
     gmina: "",
   });
+
+  // const fetchTerytData = async () => {
+  //   if (terytCode.length === 8) {
+  //     try {
+  //       const response = await axios.get<IterytData>(
+  //         `/api/teryt/data?teryt=${terytCode}`,
+  //       );
+  //       setTerytData(response.data);
+  //       console.log(response.data);
+  //       console.log(terytData);
+  //     } catch (err) {
+  //       console.log("Blad zaczytywania danych teryt");
+  //     }
+  //   }
+  // };
+
+  const fetchTerytData = async () => {
+    if (terytCode.length === 8) {
+      setTerytData({
+        wojewodztwo: terytCode.substring(0, 2),
+        powiat: terytCode.substring(0, 4),
+        gmina: terytCode,
+      });
+    }
+  };
+
+  useEffect(() => {
+    console.log(terytCode);
+    console.log("wykonuje wyszukiwanie!!!", terytCode);
+    fetchTerytData();
+  }, [terytCode]);
 
   useEffect(() => {
     fetchWojewodztwa().then(setWojewodztwa);

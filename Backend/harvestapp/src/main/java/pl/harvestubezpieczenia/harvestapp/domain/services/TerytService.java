@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pl.harvestubezpieczenia.harvestapp.domain.DTOs.PartOfTerytDto;
 import pl.harvestubezpieczenia.harvestapp.domain.DTOs.TerytDto;
+import pl.harvestubezpieczenia.harvestapp.domain.exceptions.InvalidTerytCodeException;
 import pl.harvestubezpieczenia.harvestapp.domain.mappers.TerytMapper;
 import pl.harvestubezpieczenia.harvestapp.domain.model.Teryt;
 import pl.harvestubezpieczenia.harvestapp.domain.ports.TerytRepo;
@@ -65,5 +66,31 @@ public class TerytService {
         List<PartOfTerytDto> gminy = repo.getGminy(teryt);
 
         return new ResponseEntity<>(gminy, HttpStatus.OK);
+    }
+
+    public ResponseEntity<TerytDto> getTerytData(String teryt) {
+        TerytDto dto = new TerytDto();
+        String wojewodztwo;
+        String powiat;
+        String gmina;
+
+        try {
+            wojewodztwo = repo.getTerytPart(teryt.substring(0, 2));
+            powiat = repo.getTerytPart(teryt.substring(0, 4));
+            gmina = repo.getTerytPart(teryt);
+
+            if(wojewodztwo==null || powiat==null || gmina==null){
+                throw new InvalidTerytCodeException();
+            }
+        } catch(InvalidTerytCodeException e) {
+            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+        }
+
+        dto.setKodTeryt(teryt);
+        dto.setWojewodztwo(wojewodztwo);
+        dto.setPowiat(powiat);
+        dto.setGmina(gmina);
+
+        return new ResponseEntity<>(dto, HttpStatus.OK);
     }
 }

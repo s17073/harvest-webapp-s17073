@@ -38,4 +38,9 @@ public class TerytAdapterJpa implements TerytRepo {
     public List<PartOfTerytDto> getGminy(String teryt) {
         return terytRepoJpa.getGminy(teryt);
     }
+
+    @Override
+    public String getTerytPart(String substring) {
+        return terytRepoJpa.getTerytPart(substring);
+    }
 }

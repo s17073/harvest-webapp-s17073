@@ -321,6 +321,7 @@ export const DictionaryForm = <T extends {}>({
               )}
               {field.type === "teryt" && (
                 <Teryt
+                  terytCode={value as string}
                   onChange={(terytData) =>
                     handleOnChange(field.name, terytData)
                   }

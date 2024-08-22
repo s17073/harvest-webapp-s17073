@@ -44,4 +44,9 @@ public class TerytController {
         return service.getGminy(teryt);
     }
 
+    @GetMapping("/data")
+    public ResponseEntity<TerytDto> getTerytData(@RequestParam(value = "teryt", required = false) String teryt) {
+        return service.getTerytData(teryt);
+    }
+
 }

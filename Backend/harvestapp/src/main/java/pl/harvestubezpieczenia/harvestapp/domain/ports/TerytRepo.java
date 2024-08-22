@@ -14,4 +14,6 @@ public interface TerytRepo {
     List<PartOfTerytDto> getPowiaty(String teryt);
 
     List<PartOfTerytDto> getGminy(String teryt);
+
+    String getTerytPart(String substring);
 }
