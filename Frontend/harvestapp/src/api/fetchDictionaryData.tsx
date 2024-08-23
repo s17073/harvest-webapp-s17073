@@ -1,7 +1,7 @@
 import axios from "axios";
 
 export const fetchDictionaryData = async (
-  url: string,
+  endpoint: string,
   setNoData: any,
   setData: any,
   setFetchError: any,
@@ -10,7 +10,9 @@ export const fetchDictionaryData = async (
   setLoading("Ładowanie danych...");
   // await new Promise((resolve) => setTimeout(resolve, 1000)); //sztuczne opoznienie o 1 sec
   try {
-    const response = await axios.get<any[]>(url);
+    const apiUrl = import.meta.env.VITE_BACKEND_URL;
+
+    const response = await axios.get<any[]>(`${apiUrl}/${endpoint}`);
     // console.log("Crop kind data get method status: ", response.status);
     if (response.data.length === 0) {
       setNoData("Brak danych do wyświetlenia.");

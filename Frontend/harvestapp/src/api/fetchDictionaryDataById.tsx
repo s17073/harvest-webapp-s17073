@@ -2,12 +2,14 @@ import axios from "axios";
 
 export const fetchDictionaryDataById = async (
   id: number,
-  url: string,
+  endpoint: string,
   setAnnouncement: any,
   setData: any,
 ) => {
   try {
-    const response = await axios.get<any>(`${url}/${id}`);
+    const apiUrl = import.meta.env.VITE_BACKEND_URL;
+
+    const response = await axios.get<any>(`${apiUrl}/${endpoint}/${id}`);
     if (!response.data) {
       setAnnouncement(`Nie znaleziono rekordu o id ${id}.`);
     } else {

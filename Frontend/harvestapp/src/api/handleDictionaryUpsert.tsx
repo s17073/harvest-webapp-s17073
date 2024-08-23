@@ -2,7 +2,7 @@ import axios from "axios";
 
 export const handleDictionaryUpsert = async (
   event: React.FormEvent<HTMLFormElement>,
-  api: string,
+  endpoint: string,
   method: string,
   dataToAdd: Object,
   setAnnouncement: any,
@@ -10,12 +10,12 @@ export const handleDictionaryUpsert = async (
   event.preventDefault();
 
   try {
-    let response;
+    const apiUrl = import.meta.env.VITE_BACKEND_URL;
 
     if (method === "POST") {
-      response = await axios.post(api, dataToAdd);
+      await axios.post(`${apiUrl}/${endpoint}`, dataToAdd);
     } else if (method === "PUT") {
-      response = await axios.put(api, dataToAdd);
+      await axios.put(`${apiUrl}/${endpoint}`, dataToAdd);
     } else {
       throw new Error("Unknown HTTP method.");
     }
