@@ -5,6 +5,7 @@ import { handleDictionaryUpsert } from "../api/handleDictionaryUpsert";
 import * as yup from "yup";
 import { Address } from "./Address";
 import { Teryt } from "./Teryt";
+import { CropList } from "./CropList";
 
 export interface IFormSchema<T> {
   name: keyof T;
@@ -17,6 +18,7 @@ export interface IFormSchema<T> {
     | "number"
     | "season"
     | "teryt"
+    | "crop"
     | "address";
   label?: string;
   options?: string[];
@@ -325,6 +327,13 @@ export const DictionaryForm = <T extends {}>({
                   onChange={(terytData) =>
                     handleOnChange(field.name, terytData)
                   }
+                  errors={errors[field.name]}
+                />
+              )}
+              {field.type === "crop" && (
+                <CropList
+                  cropId={value as number}
+                  onChange={(cropList) => handleOnChange(field.name, cropList)}
                   errors={errors[field.name]}
                 />
               )}

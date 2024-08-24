@@ -60,6 +60,16 @@ export const AdminPanelMainPage: React.FC = () => {
           </div>
           <div>
             <h2>
+              <Link to="/admin/cropkindvariety">EDYTUJ GATUNKI UPRAW</Link>
+            </h2>
+            <h2>
+              <Link to="/admin/cropkindvariety/upsert">
+                DODAJ GATUNEK UPRAWY
+              </Link>
+            </h2>
+          </div>
+          <div>
+            <h2>
               <Link to="/admin/insurancecompany">PODGLĄD UBEZPIECZYCIELI</Link>
             </h2>
           </div>

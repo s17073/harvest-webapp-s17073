@@ -13,11 +13,14 @@ import { ApkForm } from "./pages/ApkForm";
 import { InsuranceCompanyData } from "./pages/InsuraceCompanyData";
 import { AgentData } from "./pages/AgentData";
 import { AgentForm } from "./pages/AgentForm";
+import { CropVarietyData } from "./pages/CropVarietyData";
+import { CropVarietyFrom } from "./pages/CropVarietyForm";
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
+        <Route path="" element={<AdminPanelMainPage />} />
         <Route path="/admin" element={<AdminPanelMainPage />} />
         <Route path="/admin/cropkind" element={<CropKindData />} />
         <Route path="/admin/cropkind/upsert" element={<CropKindForm />} />
@@ -47,6 +50,15 @@ function App() {
         <Route path="/admin/agent" element={<AgentData />} />
         <Route path="/admin/agent/upsert" element={<AgentForm />} />
         <Route path="/admin/agent/upsert/:id" element={<AgentForm />} />
+        <Route path="/admin/cropkindvariety" element={<CropVarietyData />} />
+        <Route
+          path="/admin/cropkindvariety/upsert"
+          element={<CropVarietyFrom />}
+        />
+        <Route
+          path="/admin/cropkindvariety/upsert/:id"
+          element={<CropVarietyFrom />}
+        />
       </Routes>
     </BrowserRouter>
   );
