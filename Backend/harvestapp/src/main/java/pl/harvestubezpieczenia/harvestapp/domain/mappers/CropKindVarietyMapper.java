@@ -11,7 +11,12 @@ import pl.harvestubezpieczenia.harvestapp.domain.model.CropKindVariety;
 public class CropKindVarietyMapper implements GenericMapper<CropKindVariety, CropKindVarietyDto> {
     @Override
     public CropKindVariety mapToEntity(CropKindVarietyDto dto) {
-        return null;
+        CropKindVariety entity = new CropKindVariety();
+
+        entity.setCropKind(dto.getUprawa());
+        entity.setCropVariety(dto.getGatunek());
+
+        return entity;
     }
 
     @Transactional
@@ -19,10 +24,15 @@ public class CropKindVarietyMapper implements GenericMapper<CropKindVariety, Cro
     public CropKindVarietyDto mapToDto(CropKindVariety entity) {
         CropKindVarietyDto dto = new CropKindVarietyDto();
 
-        dto.setId(entity.getIdUprawaGatunek());
-        dto.setUprawa(entity.getCropKind().getName());
-        dto.setGatunek(entity.getCropVariety().getName());
+        dto.setId(entity.getId());
+        dto.setCzyAktywna(entity.getCropVariety().isCzyAktywna());
+        dto.setTaryfa(entity.getCropKind().getTaryfa().taryfa());
+        dto.setIdGatunek(entity.getIdUprawaGatunek());
+        dto.setNazwaUprawy(entity.getCropKind().getName());
+        dto.setNazwaGatunku(entity.getCropVariety().getName());
+        dto.setIdUprawa(entity.getCropKind().getId());
 
         return dto;
     }
+
 }

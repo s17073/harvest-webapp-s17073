@@ -4,7 +4,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pl.harvestubezpieczenia.harvestapp.domain.DTOs.CropKindDto;
+import pl.harvestubezpieczenia.harvestapp.domain.DTOs.CropKindListDto;
 import pl.harvestubezpieczenia.harvestapp.domain.model.CropKind;
+import pl.harvestubezpieczenia.harvestapp.domain.services.CropKindService;
 import pl.harvestubezpieczenia.harvestapp.domain.services.GenericService;
 
 import java.util.List;
@@ -14,10 +16,12 @@ import java.util.List;
 public class CropKindController {
 
     private final GenericService<CropKind, CropKindDto> genericService;
+    private final CropKindService cropKindService;
 
     @Autowired
-    public CropKindController(GenericService<CropKind, CropKindDto> genericService) {
+    public CropKindController(GenericService<CropKind, CropKindDto> genericService, CropKindService cropKindService) {
         this.genericService = genericService;
+        this.cropKindService = cropKindService;
     }
 
     @GetMapping
@@ -43,6 +47,11 @@ public class CropKindController {
     @PutMapping("/{id}")
     public ResponseEntity<String> updateItem(@RequestBody CropKindDto dto, @PathVariable int id){
         return genericService.updateItem(dto, id);
+    }
+
+    @GetMapping("/croplist")
+    public ResponseEntity<List<CropKindListDto>> getListOfCropKindNames() {
+        return cropKindService.getListOfCropKindNames();
     }
 
 }

@@ -14,8 +14,8 @@ import java.util.List;
 
 public class GenericService<E extends GenericCrudModel, D extends GenericDto> {
 
-    private final GenericCrudRepo<E> repo;
-    private final GenericMapper<E, D> map;
+    protected final GenericCrudRepo<E> repo;
+    protected final GenericMapper<E, D> map;
 
     public GenericService(GenericCrudRepo<E> repo, GenericMapper<E, D> map) {
         this.repo = repo;

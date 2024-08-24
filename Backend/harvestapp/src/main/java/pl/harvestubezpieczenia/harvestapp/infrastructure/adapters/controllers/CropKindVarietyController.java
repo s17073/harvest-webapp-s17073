@@ -10,7 +10,7 @@ import pl.harvestubezpieczenia.harvestapp.domain.services.GenericService;
 import java.util.List;
 
 @RestController
-@RequestMapping("ckv")
+@RequestMapping("cropkindvariety")
 public class CropKindVarietyController {
 
     private final GenericService<CropKindVariety, CropKindVarietyDto> genericService;

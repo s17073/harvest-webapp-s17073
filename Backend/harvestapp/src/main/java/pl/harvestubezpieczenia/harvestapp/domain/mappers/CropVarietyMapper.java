@@ -25,13 +25,13 @@ public class CropVarietyMapper implements GenericMapper<CropVariety, CropVariety
     @Override
     public CropVarietyDto mapToDto(CropVariety entity) {
         CropVarietyDto dto = new CropVarietyDto();
-
         dto.setNazwaGatunku(entity.getNazwaGatunku().nazwaGatunku());
         dto.setCzyAktywna(entity.isCzyAktywna());
 
         if (!entity.getCropKindVarieties().isEmpty()) {
             for (CropKindVariety ckv : entity.getCropKindVarieties()) {
-                dto.getUprawy().add(ckv.getCropKind().getName());
+                dto.setUprawa(ckv.getCropKind());
+                break;
             }
         }
 
