@@ -55,7 +55,7 @@ export const ApkForm: React.FC = () => {
             <h1>DODAJ PYTANIE</h1>
           </div>
           <DictionaryForm<IApkDict>
-            apiEndpoint="/api/apk"
+            apiEndpoint="apk"
             initialData={{
               pytanie: "",
               komunikat: "",

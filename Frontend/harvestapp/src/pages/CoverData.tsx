@@ -23,18 +23,12 @@ export const CoverData: React.FC = () => {
   const [announcement, setAnnouncement] = useState<string | null>(null);
 
   const fetchCoverData = () =>
-    fetchDictionaryData(
-      "/api/cover",
-      setNoData,
-      setData,
-      setFetchError,
-      setLoading,
-    );
+    fetchDictionaryData("cover", setNoData, setData, setFetchError, setLoading);
 
   const deleteCoverData = (id: number) =>
     handleDictionaryDelete(
       id,
-      "/api/cover",
+      "cover",
       setData,
       fetchCoverData,
       setAnnouncement,

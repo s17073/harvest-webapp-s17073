@@ -57,7 +57,7 @@ export const LivestockKindForm: React.FC = () => {
             <h1>DODAJ ZWIERZĘ</h1>
           </div>
           <DictionaryForm<ILivestockKindDict>
-            apiEndpoint="/api/livestockkind"
+            apiEndpoint="livestockkind"
             initialData={{
               nazwaZwierzecia: "",
               taryfa: "WIOSNA",

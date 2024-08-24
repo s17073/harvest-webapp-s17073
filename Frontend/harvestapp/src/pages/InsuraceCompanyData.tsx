@@ -23,7 +23,7 @@ export const InsuranceCompanyData: React.FC = () => {
 
   const fetchInsuranceCompanyData = () =>
     fetchDictionaryData(
-      "/api/insurancecompany",
+      "insurancecompany",
       setNoData,
       setData,
       setFetchError,

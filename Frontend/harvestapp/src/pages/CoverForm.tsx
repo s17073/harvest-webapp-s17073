@@ -83,7 +83,7 @@ export const CoverForm: React.FC = () => {
             <h1>DODAJ OCHRONĘ</h1>
           </div>
           <DictionaryForm<ICoverDict>
-            apiEndpoint="/api/cover"
+            apiEndpoint="cover"
             initialData={{
               nazwa: "",
               grupaMinisterialna: "08",

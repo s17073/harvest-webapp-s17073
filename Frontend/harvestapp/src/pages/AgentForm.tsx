@@ -76,7 +76,7 @@ export const AgentForm: React.FC = () => {
             <h1>DODAJ AGENTA</h1>
           </div>
           <DictionaryForm<IAgentDict>
-            apiEndpoint="/api/agent"
+            apiEndpoint="agent"
             initialData={{
               nazwa: "",
               kodAgencji: "",

@@ -1,4 +1,3 @@
-import axios from "axios";
 import React, { useState, useEffect } from "react";
 
 interface PartOfTeryt {
@@ -32,21 +31,6 @@ export const Teryt: React.FC<TerytProps> = ({
     gmina: "",
   });
 
-  // const fetchTerytData = async () => {
-  //   if (terytCode.length === 8) {
-  //     try {
-  //       const response = await axios.get<IterytData>(
-  //         `/api/teryt/data?teryt=${terytCode}`,
-  //       );
-  //       setTerytData(response.data);
-  //       console.log(response.data);
-  //       console.log(terytData);
-  //     } catch (err) {
-  //       console.log("Blad zaczytywania danych teryt");
-  //     }
-  //   }
-  // };
-
   const fetchTerytData = async () => {
     if (terytCode.length === 8) {
       setTerytData({
@@ -58,8 +42,6 @@ export const Teryt: React.FC<TerytProps> = ({
   };
 
   useEffect(() => {
-    console.log(terytCode);
-    console.log("wykonuje wyszukiwanie!!!", terytCode);
     fetchTerytData();
   }, [terytCode]);
 
@@ -145,19 +127,22 @@ export const Teryt: React.FC<TerytProps> = ({
 };
 
 const fetchWojewodztwa = async (): Promise<PartOfTeryt[]> => {
-  const response = await fetch("/api/teryt/wojewodztwa");
+  const apiUrl = import.meta.env.VITE_BACKEND_URL;
+  const response = await fetch(`${apiUrl}/teryt/wojewodztwa`);
   const data = await response.json();
   return data;
 };
 
 const fetchPowiaty = async (kodTeryt: string): Promise<PartOfTeryt[]> => {
-  const response = await fetch(`/api/teryt/powiaty?teryt=${kodTeryt}`);
+  const apiUrl = import.meta.env.VITE_BACKEND_URL;
+  const response = await fetch(`${apiUrl}/teryt/powiaty?teryt=${kodTeryt}`);
   const data = await response.json();
   return data;
 };
 
 const fetchGminy = async (kodTeryt: string): Promise<PartOfTeryt[]> => {
-  const response = await fetch(`/api/teryt/gminy?teryt=${kodTeryt}`);
+  const apiUrl = import.meta.env.VITE_BACKEND_URL;
+  const response = await fetch(`${apiUrl}/teryt/gminy?teryt=${kodTeryt}`);
   const data = await response.json();
   return data;
 };

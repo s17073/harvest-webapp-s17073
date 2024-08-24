@@ -21,7 +21,7 @@ export const SoilClassData: React.FC = () => {
 
   const fetchSoilClassData = () =>
     fetchDictionaryData(
-      "/api/soilclass",
+      "soilclass",
       setNoData,
       setData,
       setFetchError,
@@ -31,7 +31,7 @@ export const SoilClassData: React.FC = () => {
   const deleteSoilClassData = (id: number) =>
     handleDictionaryDelete(
       id,
-      "/api/soilclass",
+      "soilclass",
       setData,
       fetchSoilClassData,
       setAnnouncement,

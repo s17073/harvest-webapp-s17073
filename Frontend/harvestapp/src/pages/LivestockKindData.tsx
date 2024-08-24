@@ -22,7 +22,7 @@ export const LivestockKindData: React.FC = () => {
 
   const fetchLivestockKindData = () =>
     fetchDictionaryData(
-      "/api/livestockkind",
+      "livestockkind",
       setNoData,
       setData,
       setFetchError,
@@ -32,7 +32,7 @@ export const LivestockKindData: React.FC = () => {
   const deleteLivestockKindData = (id: number) =>
     handleDictionaryDelete(
       id,
-      "/api/livestockkind",
+      "livestockkind",
       setData,
       fetchLivestockKindData,
       setAnnouncement,

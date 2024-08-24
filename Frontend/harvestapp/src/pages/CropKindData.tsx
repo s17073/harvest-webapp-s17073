@@ -22,7 +22,7 @@ export const CropKindData: React.FC = () => {
 
   const fetchCropKindData = () =>
     fetchDictionaryData(
-      "/api/cropkind",
+      "cropkind",
       setNoData,
       setData,
       setFetchError,
@@ -32,7 +32,7 @@ export const CropKindData: React.FC = () => {
   const deleteCropKindData = (id: number) =>
     handleDictionaryDelete(
       id,
-      "/api/cropkind",
+      "cropkind",
       setData,
       fetchCropKindData,
       setAnnouncement,

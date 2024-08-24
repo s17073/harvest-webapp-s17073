@@ -19,22 +19,10 @@ export const ApkData: React.FC = () => {
   const [announcement, setAnnouncement] = useState<string | null>(null);
 
   const fetchApkData = () =>
-    fetchDictionaryData(
-      "/api/apk",
-      setNoData,
-      setData,
-      setFetchError,
-      setLoading,
-    );
+    fetchDictionaryData("apk", setNoData, setData, setFetchError, setLoading);
 
   const deleteApkData = (id: number) =>
-    handleDictionaryDelete(
-      id,
-      "/api/apk",
-      setData,
-      fetchApkData,
-      setAnnouncement,
-    );
+    handleDictionaryDelete(id, "apk", setData, fetchApkData, setAnnouncement);
 
   useEffect(() => {
     fetchApkData();

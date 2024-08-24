@@ -59,7 +59,7 @@ export const SoilClassForm: React.FC = () => {
             <h1>DODAJ KLASĘ GLEBY</h1>
           </div>
           <DictionaryForm<ISoilClassDict>
-            apiEndpoint="/api/soilclass"
+            apiEndpoint="soilclass"
             initialData={{
               klasaGleby: "",
               opis: "",

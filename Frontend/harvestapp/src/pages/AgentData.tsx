@@ -22,18 +22,12 @@ export const AgentData: React.FC = () => {
   const [announcement, setAnnouncement] = useState<string | null>(null);
 
   const fetchAgentData = () =>
-    fetchDictionaryData(
-      "/api/agent",
-      setNoData,
-      setData,
-      setFetchError,
-      setLoading,
-    );
+    fetchDictionaryData("agent", setNoData, setData, setFetchError, setLoading);
 
   const deleteAgentData = (id: number) =>
     handleDictionaryDelete(
       id,
-      "/api/agent",
+      "agent",
       setData,
       fetchAgentData,
       setAnnouncement,

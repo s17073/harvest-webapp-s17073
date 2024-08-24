@@ -58,7 +58,7 @@ export const CropKindForm: React.FC = () => {
             <h1>DODAJ UPRAWĘ</h1>
           </div>
           <DictionaryForm<ICropKindDict>
-            apiEndpoint="/api/cropkind"
+            apiEndpoint="cropkind"
             initialData={{
               nazwaUprawy: "",
               taryfa: "WIOSNA",
