@@ -36,12 +36,15 @@ public class AgentService extends GenericService<Agent, AgentDto> {
     @Transactional
     public ResponseEntity<String> addItem(AgentDto dto){
         Teryt teryt = new Teryt();
-        for(Teryt t: terytRepo.getAllItems()) {
-            if (t.getKodTeryt().equals(dto.getTeryt())) {
-                teryt = t;
-                break;
-            }
-        }
+//        for(Teryt t: terytRepo.getAllItems()) {
+//            if (t.getKodTeryt().equals(dto.getTeryt())) {
+//                teryt = t;
+//                break;
+//            }
+//        }
+        teryt = terytRepo.getTeryt(dto.getTeryt());
+
+
         dto.setTerytData(teryt);
 
         Agent agentToAdd = agentMapper.mapToEntity(dto);

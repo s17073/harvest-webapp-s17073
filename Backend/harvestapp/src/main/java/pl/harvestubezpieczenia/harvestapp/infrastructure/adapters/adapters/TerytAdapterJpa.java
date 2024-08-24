@@ -43,4 +43,9 @@ public class TerytAdapterJpa implements TerytRepo {
     public String getTerytPart(String substring) {
         return terytRepoJpa.getTerytPart(substring);
     }
+
+    @Override
+    public Teryt getTeryt(String teryt) {
+        return terytRepoJpa.getTeryt(teryt);
+    }
 }

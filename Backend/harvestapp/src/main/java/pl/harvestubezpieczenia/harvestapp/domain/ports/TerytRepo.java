@@ -16,4 +16,6 @@ public interface TerytRepo {
     List<PartOfTerytDto> getGminy(String teryt);
 
     String getTerytPart(String substring);
+
+    Teryt getTeryt(String teryt);
 }

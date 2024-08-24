@@ -28,4 +28,7 @@ public interface TerytRepoJpa extends JpaRepository<Teryt, Long> {
 
     @Query(value = "select distinct nazwa from harvest.teryt t where kod_teryt =:substring",nativeQuery = true)
     String getTerytPart(@Param("substring") String substring);
+
+    @Query(value = "select distinct * from harvest.teryt t where kod_teryt =:teryt",nativeQuery = true)
+    Teryt getTeryt(String teryt);
 }
