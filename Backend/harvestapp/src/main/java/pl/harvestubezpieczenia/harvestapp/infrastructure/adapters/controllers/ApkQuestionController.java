@@ -4,6 +4,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pl.harvestubezpieczenia.harvestapp.domain.DTOs.ApkQuestionDto;
 import pl.harvestubezpieczenia.harvestapp.domain.model.ApkQuestion;
+import pl.harvestubezpieczenia.harvestapp.domain.services.ApkQuestionService;
 import pl.harvestubezpieczenia.harvestapp.domain.services.GenericService;
 
 import java.util.List;
@@ -13,9 +14,11 @@ import java.util.List;
 public class ApkQuestionController {
 
     private final GenericService<ApkQuestion, ApkQuestionDto> genericService;
+    private final ApkQuestionService apkQuestionService;
 
-    public ApkQuestionController(GenericService<ApkQuestion, ApkQuestionDto> genericService) {
+    public ApkQuestionController(GenericService<ApkQuestion, ApkQuestionDto> genericService, ApkQuestionService apkQuestionService) {
         this.genericService = genericService;
+        this.apkQuestionService = apkQuestionService;
     }
 
     @GetMapping
@@ -41,6 +44,11 @@ public class ApkQuestionController {
     @PutMapping("/{id}")
     public ResponseEntity<String> updateItem(@RequestBody ApkQuestionDto dto, @PathVariable int id){
         return genericService.updateItem(dto, id);
+    }
+
+    @GetMapping("/questions")
+    public ResponseEntity<List<ApkQuestionDto>> getApkQuestions() {
+        return apkQuestionService.getApkQuestions();
     }
 
 
