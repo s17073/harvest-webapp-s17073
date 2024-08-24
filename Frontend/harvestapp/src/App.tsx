@@ -15,12 +15,26 @@ import { AgentData } from "./pages/AgentData";
 import { AgentForm } from "./pages/AgentForm";
 import { CropVarietyData } from "./pages/CropVarietyData";
 import { CropVarietyFrom } from "./pages/CropVarietyForm";
+import { CalculationForm } from "./pages/CalculationForm";
+import { InsurancePeriodForm } from "./components/InsurancePeriodForm";
+import { PersonalDataorm } from "./components/PersonalDataForm";
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="" element={<AdminPanelMainPage />} />
+        <Route
+          path=""
+          element={<CalculationForm CalculationStep={InsurancePeriodForm} />}
+        />
+        <Route
+          path="calculation/insuranceperiod"
+          element={<CalculationForm CalculationStep={InsurancePeriodForm} />}
+        />
+        <Route
+          path="calculation/personaldata"
+          element={<CalculationForm CalculationStep={PersonalDataorm} />}
+        />
         <Route path="/admin" element={<AdminPanelMainPage />} />
         <Route path="/admin/cropkind" element={<CropKindData />} />
         <Route path="/admin/cropkind/upsert" element={<CropKindForm />} />
