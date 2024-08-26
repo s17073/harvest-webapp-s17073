@@ -4,8 +4,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pl.harvestubezpieczenia.harvestapp.domain.DTOs.SoilClassDto;
+import pl.harvestubezpieczenia.harvestapp.domain.DTOs.SoilClassListDto;
 import pl.harvestubezpieczenia.harvestapp.domain.model.SoilClass;
 import pl.harvestubezpieczenia.harvestapp.domain.services.GenericService;
+import pl.harvestubezpieczenia.harvestapp.domain.services.SoilClassService;
 
 import java.util.List;
 
@@ -14,10 +16,12 @@ import java.util.List;
 public class SoilClassController {
 
     private final GenericService<SoilClass, SoilClassDto> genericService;
+    private final SoilClassService soilClassService;
 
     @Autowired
-    public SoilClassController(GenericService<SoilClass, SoilClassDto> genericService) {
+    public SoilClassController(GenericService<SoilClass, SoilClassDto> genericService, SoilClassService soilClassService) {
         this.genericService = genericService;
+        this.soilClassService = soilClassService;
     }
 
 
@@ -46,4 +50,8 @@ public class SoilClassController {
         return genericService.updateItem(dto, id);
     }
 
+    @GetMapping("/soilclasslist")
+    public ResponseEntity<List<SoilClassListDto>> getSoilClassNames(){
+        return soilClassService.getSoilClassNames();
+    }
 }
