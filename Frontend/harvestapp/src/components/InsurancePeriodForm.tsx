@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-
-interface IApk {
-  id: number;
-  pytanie: string;
-  odpowiedz: boolean | undefined;
-  komunikat: string;
-}
+import { useNavigate, useParams } from "react-router-dom";
+import { IApk } from "../interfaces/IApk";
+import { fetchApkQuestions } from "../api/fetchApkQuestion";
+import { handleAddInsurancePeriod } from "../api/handleAddInsurancePeriod";
+import {
+  IApkCalculation,
+  IStepInsurancePeriod,
+} from "../interfaces/IStepInsurancePeriod";
 
 interface IInsurancePeriodData {
   dateFrom: string;
@@ -20,7 +20,9 @@ export const InsurancePeriodForm: React.FC = () => {
     dateTo: String(new Date().toISOString().slice(0, 10)),
     apkQuestions: [],
   });
+  const [error, setError] = useState<string | undefined>(undefined);
   const navigate = useNavigate();
+  const { id } = useParams<{ id: string }>();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -56,12 +58,32 @@ export const InsurancePeriodForm: React.FC = () => {
   };
 
   const handleGoBack = () => {
-    console.log("idź wstecz");
+    navigate("/");
   };
 
-  const handleSubmit = (event: React.FormEvent) => {
+  const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
-    navigate("/calculation/personaldata");
+
+    const apkToAdd: IApkCalculation[] = data.apkQuestions.map((apk) => ({
+      idApk: apk.id,
+      apkOdpowiedz: apk.odpowiedz ?? false,
+    }));
+
+    const insurancePeriodData: IStepInsurancePeriod = {
+      dataPoczatkuOchrony: new Date(data.dateFrom),
+      dataKoncaOchrony: new Date(data.dateTo),
+      apk: apkToAdd,
+    };
+
+    if (id) {
+      const idCalculation = parseInt(id);
+      try {
+        await handleAddInsurancePeriod(idCalculation, insurancePeriodData);
+        navigate("/calculation/${id}/personaldata");
+      } catch (e) {
+        setError("Nie udało się wysłać danych");
+      }
+    }
   };
 
   return (
@@ -118,14 +140,8 @@ export const InsurancePeriodForm: React.FC = () => {
             <button type="submit">Dalej</button>
           </div>
         </form>
+        <div>{error && error}</div>
       </div>
     </>
   );
-};
-
-const fetchApkQuestions = async (): Promise<IApk[]> => {
-  const apiUrl = import.meta.env.VITE_BACKEND_URL;
-  const response = await fetch(`${apiUrl}/apk/questions`);
-  const dane = await response.json();
-  return dane;
 };

@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from "react";
-
-interface PartOfTeryt {
-  kodTeryt: string;
-  nazwa: string;
-}
+import { fetchWojewodztwa } from "../api/fetchWojewodztwa";
+import { fetchPowiaty } from "../api/fetchPowiaty";
+import { fetchGminy } from "../api/fetchGminy";
+import { PartOfTeryt } from "../interfaces/PartOfTeryt";
 
 interface IterytData {
   wojewodztwo: string;
@@ -124,25 +123,4 @@ export const Teryt: React.FC<TerytProps> = ({
       </div>
     </div>
   );
-};
-
-const fetchWojewodztwa = async (): Promise<PartOfTeryt[]> => {
-  const apiUrl = import.meta.env.VITE_BACKEND_URL;
-  const response = await fetch(`${apiUrl}/teryt/wojewodztwa`);
-  const data = await response.json();
-  return data;
-};
-
-const fetchPowiaty = async (kodTeryt: string): Promise<PartOfTeryt[]> => {
-  const apiUrl = import.meta.env.VITE_BACKEND_URL;
-  const response = await fetch(`${apiUrl}/teryt/powiaty?teryt=${kodTeryt}`);
-  const data = await response.json();
-  return data;
-};
-
-const fetchGminy = async (kodTeryt: string): Promise<PartOfTeryt[]> => {
-  const apiUrl = import.meta.env.VITE_BACKEND_URL;
-  const response = await fetch(`${apiUrl}/teryt/gminy?teryt=${kodTeryt}`);
-  const data = await response.json();
-  return data;
 };

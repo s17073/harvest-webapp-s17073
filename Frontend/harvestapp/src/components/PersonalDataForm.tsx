@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
-
-interface PartOfTeryt {
-  kodTeryt: string;
-  nazwa: string;
-}
+import { useNavigate } from "react-router-dom";
+import { fetchWojewodztwa } from "../api/fetchWojewodztwa";
+import { fetchPowiaty } from "../api/fetchPowiaty";
+import { fetchGminy } from "../api/fetchGminy";
+import { PartOfTeryt } from "../interfaces/PartOfTeryt";
 
 interface IPersonalData {
   imie: string;
@@ -19,10 +19,12 @@ interface IPersonalData {
   numerMieszkania: string | undefined;
 }
 
-export const PersonalDataorm: React.FC = () => {
+export const PersonalDataForm: React.FC = () => {
   const [wojewodztwa, setWojewodztwa] = useState<PartOfTeryt[]>([]);
   const [powiaty, setPowiaty] = useState<PartOfTeryt[]>([]);
   const [gminy, setGminy] = useState<PartOfTeryt[]>([]);
+  const [powiatyInsurer, setPowiatyInsurer] = useState<PartOfTeryt[]>([]);
+  const [gminyInsurer, setGminyInsurer] = useState<PartOfTeryt[]>([]);
   const [policyHolder, setPolicyHolder] = useState<IPersonalData>({
     imie: "",
     nazwisko: "",
@@ -49,6 +51,7 @@ export const PersonalDataorm: React.FC = () => {
     numerDomu: "",
     numerMieszkania: "",
   });
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetchWojewodztwa().then(setWojewodztwa);
@@ -58,14 +61,14 @@ export const PersonalDataorm: React.FC = () => {
     if (policyHolder.teryt.length === 2)
       fetchPowiaty(policyHolder.teryt).then(setPowiaty);
     if (insured.teryt.length === 2)
-      fetchPowiaty(insured.teryt).then(setPowiaty);
+      fetchPowiaty(insured.teryt).then(setPowiatyInsurer);
   }, [policyHolder.teryt.substring(0, 2), insured.teryt.substring(0, 2)]);
 
   useEffect(() => {
     if (policyHolder.teryt.length === 4)
       fetchGminy(policyHolder.teryt).then(setGminy);
-    if (policyHolder.teryt.length === 4)
-      fetchGminy(insured.teryt).then(setGminy);
+    if (insured.teryt.length === 4)
+      fetchGminy(insured.teryt).then(setGminyInsurer);
   }, [policyHolder.teryt.substring(2, 4), insured.teryt.substring(2, 4)]);
 
   const setField = (
@@ -77,7 +80,6 @@ export const PersonalDataorm: React.FC = () => {
       ...personFields,
       [field]: value,
     }));
-    console.log(policyHolder);
   };
 
   const handleGoBack = () => {
@@ -86,6 +88,11 @@ export const PersonalDataorm: React.FC = () => {
 
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
+    navigate("/calculation/crops");
+  };
+
+  const copyPolicyHolderData = () => {
+    setInsured(policyHolder);
   };
 
   return (
@@ -256,6 +263,9 @@ export const PersonalDataorm: React.FC = () => {
             />
           </div>
           <div className="calc-form-section-title">Dane ubezpieczonego</div>
+          <div className="copy-policy-holder" onClick={copyPolicyHolderData}>
+            Takie same jak ubezpieczającego
+          </div>
           <div className="calc-form-field">
             <label className="calc-form-field-label">Imię</label>
             <input
@@ -327,7 +337,7 @@ export const PersonalDataorm: React.FC = () => {
               onChange={(e) => setField("teryt", setInsured, e.target.value)}
             >
               <option value="">Wybierz powiat</option>
-              {powiaty.map((powiat) => (
+              {powiatyInsurer.map((powiat) => (
                 <option key={powiat.kodTeryt} value={powiat.kodTeryt}>
                   {powiat.nazwa}
                 </option>
@@ -341,7 +351,7 @@ export const PersonalDataorm: React.FC = () => {
               onChange={(e) => setField("teryt", setInsured, e.target.value)}
             >
               <option value="">Wybierz gminę</option>
-              {gminy.map((gmina) => (
+              {gminyInsurer.map((gmina) => (
                 <option key={gmina.kodTeryt} value={gmina.kodTeryt}>
                   {gmina.nazwa}
                 </option>
@@ -402,7 +412,7 @@ export const PersonalDataorm: React.FC = () => {
             />
           </div>
           <button
-            className="calc - form - previous-button"
+            className="calc-form-previous-button"
             type="button"
             onClick={handleGoBack}
           >
@@ -415,25 +425,4 @@ export const PersonalDataorm: React.FC = () => {
       </div>
     </>
   );
-};
-
-const fetchWojewodztwa = async (): Promise<PartOfTeryt[]> => {
-  const apiUrl = import.meta.env.VITE_BACKEND_URL;
-  const response = await fetch(`${apiUrl}/teryt/wojewodztwa`);
-  const data = await response.json();
-  return data;
-};
-
-const fetchPowiaty = async (kodTeryt: string): Promise<PartOfTeryt[]> => {
-  const apiUrl = import.meta.env.VITE_BACKEND_URL;
-  const response = await fetch(`${apiUrl}/teryt/powiaty?teryt=${kodTeryt}`);
-  const data = await response.json();
-  return data;
-};
-
-const fetchGminy = async (kodTeryt: string): Promise<PartOfTeryt[]> => {
-  const apiUrl = import.meta.env.VITE_BACKEND_URL;
-  const response = await fetch(`${apiUrl}/teryt/gminy?teryt=${kodTeryt}`);
-  const data = await response.json();
-  return data;
 };
