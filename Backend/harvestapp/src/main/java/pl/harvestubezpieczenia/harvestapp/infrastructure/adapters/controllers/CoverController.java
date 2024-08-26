@@ -5,7 +5,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import pl.harvestubezpieczenia.harvestapp.domain.DTOs.CoverDto;
+import pl.harvestubezpieczenia.harvestapp.domain.DTOs.CoverListDto;
 import pl.harvestubezpieczenia.harvestapp.domain.model.Cover;
+import pl.harvestubezpieczenia.harvestapp.domain.services.CoverService;
 import pl.harvestubezpieczenia.harvestapp.domain.services.GenericService;
 
 import java.util.List;
@@ -15,10 +17,12 @@ import java.util.List;
 public class CoverController {
 
     private final GenericService<Cover, CoverDto> genericService;
+    private final CoverService coverService;
 
     @Autowired
-    public CoverController(GenericService<Cover, CoverDto> genericService) {
+    public CoverController(GenericService<Cover, CoverDto> genericService, CoverService coverService) {
         this.genericService = genericService;
+        this.coverService = coverService;
     }
 
     @GetMapping
@@ -44,6 +48,11 @@ public class CoverController {
     @PutMapping("/{id}")
     public ResponseEntity<String> updateItem(@RequestBody CoverDto dto, @PathVariable int id){
         return genericService.updateItem(dto, id);
+    }
+
+    @GetMapping("/coverlist")
+    public ResponseEntity<List<CoverListDto>> getCoverList(@RequestParam(value = "coveredtype") String coveredType) {
+        return coverService.getCoverList(coveredType);
     }
 
 }
