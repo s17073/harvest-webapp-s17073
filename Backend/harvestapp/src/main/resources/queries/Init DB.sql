@@ -83,14 +83,13 @@ CREATE TABLE Gatunek (
 -- Table: Kalkulacja
 CREATE TABLE Kalkulacja (
     id_kalkulacja int GENERATED ALWAYS AS IDENTITY NOT NULL,
-    id_adres int  NOT NULL,
-    id_ubezpieczajacy int  NOT NULL,
-    id_ubezpieczony int  NOT NULL,
+    id_ubezpieczajacy int NULL,
+    id_ubezpieczony int NULL,
     id_posrednik int  NULL,
-    numer_kalkulacji varchar(10)  NOT NULL,
-    data_poczatku_ochrony date  NOT NULL,
-    data_konca_ochrony date  NOT NULL,
-    status_kalkulacji varchar(15)  NOT NULL,
+    numer_kalkulacji varchar(10) NULL,
+    data_poczatku_ochrony date NULL,
+    data_konca_ochrony date NULL,
+    status_kalkulacji varchar(15) NULL,
     CONSTRAINT Kalkulacja_pk PRIMARY KEY (id_kalkulacja)
 );
 
@@ -329,14 +328,6 @@ ALTER TABLE Dzialka ADD CONSTRAINT Dzialka_Teryt
 ALTER TABLE Dzialka ADD CONSTRAINT Dzialka_Uprawa
     FOREIGN KEY (id_uprawa)
     REFERENCES Uprawa (id_uprawa)
-    NOT DEFERRABLE
-    INITIALLY IMMEDIATE
-;
-
--- Reference: Kalkulacja_Adres (table: Kalkulacja)
-ALTER TABLE Kalkulacja ADD CONSTRAINT Kalkulacja_Adres
-    FOREIGN KEY (id_adres)
-    REFERENCES Adres (id_adres)
     NOT DEFERRABLE
     INITIALLY IMMEDIATE
 ;

@@ -8,4 +8,5 @@ public interface ApkQuestionRepo extends  GenericCrudRepo<ApkQuestion>{
 
     List<ApkQuestion> getApkQuestions();
 
+    ApkQuestion findApkById(int idApk);
 }

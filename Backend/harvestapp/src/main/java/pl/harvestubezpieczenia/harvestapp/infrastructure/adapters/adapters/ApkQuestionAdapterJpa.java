@@ -22,4 +22,9 @@ public class ApkQuestionAdapterJpa extends GenericCrudRepoAdapterJpa<ApkQuestion
     public List<ApkQuestion> getApkQuestions() {
         return apkQuestionRepoJpa.getApkQuestions();
     }
+
+    @Override
+    public ApkQuestion findApkById(int idApk) {
+        return apkQuestionRepoJpa.findApkById(idApk);
+    }
 }
