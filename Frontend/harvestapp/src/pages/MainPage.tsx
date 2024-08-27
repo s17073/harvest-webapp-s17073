@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { startNewCalculation } from "../api/startNewCalculation";
+import { useNavigate } from "react-router-dom";
+import { startNewCalculation } from "../api/Calculation/startNewCalculation";
 
 export const MainPage: React.FC = () => {
   const [message, setMessage] = useState<string | undefined>(undefined);

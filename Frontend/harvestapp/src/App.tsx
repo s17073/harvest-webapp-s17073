@@ -1,39 +1,47 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import { AdminPanelMainPage } from "./pages/AdminPanelMainPage";
-import { CropKindForm } from "./pages/CropKindForm";
-import { CropKindData } from "./pages/CropKindData";
-import { LivestockKindData } from "./pages/LivestockKindData";
-import { LivestockKindForm } from "./pages/LivestockKindForm";
-import { CoverData } from "./pages/CoverData";
-import { CoverForm } from "./pages/CoverForm";
-import { SoilClassData } from "./pages/SoilClassData";
-import { SoilClassForm } from "./pages/SoilClassForm";
-import { ApkData } from "./pages/ApkData";
-import { ApkForm } from "./pages/ApkForm";
-import { InsuranceCompanyData } from "./pages/InsuraceCompanyData";
-import { AgentData } from "./pages/AgentData";
-import { AgentForm } from "./pages/AgentForm";
-import { CropVarietyData } from "./pages/CropVarietyData";
-import { CropVarietyFrom } from "./pages/CropVarietyForm";
+import { AdminPanelMainPage } from "./pages/Dictionaries/AdminPanelMainPage";
+import { CropKindForm } from "./pages/Dictionaries/CropKindForm";
+import { CropKindData } from "./pages/Dictionaries/CropKindData";
+import { LivestockKindData } from "./pages/Dictionaries/LivestockKindData";
+import { LivestockKindForm } from "./pages/Dictionaries/LivestockKindForm";
+import { CoverData } from "./pages/Dictionaries/CoverData";
+import { CoverForm } from "./pages/Dictionaries/CoverForm";
+import { SoilClassData } from "./pages/Dictionaries/SoilClassData";
+import { SoilClassForm } from "./pages/Dictionaries/SoilClassForm";
+import { ApkData } from "./pages/Dictionaries/ApkData";
+import { ApkForm } from "./pages/Dictionaries/ApkForm";
+import { InsuranceCompanyData } from "./pages/Dictionaries/InsuraceCompanyData";
+import { AgentData } from "./pages/Dictionaries/AgentData";
+import { AgentForm } from "./pages/Dictionaries/AgentForm";
+import { CropVarietyData } from "./pages/Dictionaries/CropVarietyData";
+import { CropVarietyFrom } from "./pages/Dictionaries/CropVarietyForm";
 import { CalculationForm } from "./pages/CalculationForm";
-import { InsurancePeriodForm } from "./components/InsurancePeriodForm";
-import { PersonalDataorm } from "./components/PersonalDataForm";
+import { InsurancePeriodForm } from "./components/Calculation/InsurancePeriodForm";
+import { PersonalDataForm } from "./components/Calculation/PersonalDataForm";
+import { MainPage } from "./pages/MainPage";
+import { CropsFormTable } from "./components/Calculation/CropsFormTable";
+import { CropForm } from "./components/Dictionaries/CropForm";
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
+        <Route path="" element={<MainPage />} />
         <Route
-          path=""
+          path="calculation/:id/insuranceperiod"
           element={<CalculationForm CalculationStep={InsurancePeriodForm} />}
         />
         <Route
-          path="calculation/insuranceperiod"
-          element={<CalculationForm CalculationStep={InsurancePeriodForm} />}
+          path="calculation/:id/personaldata"
+          element={<CalculationForm CalculationStep={PersonalDataForm} />}
         />
         <Route
-          path="calculation/personaldata"
-          element={<CalculationForm CalculationStep={PersonalDataorm} />}
+          path="calculation/:id/crops"
+          element={<CalculationForm CalculationStep={CropsFormTable} />}
+        />
+        <Route
+          path="calculation/:id/crop"
+          element={<CalculationForm CalculationStep={CropForm} />}
         />
         <Route path="/admin" element={<AdminPanelMainPage />} />
         <Route path="/admin/cropkind" element={<CropKindData />} />
