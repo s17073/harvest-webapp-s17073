@@ -23,4 +23,9 @@ public class CropVarietyAdapterJpa extends GenericCrudRepoAdapterJpa<CropVariety
     public List<CropVarietyListDto> getCropVarietyNames(int cropId) {
         return cropVarietyRepoJpa.getCropVarietyNames(cropId);
     }
+
+    @Override
+    public CropVariety getCropVarietyById(int idGatunek) {
+        return cropVarietyRepoJpa.getCropVarietyById(idGatunek);
+    }
 }

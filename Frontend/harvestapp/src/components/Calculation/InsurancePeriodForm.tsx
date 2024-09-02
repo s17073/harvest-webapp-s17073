@@ -7,6 +7,7 @@ import {
   IApkCalculation,
   IStepInsurancePeriod,
 } from "../../interfaces/IStepInsurancePeriod";
+import { fetchInsurancePeriodData } from "../../api/Calculation/fetchInsurancePeriodData";
 
 interface IInsurancePeriodData {
   dateFrom: string;
@@ -34,6 +35,35 @@ export const InsurancePeriodForm: React.FC = () => {
     };
     fetchData();
   }, []);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      if (id && data.apkQuestions.length > 0) {
+        const insurancePeriodData = await fetchInsurancePeriodData(
+          parseInt(id),
+        );
+
+        if (insurancePeriodData) {
+          const setApkQuestions = data.apkQuestions.map((q) => {
+            const setResponse = insurancePeriodData.apk.find(
+              (resp) => resp.id === q.id,
+            );
+            return {
+              ...q,
+              odpowiedz: setResponse ? setResponse.odpowiedz : undefined,
+            };
+          });
+
+          setData(() => ({
+            dateFrom: insurancePeriodData.dataPoczatkuOchrony,
+            dateTo: insurancePeriodData.dataKoncaOchrony,
+            apkQuestions: setApkQuestions,
+          }));
+        }
+      }
+    };
+    fetchData();
+  }, [id, data.apkQuestions.length]);
 
   const setDates = (dateFrom: string) => {
     const newDateTo = new Date(dateFrom);

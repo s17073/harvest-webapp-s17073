@@ -10,4 +10,6 @@ public interface CoverRepo extends GenericCrudRepo<Cover> {
     List<CoverListDto> getCoverListOfLivestock();
 
     List<CoverListDto> getCoverListOfCrops();
+
+    Cover getCoverById(int id);
 }

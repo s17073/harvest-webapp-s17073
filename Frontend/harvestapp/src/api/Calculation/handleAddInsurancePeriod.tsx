@@ -6,5 +6,5 @@ export const handleAddInsurancePeriod = async (
   data: IStepInsurancePeriod,
 ) => {
   const apiUrl = import.meta.env.VITE_BACKEND_URL;
-  await axios.put(`${apiUrl}/calculation/insuranceperiod/${id}`, data);
+  await axios.put(`${apiUrl}/calculation/${id}/insuranceperiod`, data);
 };

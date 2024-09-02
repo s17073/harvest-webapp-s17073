@@ -20,7 +20,9 @@ import { InsurancePeriodForm } from "./components/Calculation/InsurancePeriodFor
 import { PersonalDataForm } from "./components/Calculation/PersonalDataForm";
 import { MainPage } from "./pages/MainPage";
 import { CropsFormTable } from "./components/Calculation/CropsFormTable";
-import { CropForm } from "./components/Dictionaries/CropForm";
+import { CropForm } from "./components/Calculation/CropForm";
+import { LivestockFormTable } from "./components/Calculation/LivestockFromTable";
+import { LivestockForm } from "./components/Calculation/LivestockForm";
 
 function App() {
   return (
@@ -42,6 +44,22 @@ function App() {
         <Route
           path="calculation/:id/crop"
           element={<CalculationForm CalculationStep={CropForm} />}
+        />
+        <Route
+          path="calculation/:id/crop/:cropid"
+          element={<CalculationForm CalculationStep={CropForm} />}
+        />
+        <Route
+          path="calculation/:id/livestock"
+          element={<CalculationForm CalculationStep={LivestockFormTable} />}
+        />
+        <Route
+          path="calculation/:id/livestock/add"
+          element={<CalculationForm CalculationStep={LivestockForm} />}
+        />
+        <Route
+          path="calculation/:id/livestock/:livestockid"
+          element={<CalculationForm CalculationStep={LivestockForm} />}
         />
         <Route path="/admin" element={<AdminPanelMainPage />} />
         <Route path="/admin/cropkind" element={<CropKindData />} />

@@ -4,8 +4,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pl.harvestubezpieczenia.harvestapp.domain.DTOs.LivestockKindDto;
+import pl.harvestubezpieczenia.harvestapp.domain.DTOs.LivestockListDto;
 import pl.harvestubezpieczenia.harvestapp.domain.model.LivestockKind;
 import pl.harvestubezpieczenia.harvestapp.domain.services.GenericService;
+import pl.harvestubezpieczenia.harvestapp.domain.services.LivestockKindService;
 
 import java.util.List;
 
@@ -14,10 +16,12 @@ import java.util.List;
 public class LivestockKindController {
 
     private final GenericService<LivestockKind, LivestockKindDto> genericService;
+    private final LivestockKindService livestockKindService;
 
     @Autowired
-    public LivestockKindController(GenericService<LivestockKind, LivestockKindDto> genericService) {
+    public LivestockKindController(GenericService<LivestockKind, LivestockKindDto> genericService, LivestockKindService livestockKindService) {
         this.genericService = genericService;
+        this.livestockKindService = livestockKindService;
     }
 
     @GetMapping
@@ -43,6 +47,11 @@ public class LivestockKindController {
     @PutMapping("/{id}")
     public ResponseEntity<String> updateItem(@RequestBody LivestockKindDto dto, @PathVariable int id){
         return genericService.updateItem(dto, id);
+    }
+
+    @GetMapping("livestocklist")
+    public ResponseEntity<List<LivestockListDto>> getLivestockList(){
+        return livestockKindService.getLivestockList();
     }
 
 

@@ -24,4 +24,9 @@ public class SoilClassAdapterJpa extends GenericCrudRepoAdapterJpa<SoilClass> im
     public List<SoilClassListDto> getSoilClassNames() {
         return soilClassRepoJpa.getSoilClassNames();
     }
+
+    @Override
+    public SoilClass getSoilClassById(int idKlasaGleby) {
+        return soilClassRepoJpa.getSoilClassById(idKlasaGleby);
+    }
 }

@@ -2,6 +2,7 @@ package pl.harvestubezpieczenia.harvestapp.infrastructure.adapters.adapters;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
+import pl.harvestubezpieczenia.harvestapp.domain.DTOs.CalcGetApkDto;
 import pl.harvestubezpieczenia.harvestapp.domain.model.ApkQuestion;
 import pl.harvestubezpieczenia.harvestapp.domain.ports.ApkQuestionRepo;
 import pl.harvestubezpieczenia.harvestapp.infrastructure.adapters.repositories.ApkQuestionRepoJpa;
@@ -26,5 +27,10 @@ public class ApkQuestionAdapterJpa extends GenericCrudRepoAdapterJpa<ApkQuestion
     @Override
     public ApkQuestion findApkById(int idApk) {
         return apkQuestionRepoJpa.findApkById(idApk);
+    }
+
+    @Override
+    public List<CalcGetApkDto> findApkQuestionsByCalcId(int calcId) {
+        return apkQuestionRepoJpa.findApkQuestionsByCalcId(calcId);
     }
 }

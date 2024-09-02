@@ -29,4 +29,11 @@ public class CoverAdapterJpa extends GenericCrudRepoAdapterJpa<Cover> implements
     public List<CoverListDto> getCoverListOfCrops() {
         return coverRepoJpa.getCoverListOfCrops();
     }
+
+    @Override
+    public Cover getCoverById(int id) {
+        return coverRepoJpa.getCoverById(id);
+    }
+
+
 }

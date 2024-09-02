@@ -1,4 +1,4 @@
-:root {
+/* :root {
   --color-white: #f0f0f2;
   --color-primary-feldgrau: #4e5f5f;
   --color-background-lavgray: #a8b5bf;
@@ -129,4 +129,4 @@ span.error-message {
 
 input:invalid ~ span.error-message {
   display: inline;
-}
+} */

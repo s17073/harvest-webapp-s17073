@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { ICropData } from "../Calculation/CropsFormTable";
+import { ICropData } from "./CropsFormTable";
 import { CropFormLandField } from "./CropFormLandField";
 import { ICrop } from "../../interfaces/ICrop";
 import { ISoilClassList } from "../../interfaces/ISoilClassList";
@@ -9,11 +9,19 @@ import { fetchUprawy } from "../../api/Shared/fetchUprawy";
 import { fetchGatunki } from "../../api/Shared/fetchGatunki";
 import { fetchKlasyGleby } from "../../api/Shared/fetchKlasyGleby";
 import { fetchOchrony } from "../../api/Shared/fetchOchrony";
+import { useNavigate, useParams } from "react-router-dom";
+import { ILand, IStepCrop } from "../../interfaces/IStepCrop";
+import { handleAddCrop } from "../../api/Calculation/handleAddCrop";
+import { fetchUprawa } from "../../api/Calculation/fetchUprawa";
 
 export const CropForm: React.FC = () => {
   const [cropsList, setCropsList] = useState<ICrop[]>([]);
   const [soilClassList, setSoilClassList] = useState<ISoilClassList[]>([]);
+  const [error, setError] = useState<String | undefined>(undefined);
   const [coverList, setCoverList] = useState<ICoverList[]>([]);
+  const { id } = useParams<{ id: string }>();
+  const { cropid } = useParams<{ cropid: string }>();
+  const navigate = useNavigate();
   const [cropVarietyList, setCropVarietyList] = useState<ICropVarietyList[]>(
     [],
   );
@@ -22,6 +30,7 @@ export const CropForm: React.FC = () => {
   );
   const [message, setMessage] = useState<string | undefined>(undefined);
   const [crop, setCrop] = useState<ICropData>({
+    id: 0,
     idUprawy: 0,
     idGatunek: 0,
     idKlasaGleby: 0,
@@ -42,7 +51,7 @@ export const CropForm: React.FC = () => {
         czyPoprawna: false,
         kodObrebu: "",
         numerDzialki: "",
-        oberb: "",
+        obreb: "",
         identyfikatorDzialki: "",
       },
     ],
@@ -64,20 +73,68 @@ export const CropForm: React.FC = () => {
     fetchOchrony("uprawy").then(setCoverList);
   }, []);
 
-  const handleSubmit = (event: React.FormEvent) => {
+  useEffect(() => {
+    const fetchData = async () => {
+      if (id && cropid) {
+        const crop = await fetchUprawa(parseInt(id), parseInt(cropid));
+        if (crop) {
+          setCrop(crop);
+        }
+      }
+    };
+    fetchData();
+  }, [cropid]);
+
+  const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
-    console.log(crop);
+
+    const landsToAdd: ILand[] = crop.dzialki.map((dzialka) => {
+      const land: ILand = {
+        teryt: dzialka.teryt,
+        numerDzialki: dzialka.numerDzialki,
+        czyPoprawna: dzialka.czyPoprawna,
+        kodObrebu: dzialka.kodObrebu,
+        obreb: dzialka.obreb,
+      };
+      return land;
+    });
+
+    const cropDataToAdd: IStepCrop = {
+      idRodzajUprawy: crop.idUprawy,
+      idGatunek: crop.idGatunek,
+      idKlasaGleby: crop.idKlasaGleby,
+      czyNasienna: crop.czyNasienna,
+      powierzchnia: crop.powierzchnia,
+      wartosc: crop.wartosc,
+      ryzyka: crop.ryzyka,
+      dzialki: landsToAdd,
+    };
+
+    if (id) {
+      const idCalculation = parseInt(id);
+      try {
+        if (cropid) {
+          const idCrop = parseInt(cropid);
+          await handleAddCrop(idCalculation, cropDataToAdd, idCrop);
+          navigate(`/calculation/${id}/crops`);
+        } else {
+          await handleAddCrop(idCalculation, cropDataToAdd);
+          navigate(`/calculation/${id}/crops`);
+        }
+      } catch (e) {
+        setError("Nie udało się wysłać danych");
+      }
+    }
   };
 
   const handleGoBack = () => {
-    console.log("going Back");
+    navigate(`/calculation/${id}/crops`);
   };
 
   const setField = (
     field: keyof ICropData,
     value: string | boolean | string[],
   ) => {
-    console.log(crop);
     setCrop((cropFields) => ({
       ...cropFields,
       [field]: value,
@@ -106,7 +163,7 @@ export const CropForm: React.FC = () => {
             kodObrebu: "",
             numerDzialki: "",
             identyfikatorDzialki: "",
-            oberb: "",
+            obreb: "",
           },
         ],
       }));
@@ -249,9 +306,9 @@ export const CropForm: React.FC = () => {
             <div key={dzialka.id}>
               <CropFormLandField
                 dzialka={dzialka}
-                onUpdateField={(field, value) =>
-                  updateLandField(dzialka.id, field, value)
-                }
+                onUpdateField={(field, value) => {
+                  updateLandField(dzialka.id, field, value);
+                }}
                 onRemove={() => removeLand(dzialka.id)}
                 removeButtonDisable={crop.dzialki.length === 1}
                 setTerytIsIncorrect={setTerytIsIncorrect}
@@ -275,6 +332,7 @@ export const CropForm: React.FC = () => {
             Dodaj
           </button>
         </form>
+        {error && error}
       </div>
     </>
   );

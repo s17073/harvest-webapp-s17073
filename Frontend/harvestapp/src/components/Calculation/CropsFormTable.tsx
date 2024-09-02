@@ -1,16 +1,11 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { IAgriculturalLand } from "../../interfaces/IAgriculturalLand";
-
-interface ICropFormTableProps {
-  cropData: ICropData;
-}
-
-interface ICover {
-  idRyzyko: number;
-  ryzyko: string;
-}
+import { useNavigate, useParams } from "react-router-dom";
+import { fetchCrops } from "../../api/Calculation/fetchCrops";
+import { handleDeleteCrop } from "../../api/Calculation/handleDeleteCrop";
 
 export interface ICropData {
+  id: number;
   idUprawy: number;
   idGatunek: number;
   idKlasaGleby: number;
@@ -32,6 +27,48 @@ export const CropsFormTable: React.FC = () => {
   const [loading, setLoading] = useState<string | null>(null);
   const [info, setInfo] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const { id } = useParams<{ id: string }>();
+  const navigate = useNavigate();
+
+  const fetchData = async () => {
+    if (id) {
+      const cropsData = await fetchCrops(parseInt(id));
+      if (cropsData) {
+        setCrops(cropsData);
+      }
+    }
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, [id]);
+
+  const handleGoBack = () => {
+    navigate(`/calculation/${id}/personaldata`);
+  };
+
+  const handleAddCrop = () => {
+    navigate(`/calculation/${id}/crop`);
+  };
+
+  const handleEditCrop = (cropId: number) => {
+    navigate(`/calculation/${id}/crop/${cropId}`);
+  };
+
+  const handleRemoveCrop = async (cropId: number) => {
+    if (id) {
+      try {
+        await handleDeleteCrop(parseInt(id), cropId);
+        fetchData();
+      } catch (e) {
+        setError("Wystąpił błąd podczas usuwania uprawy");
+      }
+    }
+  };
+
+  const handleSubmit = () => {
+    navigate(`/calculation/${id}/livestock`);
+  };
 
   return (
     <>
@@ -54,18 +91,54 @@ export const CropsFormTable: React.FC = () => {
             </thead>
             <tbody>
               {crops.map((crop) => (
-                <tr key={crop.idUprawy} className={`row-${crop.idUprawy}`}>
+                <tr key={crop.id} className={`row-${crop.id}`}>
                   <td>{crop.uprawa}</td>
                   <td>{crop.czyNasienna}</td>
                   <td>{crop.powierzchnia}</td>
                   <td>{crop.wartosc}</td>
                   <td>{crop.sumaUbezpieczenia}</td>
-                  <td>Edytuj</td>
-                  <td>Usuń</td>
+                  <td>
+                    <button
+                      type="button"
+                      onClick={() => handleEditCrop(crop.id)}
+                    >
+                      Edytuj
+                    </button>
+                  </td>
+                  <td>
+                    <button
+                      type="button"
+                      onClick={() => handleRemoveCrop(crop.id)}
+                    >
+                      Usuń
+                    </button>
+                  </td>
                 </tr>
               ))}
             </tbody>
           </table>
+          <button
+            className="calc-form-add-crop"
+            type="button"
+            onClick={handleAddCrop}
+          >
+            Dodaj Uprawę
+          </button>
+          <button
+            className="calc-form-previous-button"
+            type="button"
+            onClick={handleGoBack}
+          >
+            Wstecz
+          </button>
+          <button
+            className="calc-form-next-button"
+            type="submit"
+            onClick={handleSubmit}
+          >
+            Dalej
+          </button>
+          <div>{error && error}</div>
         </div>
       </div>
     </>

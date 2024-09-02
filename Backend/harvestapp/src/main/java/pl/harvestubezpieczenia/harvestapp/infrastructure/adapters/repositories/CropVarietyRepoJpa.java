@@ -13,4 +13,7 @@ public interface CropVarietyRepoJpa extends GenericCrudRepoJpa<CropVariety> {
 
     @Query(value = "select g.id_gatunek, g.nazwa_gatunku from harvest.gatunek g inner join harvest.uprawa_gatunek ug on ug.id_gatunek = g.id_gatunek where data_usuniecia is null and czy_aktywna = true and ug.id_rodzaj_uprawy = :cropid",nativeQuery = true)
     List<CropVarietyListDto> getCropVarietyNames(@Param("cropid") int cropId);
+
+    @Query(value = "select * from harvest.gatunek g where id_gatunek = :idcropvariety", nativeQuery = true)
+    CropVariety getCropVarietyById(@Param("idcropvariety") int idGatunek);
 }

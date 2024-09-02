@@ -7,4 +7,6 @@ import java.util.List;
 
 public interface SoilClassRepo extends GenericCrudRepo<SoilClass>{
     List<SoilClassListDto> getSoilClassNames();
+
+    SoilClass getSoilClassById(int idKlasaGleby);
 }

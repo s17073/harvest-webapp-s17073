@@ -7,6 +7,9 @@ import pl.harvestubezpieczenia.harvestapp.domain.valueObjects.InsuranceClass;
 import pl.harvestubezpieczenia.harvestapp.domain.valueObjects.ModificationDate;
 import pl.harvestubezpieczenia.harvestapp.domain.valueObjects.Season;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Data
 @Entity
 @Table(name = "ochrona")
@@ -29,6 +32,9 @@ public class Cover implements GenericCrudModel{
     private boolean czyAktywna;
 
     private ModificationDate dataModyfikacji;
+
+    @ManyToMany(mappedBy = "ochrony",cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private List<Livestock> zwierzeta = new ArrayList<>();
 
     @Override
     public int getId() {

@@ -84,10 +84,10 @@ export const CropFormLandField: React.FC<ICropFormLandFieldProps> = ({
 
     if (value.length < 13) {
       onUpdateField("kodObrebu", "");
-      onUpdateField("nazwaObrebu", "");
       onUpdateField("numerDzialki", "");
     } else {
       onUpdateField("kodObrebu", value.substring(0, 13));
+      onUpdateField("obreb", "");
       onUpdateField("numerDzialki", value.substring(14));
     }
 
@@ -164,7 +164,7 @@ export const CropFormLandField: React.FC<ICropFormLandFieldProps> = ({
             );
             if (selectedObreb) {
               onUpdateField("kodObrebu", selectedObreb.kodTeryt);
-              onUpdateField("nazwaObrebu", selectedObreb.nazwa);
+              onUpdateField("obreb", selectedObreb.nazwa);
               onUpdateField("identyfikatorDzialki", selectedObreb.kodTeryt);
             }
           }}

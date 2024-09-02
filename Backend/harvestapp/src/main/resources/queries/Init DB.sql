@@ -241,16 +241,16 @@ CREATE TABLE Uzytkownik (
     id_uzytkownik int GENERATED ALWAYS AS IDENTITY NOT NULL,
     id_adres int  NOT NULL,
     id_agent int  NULL,
-    id_konta int  NOT NULL,
+    id_konta int NULL,
     imie varchar(20)  NOT NULL,
     nazwisko varchar(60)  NOT NULL,
     pesel varchar(11)  NOT NULL,
     data_urodzenia date  NOT NULL,
-    wiek smallint  NOT NULL,
+    wiek smallint NULL,
     email varchar(100)  NOT NULL,
-    haslo varchar(30)  NOT NULL,
-    kod_posrednika varchar(10)  NOT NULL,
-    numer_telefonu varchar(13)  NOT NULL,
+    haslo varchar(30) NULL,
+    kod_posrednika varchar(10) NULL,
+    numer_telefonu varchar(13) NULL,
     CONSTRAINT Uzytkownik_pk PRIMARY KEY (id_uzytkownik)
 );
 

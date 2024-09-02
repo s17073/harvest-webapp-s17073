@@ -1,7 +1,7 @@
 export interface IAgriculturalLand {
   id: number;
   teryt: string;
-  oberb: string;
+  obreb: string;
   kodObrebu: string;
   numerDzialki: string;
   identyfikatorDzialki: string;

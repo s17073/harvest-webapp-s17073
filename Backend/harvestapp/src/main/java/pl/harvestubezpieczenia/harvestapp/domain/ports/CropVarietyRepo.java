@@ -7,4 +7,6 @@ import java.util.List;
 
 public interface CropVarietyRepo extends  GenericCrudRepo<CropVariety>{
     List<CropVarietyListDto> getCropVarietyNames(int cropId);
+
+    CropVariety getCropVarietyById(int idRodzajUprawy);
 }

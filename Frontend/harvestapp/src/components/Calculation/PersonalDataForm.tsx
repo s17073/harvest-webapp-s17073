@@ -4,6 +4,9 @@ import { fetchWojewodztwa } from "../../api/Shared/fetchWojewodztwa";
 import { fetchPowiaty } from "../../api/Shared/fetchPowiaty";
 import { fetchGminy } from "../../api/Shared/fetchGminy";
 import { PartOfTeryt } from "../../interfaces/PartOfTeryt";
+import { IStepPersonalData } from "../../interfaces/IStepPersonalData";
+import { handleAddPersonalData } from "../../api/Calculation/handleAddPersonalData";
+import { fetchPersonalData } from "../../api/Calculation/fetchPersonalData";
 
 interface IPersonalData {
   imie: string;
@@ -25,6 +28,7 @@ export const PersonalDataForm: React.FC = () => {
   const [gminy, setGminy] = useState<PartOfTeryt[]>([]);
   const [powiatyInsurer, setPowiatyInsurer] = useState<PartOfTeryt[]>([]);
   const [gminyInsurer, setGminyInsurer] = useState<PartOfTeryt[]>([]);
+  const [error, setError] = useState<string | undefined>(undefined);
   const [policyHolder, setPolicyHolder] = useState<IPersonalData>({
     imie: "",
     nazwisko: "",
@@ -87,10 +91,90 @@ export const PersonalDataForm: React.FC = () => {
     navigate(`/calculation/${id}/insuranceperiod`);
   };
 
-  const handleSubmit = (event: React.FormEvent) => {
+  const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
-    navigate("/calculation/crops");
+
+    const personalDataToAdd: IStepPersonalData = {
+      ubezpieczajacy: {
+        imie: policyHolder.imie,
+        nazwisko: policyHolder.nazwisko,
+        pesel: policyHolder.pesel,
+        dataUrodzenia: new Date(policyHolder.dataUrodzenia),
+        adresEmail: policyHolder.adresEmail,
+        teryt: policyHolder.teryt,
+        kodPocztowy: policyHolder.kodPocztowy,
+        miejscowosc: policyHolder.miejscowosc,
+        ulica: policyHolder.ulica,
+        numerDomu: policyHolder.numerDomu,
+        numerMieszkania: policyHolder.numerMieszkania,
+      },
+      ubezpieczony: {
+        imie: insured.imie,
+        nazwisko: insured.nazwisko,
+        pesel: insured.pesel,
+        dataUrodzenia: new Date(insured.dataUrodzenia),
+        adresEmail: insured.adresEmail,
+        teryt: insured.teryt,
+        kodPocztowy: insured.kodPocztowy,
+        miejscowosc: insured.miejscowosc,
+        ulica: insured.ulica,
+        numerDomu: insured.numerDomu,
+        numerMieszkania: insured.numerMieszkania,
+      },
+    };
+
+    if (id) {
+      const idCalculation = parseInt(id);
+      try {
+        await handleAddPersonalData(idCalculation, personalDataToAdd);
+        navigate(`/calculation/${id}/crops`);
+      } catch (e) {
+        setError("Nie udało się wysłać danych");
+      }
+    }
   };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      if (id) {
+        const personalData = await fetchPersonalData(parseInt(id));
+
+        if (personalData) {
+          const policyHolder: IPersonalData = {
+            imie: personalData.ubezpieczajacy.imie,
+            nazwisko: personalData.ubezpieczajacy.nazwisko,
+            pesel: personalData.ubezpieczajacy.pesel,
+            dataUrodzenia: personalData.ubezpieczajacy.dataUrodzenia,
+            adresEmail: personalData.ubezpieczajacy.adresEmail,
+            teryt: personalData.ubezpieczajacy.teryt,
+            kodPocztowy: personalData.ubezpieczajacy.kodPocztowy,
+            miejscowosc: personalData.ubezpieczajacy.miejscowosc,
+            ulica: personalData.ubezpieczajacy.ulica,
+            numerDomu: personalData.ubezpieczajacy.numerDomu,
+            numerMieszkania: personalData.ubezpieczajacy.numerMieszkania,
+          };
+
+          const policyInsured: IPersonalData = {
+            imie: personalData.ubezpieczony.imie,
+            nazwisko: personalData.ubezpieczony.nazwisko,
+            pesel: personalData.ubezpieczony.pesel,
+            dataUrodzenia: personalData.ubezpieczony.dataUrodzenia,
+            adresEmail: personalData.ubezpieczony.adresEmail,
+            teryt: personalData.ubezpieczony.teryt,
+            kodPocztowy: personalData.ubezpieczony.kodPocztowy,
+            miejscowosc: personalData.ubezpieczony.miejscowosc,
+            ulica: personalData.ubezpieczony.ulica,
+            numerDomu: personalData.ubezpieczony.numerDomu,
+            numerMieszkania: personalData.ubezpieczony.numerMieszkania,
+          };
+
+          setPolicyHolder(policyHolder);
+          setInsured(policyInsured);
+        }
+      }
+    };
+    fetchData();
+  }, [id]);
 
   const copyPolicyHolderData = () => {
     setInsured(policyHolder);
@@ -423,6 +507,7 @@ export const PersonalDataForm: React.FC = () => {
             Dalej
           </button>
         </form>
+        <div>{error && error}</div>
       </div>
     </>
   );

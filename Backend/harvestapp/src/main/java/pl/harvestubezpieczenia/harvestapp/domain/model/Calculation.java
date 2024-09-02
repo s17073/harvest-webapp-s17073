@@ -18,6 +18,22 @@ public class Calculation {
     @OneToMany(mappedBy = "kalkulacja", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<ApkCalculation> apk;
 
+    @JoinColumn(name = "id_ubezpieczajacy")
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    User ubezpieczajacy;
+    @JoinColumn(name = "id_ubezpieczony")
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    User ubezpieczony;
+    @JoinColumn(name = "id_posrednik")
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    User posrednik;
+
+    @OneToMany(mappedBy = "kalkulacja", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    List<Crop> uprawy;
+
+    @OneToMany(mappedBy = "kalkulacja", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    List<Livestock> zwierzeta;
+
     private String numerKalkulacji;
     private LocalDate dataPoczatkuOchrony;
     private LocalDate dataKoncaOchrony;
