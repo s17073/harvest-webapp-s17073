@@ -7,9 +7,14 @@ export const fetchDictionaryDataById = async (
   setData: any,
 ) => {
   try {
+    const token = localStorage.getItem("token");
     const apiUrl = import.meta.env.VITE_BACKEND_URL;
 
-    const response = await axios.get<any>(`${apiUrl}/${endpoint}/${id}`);
+    const response = await axios.get<any>(`${apiUrl}/${endpoint}/${id}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
     if (!response.data) {
       setAnnouncement(`Nie znaleziono rekordu o id ${id}.`);
     } else {

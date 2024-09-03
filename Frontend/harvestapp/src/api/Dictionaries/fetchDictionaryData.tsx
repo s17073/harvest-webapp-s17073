@@ -10,9 +10,14 @@ export const fetchDictionaryData = async (
   setLoading("Ładowanie danych...");
   // await new Promise((resolve) => setTimeout(resolve, 1000)); //sztuczne opoznienie o 1 sec
   try {
+    const token = localStorage.getItem("token");
     const apiUrl = import.meta.env.VITE_BACKEND_URL;
 
-    const response = await axios.get<any[]>(`${apiUrl}/${endpoint}`);
+    const response = await axios.get<any[]>(`${apiUrl}/${endpoint}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
     // console.log("Crop kind data get method status: ", response.status);
     if (response.data.length === 0) {
       setNoData("Brak danych do wyświetlenia.");

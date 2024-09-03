@@ -33,9 +33,11 @@ public class SecurityConfig {
                 .csrf(customizer -> customizer.disable())
                 .authorizeHttpRequests(request -> request
                         .requestMatchers("/user/login","/user/register").permitAll()
+                        .requestMatchers("address").hasAuthority("ADMIN")
+                        .requestMatchers("teryt").hasAuthority("ADMIN")
+                        .requestMatchers("cropkind").hasAuthority("ADMIN")
                         .requestMatchers("/user/admin/login").permitAll()
                         .requestMatchers("/user/admin/**").hasAuthority("ADMIN")
-                        .requestMatchers("cropkind").hasAuthority("ADMIN")
                         .anyRequest()
                         .authenticated())
                 .httpBasic(Customizer.withDefaults())

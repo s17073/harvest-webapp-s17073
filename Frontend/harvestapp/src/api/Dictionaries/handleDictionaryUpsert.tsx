@@ -10,12 +10,21 @@ export const handleDictionaryUpsert = async (
   event.preventDefault();
 
   try {
+    const token = localStorage.getItem("token");
     const apiUrl = import.meta.env.VITE_BACKEND_URL;
 
     if (method === "POST") {
-      await axios.post(`${apiUrl}/${endpoint}`, dataToAdd);
+      await axios.post(`${apiUrl}/${endpoint}`, dataToAdd, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
     } else if (method === "PUT") {
-      await axios.put(`${apiUrl}/${endpoint}`, dataToAdd);
+      await axios.put(`${apiUrl}/${endpoint}`, dataToAdd, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
     } else {
       throw new Error("Unknown HTTP method.");
     }

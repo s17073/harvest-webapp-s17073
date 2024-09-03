@@ -8,9 +8,14 @@ export const handleDictionaryDelete = async (
   setAnnouncement: any,
 ) => {
   try {
+    const token = localStorage.getItem("token");
     const apiUrl = import.meta.env.VITE_BACKEND_URL;
 
-    const response = await axios.delete(`${apiUrl}/${endpoint}/${id}`);
+    const response = await axios.delete(`${apiUrl}/${endpoint}/${id}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
     // console.log(`Crop kind id: ${id} delete method status: ${response.status}`);
     if (response.status === 200) {
       setData([]);

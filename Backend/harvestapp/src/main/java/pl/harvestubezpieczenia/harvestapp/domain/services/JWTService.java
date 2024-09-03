@@ -39,7 +39,7 @@ public class JWTService<T> {
                 .add(claims)
                 .subject(username)
                 .issuedAt(new Date(System.currentTimeMillis()))
-                .expiration(new java.util.Date(System.currentTimeMillis() + 60 * 60 * 30))
+                .expiration(new java.util.Date(System.currentTimeMillis() + 60 * 60 * 500))
                 .and()
                 .signWith(getKey())
                 .compact();
