@@ -7,4 +7,6 @@ public interface UserRepo {
     void saveUser(User policyHolder);
 
     User getUserByUsername(String username);
+
+    String getUserRole(String email);
 }

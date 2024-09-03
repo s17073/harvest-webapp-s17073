@@ -22,4 +22,9 @@ public class UserAdapterJpa implements UserRepo {
     public User getUserByUsername(String username) {
         return userRepoJpa.getUserByUsername(username);
     }
+
+    @Override
+    public String getUserRole(String email) {
+        return userRepoJpa.getUserRole(email);
+    }
 }

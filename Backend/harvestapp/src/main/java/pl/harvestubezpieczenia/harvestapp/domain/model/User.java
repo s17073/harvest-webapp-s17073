@@ -28,5 +28,6 @@ public class User {
     String haslo;
     String kodPosrednika;
     String numerTelefonu;
+    String rola;
 
 }

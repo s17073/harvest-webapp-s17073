@@ -11,4 +11,7 @@ public interface UserRepoJpa extends JpaRepository<User, Long> {
 
     @Query(value = "SELECT * FROM harvest.uzytkownik where email = :username and haslo is not null", nativeQuery = true)
     User getUserByUsername(@Param("username") String username);
+
+    @Query(value = "SELECT rola FROM harvest.uzytkownik where email = :email", nativeQuery = true)
+    String getUserRole(@Param("email") String email);
 }

@@ -239,7 +239,7 @@ CREATE TABLE Uprawa_gatunek (
 -- Table: Uzytkownik
 CREATE TABLE Uzytkownik (
     id_uzytkownik int GENERATED ALWAYS AS IDENTITY NOT NULL,
-    id_adres int  NOT NULL,
+    id_adres int  NULL,
     id_agent int  NULL,
     id_konta int NULL,
     imie varchar(20)  NOT NULL,
@@ -248,7 +248,8 @@ CREATE TABLE Uzytkownik (
     data_urodzenia date  NOT NULL,
     wiek smallint NULL,
     email varchar(100)  NOT NULL,
-    haslo varchar(30) NULL,
+    haslo text NULL,
+    rola varchar(10) NULL,
     kod_posrednika varchar(10) NULL,
     numer_telefonu varchar(13) NULL,
     CONSTRAINT Uzytkownik_pk PRIMARY KEY (id_uzytkownik)
