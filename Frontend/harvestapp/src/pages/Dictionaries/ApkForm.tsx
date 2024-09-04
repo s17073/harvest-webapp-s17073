@@ -4,6 +4,7 @@ import {
   IFormSchema,
 } from "../../components/Dictionaries/DictionaryForm";
 import { AdminPanelNav } from "../../components/Dictionaries/AdminPanelNav";
+import { useParams } from "react-router-dom";
 
 interface IApkDict {
   pytanie: string;
@@ -33,6 +34,7 @@ const additionalValidationSchema = yup.object().shape({
 });
 
 export const ApkForm: React.FC = () => {
+  const { id } = useParams();
   const apkFields: IFormSchema<IApkDict>[] = [
     {
       name: "pytanie",
@@ -55,7 +57,7 @@ export const ApkForm: React.FC = () => {
       <div className="background">
         <div className="admin-content-space">
           <div className="admin-title-container">
-            <h1>DODAJ PYTANIE</h1>
+            <h1>{id !== undefined ? "EDYTUJ PYTANIE" : "DODAJ PYTANIE"}</h1>
           </div>
           <DictionaryForm<IApkDict>
             apiEndpoint="apk"

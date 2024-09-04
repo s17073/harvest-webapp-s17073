@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import * as yup from "yup";
 import { Address } from "./Address";
 import { Teryt } from "./Teryt";
@@ -43,6 +43,7 @@ export const DictionaryForm = <T extends {}>({
   const [errors, setErrors] = useState<any>({});
   const [announcement, setAnnouncement] = useState<string | null>(null);
   const { id } = useParams();
+  const navigate = useNavigate();
 
   const keyExists = (key: keyof T): boolean => {
     return key in data;
@@ -108,6 +109,8 @@ export const DictionaryForm = <T extends {}>({
       const method = id !== undefined ? "PUT" : "POST";
 
       handleDictionaryUpsert(event, apiUrl, method, data, setAnnouncement);
+
+      navigate("..");
     } catch (err) {
       if (err instanceof yup.ValidationError) {
         const fieldErrors: any = {};
@@ -138,209 +141,235 @@ export const DictionaryForm = <T extends {}>({
   return (
     <div className="admin-upsert-space">
       <form onSubmit={sendUpsertRequest}>
-        {fields.map((field) => {
-          const value = data[field.name];
-          return (
-            <div key={field.name as string}>
-              <label>{field.label}:</label>
-              {field.type === "text" && (
-                <>
-                  <input
-                    type="text"
-                    value={value as string}
-                    onChange={(e) => handleOnChange(field.name, e.target.value)}
-                    placeholder={field.placeholder}
-                    onBlur={() => handleOnBlur(field.name)}
-                  />
-                  {errors[field.name as string] && (
-                    <span className="error-message">
-                      {errors[field.name as string]}
-                    </span>
-                  )}
-                </>
-              )}
-              {field.type === "number" && (
-                <>
-                  <input
-                    type="number"
-                    value={value as number}
-                    onChange={(e) =>
-                      handleOnChange(field.name, parseFloat(e.target.value))
-                    }
-                    onBlur={() => handleOnBlur(field.name)}
-                    placeholder={field.placeholder}
-                    required={field.required}
-                  />
-                  {errors[field.name as string] && (
-                    <span className="error-message">
-                      {errors[field.name as string]}
-                    </span>
-                  )}
-                </>
-              )}
-              {field.type === "isActive" && (
-                <>
-                  <input
-                    type="checkbox"
-                    checked={value as boolean}
-                    onChange={() =>
-                      handleOnChange(field.name, !(value as boolean))
-                    }
-                  />
-                  {errors[field.name as string] && (
-                    <span className="error-message">
-                      {errors[field.name as string]}
-                    </span>
-                  )}
-                </>
-              )}
-
-              {field.type === "radio" && field.options && (
-                <>
-                  <div>
-                    {field.options.map((option) => (
-                      <label key={option}>
-                        <input
-                          type="radio"
-                          value={option}
-                          checked={value === option}
-                          onChange={() => handleOnChange(field.name, option)}
-                        />
-                        {option}
-                      </label>
-                    ))}
-                  </div>
-                  {errors[field.name as string] && (
-                    <span className="error-message">
-                      {errors[field.name as string]}
-                    </span>
-                  )}
-                </>
-              )}
-              {field.type === "season" && (
-                <>
-                  <div>
-                    <label>
-                      <input
-                        type="radio"
-                        value={"WIOSNA"}
-                        checked={value === "WIOSNA"}
-                        onChange={() => handleOnChange(field.name, "WIOSNA")}
-                      />
-                      {"WIOSNA"}
-                    </label>
-                    <label>
-                      <input
-                        type="radio"
-                        value={"ZIMA"}
-                        checked={value === "ZIMA"}
-                        onChange={() => handleOnChange(field.name, "ZIMA")}
-                      />
-                      {"ZIMA"}
-                    </label>
-                    <label>
-                      <input
-                        type="radio"
-                        value={"CAŁOROCZNA"}
-                        checked={value === "CAŁOROCZNA"}
-                        onChange={() =>
-                          handleOnChange(field.name, "CAŁOROCZNA")
-                        }
-                      />
-                      {"CAŁOROCZNA"}
-                    </label>
-                  </div>
-                  {errors[field.name as string] && (
-                    <span className="error-message">
-                      {errors[field.name as string]}
-                    </span>
-                  )}
-                </>
-              )}
-              {field.type === "marketValue" && (
-                <>
-                  <label>
+        <div className="admin-upserd-fields">
+          {fields.map((field) => {
+            const value = data[field.name];
+            return (
+              <div
+                key={field.name as string}
+                className="admin-upsert-field-space"
+              >
+                <label>{field.label}:</label>
+                {field.type === "text" && (
+                  <>
                     <input
                       type="text"
-                      inputMode="numeric"
-                      pattern="\d*"
+                      value={value as string}
+                      onChange={(e) =>
+                        handleOnChange(field.name, e.target.value)
+                      }
+                      placeholder={field.placeholder}
+                      onBlur={() => handleOnBlur(field.name)}
+                    />
+                    {errors[field.name as string] && (
+                      <span className="error-message">
+                        {errors[field.name as string]}
+                      </span>
+                    )}
+                  </>
+                )}
+                {field.type === "number" && (
+                  <>
+                    <input
+                      type="number"
                       value={value as number}
                       onChange={(e) =>
-                        e.target.value
-                          ? handleOnChange(
-                              field.name,
-                              parseFloat(e.target.value),
-                            )
-                          : handleOnChange(field.name, 0)
+                        handleOnChange(field.name, parseFloat(e.target.value))
                       }
                       onBlur={() => handleOnBlur(field.name)}
                       placeholder={field.placeholder}
                       required={field.required}
                     />
-                  </label>
-                  {errors[field.name as string] && (
-                    <span className="error-message">
-                      {errors[field.name as string]}
-                    </span>
-                  )}
-                </>
-              )}
-              {field.type === "maxValue" && (
-                <>
-                  <label>
+                    {errors[field.name as string] && (
+                      <span className="error-message">
+                        {errors[field.name as string]}
+                      </span>
+                    )}
+                  </>
+                )}
+                {field.type === "isActive" && (
+                  <>
                     <input
-                      type="text"
-                      inputMode="numeric"
-                      pattern="\d*"
-                      value={value as number}
-                      onChange={(e) =>
-                        !Number.isNaN(Math.round(parseFloat(e.target.value)))
-                          ? handleOnChange(
-                              field.name,
-                              Math.round(parseFloat(e.target.value)),
-                            )
-                          : handleOnChange(field.name, "")
+                      className="admin-form-checkbox"
+                      type="checkbox"
+                      checked={value as boolean}
+                      onChange={() =>
+                        handleOnChange(field.name, !(value as boolean))
                       }
-                      onBlur={() => handleOnBlur(field.name)}
-                      placeholder={getMaxValuePlaceholder()}
                     />
-                  </label>
-                  {errors[field.name as string] && (
-                    <span className="error-message">
-                      {errors[field.name as string]}
-                    </span>
-                  )}
-                </>
-              )}
-              {field.type === "address" && (
-                <Address
-                  addressData={value as any}
-                  onChange={(newAddressData) =>
-                    handleOnChange(field.name, newAddressData)
-                  }
-                  errors={errors[field.name]}
-                />
-              )}
-              {field.type === "teryt" && (
-                <Teryt
-                  terytCode={value as string}
-                  onChange={(terytData) =>
-                    handleOnChange(field.name, terytData)
-                  }
-                  errors={errors[field.name]}
-                />
-              )}
-              {field.type === "crop" && (
-                <CropList
-                  cropId={value as number}
-                  onChange={(cropList) => handleOnChange(field.name, cropList)}
-                  errors={errors[field.name]}
-                />
-              )}
-            </div>
-          );
-        })}
-        <button type="submit">{id !== undefined ? "Edytuj" : "Dodaj"}</button>
+                    {errors[field.name as string] && (
+                      <span className="error-message">
+                        {errors[field.name as string]}
+                      </span>
+                    )}
+                  </>
+                )}
+
+                {field.type === "radio" && field.options && (
+                  <>
+                    <div>
+                      {field.options.map((option) => (
+                        <label key={option}>
+                          <input
+                            type="radio"
+                            value={option}
+                            checked={value === option}
+                            onChange={() => handleOnChange(field.name, option)}
+                          />
+                          {option}
+                        </label>
+                      ))}
+                    </div>
+                    {errors[field.name as string] && (
+                      <span className="error-message">
+                        {errors[field.name as string]}
+                      </span>
+                    )}
+                  </>
+                )}
+                {field.type === "season" && (
+                  <>
+                    <div className="adnmin-season-container">
+                      <label className="admin-season-label">
+                        <input
+                          className="admin-season-radio"
+                          type="radio"
+                          value={"WIOSNA"}
+                          checked={value === "WIOSNA"}
+                          onChange={() => handleOnChange(field.name, "WIOSNA")}
+                        />
+                        {"WIOSNA"}
+                      </label>
+                      <label className="admin-season-label">
+                        <input
+                          className="admin-season-radio"
+                          type="radio"
+                          value={"ZIMA"}
+                          checked={value === "ZIMA"}
+                          onChange={() => handleOnChange(field.name, "ZIMA")}
+                        />
+                        {"ZIMA"}
+                      </label>
+                      <label className="admin-season-label">
+                        <input
+                          className="admin-season-radio"
+                          type="radio"
+                          value={"CAŁOROCZNA"}
+                          checked={value === "CAŁOROCZNA"}
+                          onChange={() =>
+                            handleOnChange(field.name, "CAŁOROCZNA")
+                          }
+                        />
+                        {"CAŁOROCZNA"}
+                      </label>
+                    </div>
+                    {errors[field.name as string] && (
+                      <span className="error-message">
+                        {errors[field.name as string]}
+                      </span>
+                    )}
+                  </>
+                )}
+                {field.type === "marketValue" && (
+                  <>
+                    <label>
+                      <input
+                        type="text"
+                        inputMode="numeric"
+                        pattern="\d*"
+                        value={value as number}
+                        onChange={(e) =>
+                          e.target.value
+                            ? handleOnChange(
+                                field.name,
+                                parseFloat(e.target.value),
+                              )
+                            : handleOnChange(field.name, 0)
+                        }
+                        onBlur={() => handleOnBlur(field.name)}
+                        placeholder={field.placeholder}
+                        required={field.required}
+                      />
+                    </label>
+                    {errors[field.name as string] && (
+                      <span className="error-message">
+                        {errors[field.name as string]}
+                      </span>
+                    )}
+                  </>
+                )}
+                {field.type === "maxValue" && (
+                  <>
+                    <label>
+                      <input
+                        type="text"
+                        inputMode="numeric"
+                        pattern="\d*"
+                        value={value as number}
+                        onChange={(e) =>
+                          !Number.isNaN(Math.round(parseFloat(e.target.value)))
+                            ? handleOnChange(
+                                field.name,
+                                Math.round(parseFloat(e.target.value)),
+                              )
+                            : handleOnChange(field.name, "")
+                        }
+                        onBlur={() => handleOnBlur(field.name)}
+                        placeholder={getMaxValuePlaceholder()}
+                      />
+                    </label>
+                    {errors[field.name as string] && (
+                      <span className="error-message">
+                        {errors[field.name as string]}
+                      </span>
+                    )}
+                  </>
+                )}
+                {field.type === "address" && (
+                  <Address
+                    addressData={value as any}
+                    onChange={(newAddressData) =>
+                      handleOnChange(field.name, newAddressData)
+                    }
+                    errors={errors[field.name]}
+                  />
+                )}
+                {field.type === "teryt" && (
+                  <Teryt
+                    terytCode={value as string}
+                    onChange={(terytData) =>
+                      handleOnChange(field.name, terytData)
+                    }
+                    errors={errors[field.name]}
+                  />
+                )}
+                {field.type === "crop" && (
+                  <CropList
+                    cropId={value as number}
+                    onChange={(cropList) =>
+                      handleOnChange(field.name, cropList)
+                    }
+                    errors={errors[field.name]}
+                  />
+                )}
+              </div>
+            );
+          })}
+        </div>
+        <div className="admin-upsert-buttons">
+          <button
+            className="admin-upsert-cancel"
+            type="button"
+            onClick={() => {
+              navigate(-1);
+            }}
+          >
+            Anuluj
+          </button>
+          <button type="submit" className="admin-upsert-submit">
+            {id !== undefined ? "Edytuj" : "Dodaj"}
+          </button>
+        </div>
       </form>
       {announcement && <p>{announcement}</p>}
     </div>

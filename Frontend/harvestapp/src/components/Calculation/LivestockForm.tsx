@@ -28,6 +28,10 @@ export const LivestockForm: React.FC = () => {
     ryzyka: [],
   });
 
+  //TODO
+  console.log(error);
+  console.log(setMessage);
+
   useEffect(() => {
     fetchOchrony("zwierzeta").then(setCoverList);
   }, []);

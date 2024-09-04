@@ -30,6 +30,9 @@ export const CropsFormTable: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
 
+  //TODO
+  console.log(loading, setLoading(null), info, setInfo(null));
+
   const fetchData = async () => {
     if (id) {
       const cropsData = await fetchCrops(parseInt(id));

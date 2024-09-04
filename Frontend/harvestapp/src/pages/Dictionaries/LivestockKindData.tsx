@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { fetchDictionaryData } from "../../api/Dictionaries/fetchDictionaryData";
 import { handleDictionaryDelete } from "../../api/Dictionaries/handleDictionaryDelete";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { AdminPanelNav } from "../../components/Dictionaries/AdminPanelNav";
 
 export interface ILivestockKindData {
@@ -19,6 +19,7 @@ export const LivestockKindData: React.FC = () => {
   const [noData, setNoData] = useState<string | null>(null);
   const [fetchError, setFetchError] = useState<string | null>(null);
   const [announcement, setAnnouncement] = useState<string | null>(null);
+  const navigate = useNavigate();
 
   const fetchLivestockKindData = () =>
     fetchDictionaryData(
@@ -92,6 +93,12 @@ export const LivestockKindData: React.FC = () => {
             {noData && <p>{noData}</p>}
             {announcement && <p>{announcement}</p>}
           </div>
+          <button
+            className="admin-table-cancel"
+            onClick={() => navigate("/admin")}
+          >
+            POWRÓT
+          </button>
         </div>
       </div>
     </>

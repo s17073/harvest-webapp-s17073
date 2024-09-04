@@ -5,6 +5,7 @@ import {
   IFormSchema,
 } from "../../components/Dictionaries/DictionaryForm";
 import { AdminPanelNav } from "../../components/Dictionaries/AdminPanelNav";
+import { useParams } from "react-router-dom";
 
 interface IAgentDict {
   nazwa: string;
@@ -53,6 +54,7 @@ const additionalValidationSchema = yup.object().shape({
 });
 
 export const AgentForm: React.FC = () => {
+  const { id } = useParams();
   const agentFields: IFormSchema<IAgentDict>[] = [
     { name: "nazwa", type: "text", label: "Nazwa", required: true },
     { name: "kodAgencji", type: "text", label: "Kod Agencji", required: true },
@@ -76,7 +78,7 @@ export const AgentForm: React.FC = () => {
       <div className="background">
         <div className="admin-content-space">
           <div className="admin-title-container">
-            <h1>DODAJ AGENTA</h1>
+            <h1>{id !== undefined ? "EDYTUJ AGENTA" : "DODAJ AGENTA"}</h1>
           </div>
           <DictionaryForm<IAgentDict>
             apiEndpoint="agent"

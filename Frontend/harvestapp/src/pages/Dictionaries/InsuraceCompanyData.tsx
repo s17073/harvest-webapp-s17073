@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { fetchDictionaryData } from "../../api/Dictionaries/fetchDictionaryData";
 import { AdminPanelNav } from "../../components/Dictionaries/AdminPanelNav";
+import { useNavigate } from "react-router-dom";
 export interface IInsuranceCompanyData {
   id: 1;
   nazwa: string;
@@ -19,6 +20,7 @@ export const InsuranceCompanyData: React.FC = () => {
   const [loading, setLoading] = useState<string | null>(null);
   const [noData, setNoData] = useState<string | null>(null);
   const [fetchError, setFetchError] = useState<string | null>(null);
+  const navigate = useNavigate();
 
   const fetchInsuranceCompanyData = () =>
     fetchDictionaryData(
@@ -72,6 +74,12 @@ export const InsuranceCompanyData: React.FC = () => {
             </table>
             {noData && <p>{noData}</p>}
           </div>
+          <button
+            className="admin-table-cancel"
+            onClick={() => navigate("/admin")}
+          >
+            POWRÓT
+          </button>
         </div>
       </div>
     </>

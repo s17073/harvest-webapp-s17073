@@ -7,8 +7,8 @@ import { handleDeleteLivestock } from "../../api/Calculation/handleDeleteLivesto
 export const LivestockFormTable: React.FC = () => {
   const [livestock, setLivestock] = useState<ILivestock[]>([]);
   const [error, setError] = useState<string | null>(null);
-  const [loading, setLoading] = useState<string | null>(null);
-  const [info, setInfo] = useState<string | null>(null);
+  // const [loading, setLoading] = useState<string | null>(null);
+  // const [info, setInfo] = useState<string | null>(null);
 
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();

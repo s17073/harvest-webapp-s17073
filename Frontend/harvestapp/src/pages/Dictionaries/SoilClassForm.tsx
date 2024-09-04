@@ -4,6 +4,7 @@ import {
   IFormSchema,
 } from "../../components/Dictionaries/DictionaryForm";
 import { AdminPanelNav } from "../../components/Dictionaries/AdminPanelNav";
+import { useParams } from "react-router-dom";
 
 interface ISoilClassDict {
   klasaGleby: string;
@@ -33,6 +34,7 @@ const additionalValidationSchema = yup.object().shape({
 });
 
 export const SoilClassForm: React.FC = () => {
+  const { id } = useParams();
   const soilClassFields: IFormSchema<ISoilClassDict>[] = [
     {
       name: "klasaGleby",
@@ -59,7 +61,9 @@ export const SoilClassForm: React.FC = () => {
       <div className="background">
         <div className="admin-content-space">
           <div className="admin-title-container">
-            <h1>DODAJ KLASĘ GLEBY</h1>
+            <h1>
+              {id !== undefined ? "EDYTUJ KLASĘ GLEBY" : "DODAJ KLASĘ GLEBY"}
+            </h1>
           </div>
           <DictionaryForm<ISoilClassDict>
             apiEndpoint="soilclass"

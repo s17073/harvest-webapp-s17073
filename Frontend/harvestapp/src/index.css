@@ -1,12 +1,25 @@
-/* :root {
+:root {
   --color-white: #f0f0f2;
   --color-primary-feldgrau: #4e5f5f;
   --color-background-lavgray: #a8b5bf;
   --color-line-crayola: #a8b5bf;
   --color-primary-peru: #bf8641;
   --color-darker-feldgrau: #3f4c4c;
-  width: 90vw;
-  height: 90vh;
+  /* width: 100vw; */
+  /* height: 90vh; */
+}
+
+#root {
+  width: 100%;
+}
+
+a {
+  text-decoration: none;
+  background-color: transparent;
+}
+
+a:visited {
+  color: inherit;
 }
 
 * {
@@ -20,19 +33,22 @@ body {
   display: flex;
   font-size: 16px;
   width: 100%;
-  height: 100%;
   line-height: 2rem;
 }
 
+/*   overflow-x: hidden; */
+
 nav.admin-nav {
+  color: var(--color-white);
   min-height: 2rem;
   padding: 0 13% 0 13%;
   height: 10vh;
-  width: 100vw;
+  /* width: 100vw; */
   display: flex;
   justify-content: space-between;
   align-items: center;
   background-color: var(--color-primary-feldgrau);
+  min-width: 1033px;
 }
 
 .admin-nav-main-text {
@@ -54,19 +70,22 @@ nav.admin-nav {
 
 .background {
   width: 100%;
-  height: 100%;
-  min-height: 803px;
+  padding: 5% 0;
+  min-height: 90vh;
   display: flex;
   background-color: var(--color-background-lavgray);
   justify-content: center;
-  align-items: center;
+  align-items: stretch;
 }
 
 .admin-content-space {
+  display: flex;
+  flex-direction: column;
+  justify-content: stretch;
   width: 75%;
-  height: 90%;
   border-radius: 23px;
   background-color: var(--color-white);
+  min-width: 1033px;
 }
 .admin-table-space {
   display: flex;
@@ -113,20 +132,151 @@ nav.admin-nav {
   border-bottom: 1px solid var(--color-line-crayola);
 }
 
-.admin-upsert-space {
-  margin: 2rem 10% 0 10%;
-}
-
-.admin-upsert-space div {
-  line-height: 3rem;
-}
-
 span.error-message {
-  margin-left: 1rem;
   color: red;
   font-size: 0.8rem;
 }
 
 input:invalid ~ span.error-message {
   display: inline;
-} */
+}
+
+.admin-upsert-space {
+  height: 100%;
+  padding: 20px 30px;
+}
+
+.admin-upsert-space form {
+  width: 90%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px 20px;
+  padding: 20px;
+  border-radius: 8px;
+}
+
+.admin-upsert-space label {
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+span {
+  display: block;
+}
+
+.admin-upsert-space input[type="text"],
+.admin-upsert-space input[type="number"] {
+  display: block;
+  width: 50%;
+  padding: 8px;
+  margin: 0;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.admin-upsert-space input[type="checkbox"],
+.admin-upsert-space input[type="radio"] {
+  width: auto;
+}
+
+.admin-upsert-submit,
+.admin-upsert-cancel,
+.admin-table-cancel {
+  grid-column: 1 / -1;
+  padding: 10px 20px;
+  background-color: var(--color-primary-feldgrau);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  width: 8rem;
+}
+
+.admin-table-cancel {
+  margin: 10px 0 20px 30px;
+}
+
+.admin-upsert-buttons {
+  display: flex;
+  justify-content: space-between;
+}
+
+.admin-upsert-field-space {
+  margin: 1.5rem 0;
+}
+
+.admin-season-label {
+  font-weight: normal;
+  margin-right: 10px;
+}
+
+.admin-panel-options {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  align-items: center;
+  margin: 15px;
+  padding: 10px 5px;
+  width: 40%;
+  height: 20%;
+  border: 2px solid #ccc;
+  border-radius: 15px;
+}
+
+.admin-container-buttons {
+  display: flex;
+  flex-direction: column;
+}
+
+.admin-panel-options-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+}
+
+.admin-panel-options-container-buttons {
+  margin: 20px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+}
+
+.admin-panel-options h3 {
+  margin: 5px 15px;
+  background-color: var(--color-primary-feldgrau);
+  color: var(--color-white);
+  border-radius: 8px;
+  cursor: pointer;
+  width: 10rem;
+  line-height: 3rem;
+  font-size: 1rem;
+}
+
+.admin-panel-options h3 a {
+  display: block;
+  text-align: center;
+  padding: 0 20%;
+  width: 100%;
+  height: 100%;
+  font-weight: 200;
+}
+
+.admin-panel-options-title {
+  margin: 15px;
+  font-weight: 100;
+}
+
+.admin-panel-options-title h2 {
+  font-weight: 100;
+}
+
+.icon-edit {
+  fill: var(--color-darker-feldgrau);
+}
+
+.icon-delete {
+  fill: red;
+}

@@ -4,6 +4,7 @@ import {
   DictionaryForm,
   IFormSchema,
 } from "../../components/Dictionaries/DictionaryForm";
+import { useParams } from "react-router-dom";
 
 interface ICropKindDict {
   nazwaUprawy: string;
@@ -26,6 +27,7 @@ const additionalValidationSchema = yup.object().shape({
 });
 
 export const CropKindForm: React.FC = () => {
+  const { id } = useParams();
   const cropKindFields: IFormSchema<ICropKindDict>[] = [
     {
       name: "nazwaUprawy",
@@ -58,7 +60,7 @@ export const CropKindForm: React.FC = () => {
       <div className="background">
         <div className="admin-content-space">
           <div className="admin-title-container">
-            <h1>DODAJ UPRAWĘ</h1>
+            <h1>{id !== undefined ? "EDYTUJ UPRAWĘ" : "DODAJ UPRAWĘ"}</h1>
           </div>
           <DictionaryForm<ICropKindDict>
             apiEndpoint="cropkind"

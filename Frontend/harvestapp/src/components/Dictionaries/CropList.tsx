@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { fetchUprawy } from "../../api/Shared/fetchUprawy";
 
 interface ICropData {
   idUprawy: number;
@@ -23,7 +24,7 @@ export const CropList: React.FC<ICropListProps> = ({
   });
 
   const fetchCropListValues = async () => {
-    const fetchedCrops = await fetchCrops();
+    const fetchedCrops = await fetchUprawy();
     setCrops(fetchedCrops);
   };
 
@@ -67,11 +68,4 @@ export const CropList: React.FC<ICropListProps> = ({
       {errors?.crop && <span className="error-message">{errors.crop}</span>}
     </div>
   );
-};
-
-const fetchCrops = async (): Promise<ICropData[]> => {
-  const apiUrl = import.meta.env.VITE_BACKEND_URL;
-  const response = await fetch(`${apiUrl}/cropkind/croplist`);
-  const data = await response.json();
-  return data;
 };

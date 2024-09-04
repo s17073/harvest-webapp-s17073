@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { fetchDictionaryData } from "../../api/Dictionaries/fetchDictionaryData";
 import { handleDictionaryDelete } from "../../api/Dictionaries/handleDictionaryDelete";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { AdminPanelNav } from "../../components/Dictionaries/AdminPanelNav";
 
 export interface ISoilClassData {
@@ -18,6 +18,7 @@ export const SoilClassData: React.FC = () => {
   const [noData, setNoData] = useState<string | null>(null);
   const [fetchError, setFetchError] = useState<string | null>(null);
   const [announcement, setAnnouncement] = useState<string | null>(null);
+  const navigate = useNavigate();
 
   const fetchSoilClassData = () =>
     fetchDictionaryData(
@@ -55,7 +56,7 @@ export const SoilClassData: React.FC = () => {
             <table className="admin-table">
               <thead>
                 <tr>
-                  <th>Klasa gleby</th>
+                  <th>Klasa</th>
                   <th>Opis</th>
                   <th>Taryfa</th>
                   <th>Status</th>
@@ -89,6 +90,12 @@ export const SoilClassData: React.FC = () => {
             {noData && <p>{noData}</p>}
             {announcement && <p>{announcement}</p>}
           </div>
+          <button
+            className="admin-table-cancel"
+            onClick={() => navigate("/admin")}
+          >
+            POWRÓT
+          </button>
         </div>
       </div>
     </>
