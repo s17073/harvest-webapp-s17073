@@ -28,28 +28,56 @@ interface IAgentDict {
 const additionalValidationSchema = yup.object().shape({
   nazwa: yup
     .string()
-    .matches(
-      /^[a-zA-ZąćęłńóśźżĄĆĘŁŃÓŚŹŻ\s\–\-\(\)\:\.\+\=\*\%\,\?]+$/,
-      "nazwa ochrony może zawierać tylko litery i spacje",
-    )
-    .required("nazwa ochrony is required")
-    .min(3, "nazwa ochrony nie może zawierać mniej niż 3 znaki")
-    .max(30, "nazwa ochrony nie może zawierać więcej niż 30 znakow"),
-  kodAgencji: yup.string().required("Kod Agencji is required"),
-  nip: yup.string().required("NIP is required"),
-  krs: yup.string().required("KRS is required"),
-  nrTel: yup.string().required("Numer Telefonu is required"),
+    // .matches(
+    //   /^[a-zA-ZąćęłńóśźżĄĆĘŁŃÓŚŹŻ\s\–\-\(\)\:\.\+\=\*\%\,\?]+$/,
+    //   "nazwa ochrony może zawierać tylko litery i spacje",
+    // )
+    .required("pole jest wymagane")
+    .min(3, "pole musi zawierać przynajmniej 3 znaki")
+    .max(50, "pole może zawierać maksymalnie 50 znaków"),
+  kodAgencji: yup
+    .string()
+    .matches(/^A\d{4}$/, "wpisz właściwy kod agencji")
+    .required("pole jest wymagane")
+    .min(5, "kod agencji ma 5 znaków")
+    .max(5, "kod agencji ma 5 znaków"),
+  nip: yup
+    .string()
+    .required("pole jest wymagane")
+    .matches(/^\d{10}$/, "wpisz właściwy numer nip"),
+  krs: yup
+    .string()
+    .required("pole jest wymagane")
+    .matches(/^\d{10}$/, "wpisz właściwy numer krs"),
+  nrTel: yup
+    .string()
+    .required("pole jest wymagane")
+    .matches(/^\d{9}$/, "wpisz właściwy numer telefonu"),
   liczbaPosrednikow: yup
     .number()
-    .required("Liczba Pośredników is required")
+    .required("pole jest wymagane")
     .positive()
     .integer(),
   addressData: yup.object().shape({
-    kodPocztowy: yup.string().required("Kod Pocztowy is required"),
-    miejscowosc: yup.string().required("Miejscowość is required"),
-    ulica: yup.string().required("Ulica is required"),
-    numerDomu: yup.string().required("Numer Domu is required"),
-    numerMieszkania: yup.string().required("Numer Mieszkania is required"),
+    kodPocztowy: yup
+      .string()
+      .required("pole jest wymagane")
+      .matches(/^\d{2}-\d{3}$/, "wpisz kod pocztowy we właściwym formacie"),
+    miejscowosc: yup
+      .string()
+      .required("pole jest wymagane")
+      .max(50, "miejscowość nie może mieć więcej niż 50 znaków"),
+    ulica: yup
+      .string()
+      .required("pole jest wymagane")
+      .max(60, "ulica nie może mieć więcej niż 60 znaków"),
+    numerDomu: yup
+      .string()
+      .required("pole jest wymagane")
+      .max(5, "numer domu nie może mieć więcej niż 5 znaków"),
+    numerMieszkania: yup
+      .string()
+      .max(5, "numer mieszkania nie może mieć więcej niż 5 znaków"),
   }),
 });
 

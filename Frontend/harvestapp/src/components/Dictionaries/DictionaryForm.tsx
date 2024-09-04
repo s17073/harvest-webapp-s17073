@@ -331,7 +331,7 @@ export const DictionaryForm = <T extends {}>({
                     onChange={(newAddressData) =>
                       handleOnChange(field.name, newAddressData)
                     }
-                    errors={errors[field.name]}
+                    errors={errors}
                   />
                 )}
                 {field.type === "teryt" && (

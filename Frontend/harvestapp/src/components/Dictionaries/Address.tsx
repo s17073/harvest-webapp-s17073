@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 
 interface AddressProps {
   addressData: {
@@ -30,8 +30,10 @@ export const Address: React.FC<AddressProps> = ({
           value={addressData.kodPocztowy}
           onChange={(e) => handleFieldChange("kodPocztowy", e.target.value)}
         />
-        {errors?.kodPocztowy && (
-          <span className="error-message">{errors.kodPocztowy}</span>
+        {errors["addressData.kodPocztowy"] && (
+          <span className="error-message">
+            {errors["addressData.kodPocztowy"]}
+          </span>
         )}
       </div>
       <div>
@@ -41,8 +43,10 @@ export const Address: React.FC<AddressProps> = ({
           value={addressData.miejscowosc}
           onChange={(e) => handleFieldChange("miejscowosc", e.target.value)}
         />
-        {errors?.miejscowosc && (
-          <span className="error-message">{errors.miejscowosc}</span>
+        {errors["addressData.miejscowosc"] && (
+          <span className="error-message">
+            {errors["addressData.miejscowosc"]}
+          </span>
         )}
       </div>
       <div>
@@ -52,7 +56,9 @@ export const Address: React.FC<AddressProps> = ({
           value={addressData.ulica}
           onChange={(e) => handleFieldChange("ulica", e.target.value)}
         />
-        {errors?.ulica && <span className="error-message">{errors.ulica}</span>}
+        {errors["addressData.ulica"] && (
+          <span className="error-message">{errors["addressData.ulica"]}</span>
+        )}
       </div>
       <div>
         <label>Numer Domu:</label>
@@ -61,8 +67,10 @@ export const Address: React.FC<AddressProps> = ({
           value={addressData.numerDomu}
           onChange={(e) => handleFieldChange("numerDomu", e.target.value)}
         />
-        {errors?.numerDomu && (
-          <span className="error-message">{errors.numerDomu}</span>
+        {errors["addressData.numerDomu"] && (
+          <span className="error-message">
+            {errors["addressData.numerDomu"]}
+          </span>
         )}
       </div>
       <div>
@@ -72,8 +80,10 @@ export const Address: React.FC<AddressProps> = ({
           value={addressData.numerMieszkania}
           onChange={(e) => handleFieldChange("numerMieszkania", e.target.value)}
         />
-        {errors?.numerMieszkania && (
-          <span className="error-message">{errors.numerMieszkania}</span>
+        {errors["addressData.numerMieszkania"] && (
+          <span className="error-message">
+            {errors["addressData.numerMieszkania"]}
+          </span>
         )}
       </div>
     </div>

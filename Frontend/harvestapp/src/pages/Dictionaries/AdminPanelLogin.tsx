@@ -31,34 +31,49 @@ export const AdminPanelLogin: React.FC = () => {
   };
 
   return (
-    <div>
-      <h2>Login</h2>
-      <form onSubmit={handleLogin}>
-        <div>
-          <label htmlFor="email">Nazwa użytkownika:</label>
-          <input
-            type="text"
-            id="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-            autoComplete="username"
-          />
+    <div className="admin-login-background">
+      <div className="admin-login-section">
+        <div className="admin-login-sections">
+          <div className="admin-login-side-section">
+            <h2>HARVEST</h2>
+            <div>Witaj w panelu logowania administratora!</div>
+          </div>
+
+          <div className="admin-login-main-section">
+            <div className="admin-login-title">
+              <h1>Zaloguj się</h1>
+            </div>
+            <form onSubmit={handleLogin}>
+              <div className="admin-login">
+                <label htmlFor="email">Login:</label>
+                <input
+                  type="text"
+                  id="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
+                  autoComplete="username"
+                />
+              </div>
+              <div className="admin-password">
+                <label htmlFor="password">Hasło:</label>
+                <input
+                  type="password"
+                  id="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
+                  autoComplete="current-password"
+                />
+              </div>
+              <button className="admin-login-login-button" type="submit">
+                Zaloguj się
+              </button>
+              {error && <p className="admin-login-error">{error}</p>}
+            </form>
+          </div>
         </div>
-        <div>
-          <label htmlFor="password">Hasło:</label>
-          <input
-            type="password"
-            id="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-            autoComplete="current-password"
-          />
-        </div>
-        {error && <p>{error}</p>}
-        <button type="submit">Zaloguj się</button>
-      </form>
+      </div>
     </div>
   );
 };
