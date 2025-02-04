@@ -24,6 +24,7 @@ import { LivestockFormTable } from "./components/Calculation/LivestockFromTable"
 import { LivestockForm } from "./components/Calculation/LivestockForm";
 import { AdminPanelLogin } from "./pages/Dictionaries/AdminPanelLogin";
 import { AdminAuthentication } from "./components/Dictionaries/AdminAuthentication";
+import "bootstrap/dist/css/bootstrap.min.css";
 
 const AdminRoutes = () => (
   <Routes>

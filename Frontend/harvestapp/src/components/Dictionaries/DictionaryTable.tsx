@@ -5,6 +5,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { AdminPanelNav } from "../../components/Dictionaries/AdminPanelNav";
 import { iconEdit } from "../../assets/icons/edit";
 import { iconDelete } from "../../assets/icons/delete";
+import { Container, Table } from "react-bootstrap";
 
 interface DictionaryData {
   id: number;
@@ -62,59 +63,80 @@ const DictionaryTable: React.FC<DictionaryTableProps> = ({
     <>
       <AdminPanelNav />
       <div className="background">
-        <div className="admin-content-space">
-          <div className="admin-title-container">
-            <h1>{title}</h1>
-          </div>
-          {loading && <p>{loading}</p>}
-          {fetchError && <p>{fetchError}</p>}
-          <div className="admin-table-space">
-            <table className="admin-table">
-              <thead>
-                <tr>
-                  {columns.map((col) => (
-                    <th key={col.key}>{col.label}</th>
-                  ))}
-                  <th>Edytuj</th>
-                  <th>Usuń</th>
-                </tr>
-              </thead>
-              <tbody>
-                {data.map((item) => (
-                  <tr key={item.id}>
+        <Container>
+          <div className="admin-content-space">
+            <div className="admin-title-container">
+              <h1>{title}</h1>
+            </div>
+            {loading && <p>{loading}</p>}
+            {fetchError && <p>{fetchError}</p>}
+            <div className="admin-table-space">
+              <Table
+                striped
+                bordered
+                hover
+                responsive="xl"
+                size="xl"
+                className="admin-table"
+              >
+                <thead className="thead-dark">
+                  <tr>
                     {columns.map((col) => (
-                      <td key={col.key}>
-                        {col.render
-                          ? col.render(item[col.key], item)
-                          : item[col.key]}
-                      </td>
+                      <th
+                        className="text-center align-middle lh-base px-0 px-xl-4"
+                        key={col.key}
+                      >
+                        {col.label}
+                      </th>
                     ))}
-                    <td>
-                      <div>
-                        <Link to={`/admin/${fetchApiName}/upsert/${item.id}`}>
-                          {iconEdit()}
-                        </Link>
-                      </div>
-                    </td>
-                    <td>
-                      <div onClick={() => deleteData(item.id)}>
-                        {iconDelete()}
-                      </div>
-                    </td>
+                    <th className="text-center align-middle lh-1 px-0 px-xl-4">
+                      Edytuj
+                    </th>
+                    <th className="text-center align-middle lh-1 px-0 px-xl-4">
+                      Usuń
+                    </th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
-            {noData && <p>{noData}</p>}
-            {announcement && <p>{announcement}</p>}
+                </thead>
+                <tbody>
+                  {data.map((item) => (
+                    <tr
+                      className="text-center align-middle lh-1 px-0 px-xl-4"
+                      key={item.id}
+                    >
+                      {columns.map((col) => (
+                        <td key={col.key}>
+                          {col.render
+                            ? col.render(item[col.key], item)
+                            : item[col.key]}
+                        </td>
+                      ))}
+                      <td className="text-center align-middle lh-1 px-0 px-xl-4">
+                        <div>
+                          <Link to={`/admin/${fetchApiName}/upsert/${item.id}`}>
+                            {iconEdit()}
+                          </Link>
+                        </div>
+                      </td>
+                      <td className="text-center align-middle lh-1 px-0 px-xl-4 dict-delete-icon">
+                        <div onClick={() => deleteData(item.id)}>
+                          {iconDelete()}
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </Table>
+              {noData && <p>{noData}</p>}
+              {announcement && <p>{announcement}</p>}
+            </div>
+            <button
+              className="admin-table-cancel"
+              onClick={() => navigate("/admin")}
+            >
+              POWRÓT
+            </button>
           </div>
-          <button
-            className="admin-table-cancel"
-            onClick={() => navigate("/admin")}
-          >
-            POWRÓT
-          </button>
-        </div>
+        </Container>
       </div>
     </>
   );

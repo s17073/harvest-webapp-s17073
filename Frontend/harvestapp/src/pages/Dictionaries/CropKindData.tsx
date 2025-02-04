@@ -18,7 +18,11 @@ export const CropKindData: React.FC = () => (
         label: "Wartość rynkowa",
         render: (value) => `${value} zł`,
       },
-      { key: "wartoscMax", label: "Wartość maksymalna" },
+      {
+        key: "wartoscMax",
+        label: "Wartość maksymalna",
+        render: (value) => `${value} zł`,
+      },
     ]}
   />
 );
