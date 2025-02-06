@@ -2,8 +2,9 @@ import { useEffect, useState } from "react";
 import { fetchDictionaryData } from "../../api/Dictionaries/fetchDictionaryData";
 import { AdminPanelNav } from "../../components/Dictionaries/AdminPanelNav";
 import { useNavigate } from "react-router-dom";
+import { Container, Table } from "react-bootstrap";
 export interface IInsuranceCompanyData {
-  id: 1;
+  id: number;
   nazwa: string;
   numerZakladu: string;
   numerTelefonu: string;
@@ -12,7 +13,7 @@ export interface IInsuranceCompanyData {
   krs: string;
   czyAktywna: boolean;
   idAddress: number;
-  addres: string;
+  adres: string;
 }
 
 export const InsuranceCompanyData: React.FC = () => {
@@ -39,48 +40,74 @@ export const InsuranceCompanyData: React.FC = () => {
     <>
       <AdminPanelNav />
       <div className="background">
-        <div className="admin-content-space">
-          <div className="admin-title-container">
-            <h1>FIRMY UBEZPIECZENIOWE</h1>
-          </div>
-          {loading && <p>{loading}</p>}
-          {fetchError && <p>{fetchError}</p>}
-          <div className="admin-table-space">
-            <table className="admin-table">
-              <thead>
-                <tr>
-                  <th>Nazwa</th>
-                  <th>Numer zakładu</th>
-                  <th>Numer telefonu</th>
-                  <th>NIP</th>
-                  <th>KRS</th>
-                  <th>Status</th>
-                  <th>Adres</th>
-                </tr>
-              </thead>
-              <tbody>
-                {data.map((data) => (
-                  <tr key={data.id} className={`row-${data.id}`}>
-                    <td>{data.nazwa}</td>
-                    <td>{data.numerZakladu}</td>
-                    <td>{data.numerTelefonu}</td>
-                    <td>{data.nip}</td>
-                    <td>{data.krs}</td>
-                    <td>{data.czyAktywna ? "AKTYWNA" : "NIEAKTYWNA"}</td>
-                    <td>{data.addres}</td>
+        <Container>
+          <div className="admin-content-space">
+            <div className="admin-title-container">
+              <h1>FIRMY UBEZPIECZENIOWE</h1>
+            </div>
+            {loading && <p>{loading}</p>}
+            {fetchError && <p>{fetchError}</p>}
+            <div className="admin-table-space">
+              <Table
+                striped
+                bordered
+                hover
+                responsive="xl"
+                size="xl"
+                className="admin-table"
+              >
+                <thead>
+                  <tr>
+                    <th className="text-center align-middle lh-base px-0 px-xl-4">
+                      Nazwa
+                    </th>
+                    <th className="text-center align-middle lh-base px-0 px-xl-4">
+                      Numer zakładu
+                    </th>
+                    <th className="text-center align-middle lh-base px-0 px-xl-4">
+                      Numer telefonu
+                    </th>
+                    <th className="text-center align-middle lh-base px-0 px-xl-4">
+                      NIP
+                    </th>
+                    <th className="text-center align-middle lh-base px-0 px-xl-4">
+                      KRS
+                    </th>
+                    <th className="text-center align-middle lh-base px-0 px-xl-4">
+                      Status
+                    </th>
+                    <th className="text-center align-middle lh-base px-0 px-xl-4">
+                      Adres
+                    </th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
-            {noData && <p>{noData}</p>}
+                </thead>
+                <tbody>
+                  {data.map((data) => (
+                    <tr
+                      key={data.id}
+                      className={`row-${data.id} text-center align-middle lh-1 px-0 px-xl-4`}
+                    >
+                      <td>{data.nazwa}</td>
+                      <td>{data.numerZakladu}</td>
+                      <td>{data.numerTelefonu}</td>
+                      <td>{data.nip}</td>
+                      <td>{data.krs}</td>
+                      <td>{data.czyAktywna ? "AKTYWNA" : "NIEAKTYWNA"}</td>
+                      <td>{data.adres}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </Table>
+              {noData && <p>{noData}</p>}
+            </div>
+            <button
+              className="admin-table-cancel"
+              onClick={() => navigate("/admin")}
+            >
+              POWRÓT
+            </button>
           </div>
-          <button
-            className="admin-table-cancel"
-            onClick={() => navigate("/admin")}
-          >
-            POWRÓT
-          </button>
-        </div>
+        </Container>
       </div>
     </>
   );

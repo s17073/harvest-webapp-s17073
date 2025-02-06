@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
 import { fetchDictionaryData } from "../../api/Dictionaries/fetchDictionaryData";
 import { handleDictionaryDelete } from "../../api/Dictionaries/handleDictionaryDelete";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { AdminPanelNav } from "../../components/Dictionaries/AdminPanelNav";
 import { iconEdit } from "../../assets/icons/edit";
 import { iconDelete } from "../../assets/icons/delete";
-import { Container, Table } from "react-bootstrap";
+import { Alert, Container, Table } from "react-bootstrap";
 
 interface DictionaryData {
   id: number;
@@ -59,6 +59,24 @@ const DictionaryTable: React.FC<DictionaryTableProps> = ({
     fetchData();
   }, []);
 
+  function StateAnnoucement() {
+    const location = useLocation();
+
+    useEffect(() => {
+      setAnnouncement(location.state?.stateAnnouncement);
+    }, [location.state]);
+
+    return (
+      <>
+        {announcement && (
+          <div className="floating-alert">
+            <Alert variant="success">{announcement}</Alert>
+          </div>
+        )}
+      </>
+    );
+  }
+
   return (
     <>
       <AdminPanelNav />
@@ -79,7 +97,7 @@ const DictionaryTable: React.FC<DictionaryTableProps> = ({
                 size="xl"
                 className="admin-table"
               >
-                <thead className="thead-dark">
+                <thead>
                   <tr>
                     {columns.map((col) => (
                       <th
@@ -126,9 +144,10 @@ const DictionaryTable: React.FC<DictionaryTableProps> = ({
                   ))}
                 </tbody>
               </Table>
-              {noData && <p>{noData}</p>}
-              {announcement && <p>{announcement}</p>}
+              {/* {announcement && <p>{announcement}</p>} */}
             </div>
+            {noData && <div className="no-data">{noData}</div>}
+            <StateAnnoucement />
             <button
               className="admin-table-cancel"
               onClick={() => navigate("/admin")}

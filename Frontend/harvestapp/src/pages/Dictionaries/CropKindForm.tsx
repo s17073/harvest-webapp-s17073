@@ -5,6 +5,7 @@ import {
   IFormSchema,
 } from "../../components/Dictionaries/DictionaryForm";
 import { useParams } from "react-router-dom";
+import { Container } from "react-bootstrap";
 
 interface ICropKindDict {
   nazwaUprawy: string;
@@ -58,23 +59,25 @@ export const CropKindForm: React.FC = () => {
     <>
       <AdminPanelNav />
       <div className="background">
-        <div className="admin-content-space">
-          <div className="admin-title-container">
-            <h1>{id !== undefined ? "EDYTUJ UPRAWĘ" : "DODAJ UPRAWĘ"}</h1>
+        <Container>
+          <div className="admin-content-space">
+            <div className="admin-title-container">
+              <h1>{id !== undefined ? "EDYTUJ UPRAWĘ" : "DODAJ UPRAWĘ"}</h1>
+            </div>
+            <DictionaryForm<ICropKindDict>
+              apiEndpoint="cropkind"
+              initialData={{
+                nazwaUprawy: "",
+                taryfa: "WIOSNA",
+                czyAktywna: true,
+                wartoscRynkowa: 0,
+                wartoscMax: undefined,
+              }}
+              fields={cropKindFields}
+              additionalValidationSchema={additionalValidationSchema}
+            />
           </div>
-          <DictionaryForm<ICropKindDict>
-            apiEndpoint="cropkind"
-            initialData={{
-              nazwaUprawy: "",
-              taryfa: "WIOSNA",
-              czyAktywna: true,
-              wartoscRynkowa: 0,
-              wartoscMax: undefined,
-            }}
-            fields={cropKindFields}
-            additionalValidationSchema={additionalValidationSchema}
-          />
-        </div>
+        </Container>
       </div>
     </>
   );

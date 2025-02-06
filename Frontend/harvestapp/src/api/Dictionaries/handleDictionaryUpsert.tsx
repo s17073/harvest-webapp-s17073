@@ -5,8 +5,7 @@ export const handleDictionaryUpsert = async (
   endpoint: string,
   method: string,
   dataToAdd: Object,
-  setAnnouncement: any,
-) => {
+): Promise<string> => {
   event.preventDefault();
 
   try {
@@ -29,10 +28,14 @@ export const handleDictionaryUpsert = async (
       throw new Error("Unknown HTTP method.");
     }
     // console.log(response.data);
-    setAnnouncement("Rekord został dodany.");
+    // setAnnouncement("Rekord został dodany.");
     // console.log(response.status);
+    if (method === "POST") return "Rekord został dodany.";
+    if (method === "PUT") return "Rekord został zaktualizowany.";
+    return "Operacja wykonana pomyślnie";
   } catch (err) {
-    setAnnouncement("Wystąpił błąd przy próbie dodania rekordu.");
+    // setAnnouncement("Wystąpił błąd przy próbie dodania rekordu.");
     // console.log((err as Error).message);
+    return "Wystąpił błąd przy próbie dodania rekordu.";
   }
 };

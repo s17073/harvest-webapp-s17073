@@ -6,11 +6,13 @@ import { Teryt } from "./Teryt";
 import { CropList } from "./CropList";
 import { fetchDictionaryDataById } from "../../api/Dictionaries/fetchDictionaryDataById";
 import { handleDictionaryUpsert } from "../../api/Dictionaries/handleDictionaryUpsert";
+import { Button, Col, Form, Row } from "react-bootstrap";
 
 export interface IFormSchema<T> {
   name: keyof T;
   type:
     | "text"
+    | "textarea"
     | "radio"
     | "marketValue"
     | "maxValue"
@@ -108,9 +110,12 @@ export const DictionaryForm = <T extends {}>({
       const apiUrl = id !== undefined ? `${apiEndpoint}/${id}` : apiEndpoint;
       const method = id !== undefined ? "PUT" : "POST";
 
-      handleDictionaryUpsert(event, apiUrl, method, data, setAnnouncement);
+      const message = await handleDictionaryUpsert(event, apiUrl, method, data);
+      setAnnouncement(message);
 
-      navigate("..");
+      navigate(`../${apiEndpoint}`, {
+        state: { stateAnnouncement: message },
+      });
     } catch (err) {
       if (err instanceof yup.ValidationError) {
         const fieldErrors: any = {};
@@ -140,19 +145,23 @@ export const DictionaryForm = <T extends {}>({
 
   return (
     <div className="admin-upsert-space">
-      <form onSubmit={sendUpsertRequest}>
-        <div className="admin-upserd-fields">
+      <Form onSubmit={sendUpsertRequest}>
+        <div className="admin-upsert-fields">
           {fields.map((field) => {
             const value = data[field.name];
             return (
-              <div
-                key={field.name as string}
-                className="admin-upsert-field-space"
+              <Form.Group
+                as={Row}
+                className="mb-3 mt-3"
+                controlId={field.name as string}
+                // className="admin-upsert-field-space"
               >
-                <label>{field.label}:</label>
+                <Form.Label column xl="2">
+                  {field.label}:
+                </Form.Label>
                 {field.type === "text" && (
-                  <>
-                    <input
+                  <Col xl="10">
+                    <Form.Control
                       type="text"
                       value={value as string}
                       onChange={(e) =>
@@ -166,11 +175,30 @@ export const DictionaryForm = <T extends {}>({
                         {errors[field.name as string]}
                       </span>
                     )}
-                  </>
+                  </Col>
+                )}
+                {field.type === "textarea" && (
+                  <Col xl="10">
+                    <Form.Control
+                      as="textarea"
+                      value={value as string}
+                      style={{ height: "7rem" }}
+                      onChange={(e) =>
+                        handleOnChange(field.name, e.target.value)
+                      }
+                      placeholder={field.placeholder}
+                      onBlur={() => handleOnBlur(field.name)}
+                    />
+                    {errors[field.name as string] && (
+                      <span className="error-message">
+                        {errors[field.name as string]}
+                      </span>
+                    )}
+                  </Col>
                 )}
                 {field.type === "number" && (
-                  <>
-                    <input
+                  <Col xl="10">
+                    <Form.Control
                       type="number"
                       value={value as number}
                       onChange={(e) =>
@@ -185,11 +213,11 @@ export const DictionaryForm = <T extends {}>({
                         {errors[field.name as string]}
                       </span>
                     )}
-                  </>
+                  </Col>
                 )}
                 {field.type === "isActive" && (
-                  <>
-                    <input
+                  <Col xl="10">
+                    <Form.Check
                       className="admin-form-checkbox"
                       type="checkbox"
                       checked={value as boolean}
@@ -202,128 +230,126 @@ export const DictionaryForm = <T extends {}>({
                         {errors[field.name as string]}
                       </span>
                     )}
-                  </>
+                  </Col>
                 )}
 
                 {field.type === "radio" && field.options && (
-                  <>
-                    <div>
-                      {field.options.map((option) => (
-                        <label key={option}>
-                          <input
-                            type="radio"
-                            value={option}
-                            checked={value === option}
-                            onChange={() => handleOnChange(field.name, option)}
-                          />
-                          {option}
-                        </label>
-                      ))}
-                    </div>
+                  <Col xl="10">
+                    {/* <div> */}
+                    {field.options.map((option) => (
+                      // <label key={option}>
+                      <Form.Check
+                        key={option}
+                        type="radio"
+                        label={option}
+                        value={option}
+                        checked={value === option}
+                        onChange={() => handleOnChange(field.name, option)}
+                      />
+                      // {option}
+                      // </label>
+                    ))}
+                    {/* </div> */}
                     {errors[field.name as string] && (
                       <span className="error-message">
                         {errors[field.name as string]}
                       </span>
                     )}
-                  </>
+                  </Col>
                 )}
                 {field.type === "season" && (
-                  <>
-                    <div className="adnmin-season-container">
-                      <label className="admin-season-label">
-                        <input
-                          className="admin-season-radio"
-                          type="radio"
-                          value={"WIOSNA"}
-                          checked={value === "WIOSNA"}
-                          onChange={() => handleOnChange(field.name, "WIOSNA")}
-                        />
-                        {"WIOSNA"}
-                      </label>
-                      <label className="admin-season-label">
-                        <input
-                          className="admin-season-radio"
-                          type="radio"
-                          value={"ZIMA"}
-                          checked={value === "ZIMA"}
-                          onChange={() => handleOnChange(field.name, "ZIMA")}
-                        />
-                        {"ZIMA"}
-                      </label>
-                      <label className="admin-season-label">
-                        <input
-                          className="admin-season-radio"
-                          type="radio"
-                          value={"CAŁOROCZNA"}
-                          checked={value === "CAŁOROCZNA"}
-                          onChange={() =>
-                            handleOnChange(field.name, "CAŁOROCZNA")
-                          }
-                        />
-                        {"CAŁOROCZNA"}
-                      </label>
+                  <Col xl="10">
+                    <div className="admin-season-container">
+                      <Form.Check
+                        id={`${field.name as string}-wiosna`}
+                        className="d-inline-block me-3 admin-season-radio"
+                        type="radio"
+                        label="WIOSNA"
+                        name={field.name as string}
+                        value={"WIOSNA"}
+                        checked={value === "WIOSNA"}
+                        onChange={() => handleOnChange(field.name, "WIOSNA")}
+                      />
+                      <Form.Check
+                        id={`${field.name as string}-zima`}
+                        className="d-inline-block me-3 admin-season-radio"
+                        type="radio"
+                        label="ZIMA"
+                        name={field.name as string}
+                        value={"ZIMA"}
+                        checked={value === "ZIMA"}
+                        onChange={() => handleOnChange(field.name, "ZIMA")}
+                      />
+                      <Form.Check
+                        id={`${field.name as string}-caloroczna`}
+                        className="d-inline-block me-3 admin-season-radio"
+                        type="radio"
+                        label="CAŁOROCZNA"
+                        name={field.name as string}
+                        value={"CAŁOROCZNA"}
+                        checked={value === "CAŁOROCZNA"}
+                        onChange={() =>
+                          handleOnChange(field.name, "CAŁOROCZNA")
+                        }
+                      />
                     </div>
                     {errors[field.name as string] && (
                       <span className="error-message">
                         {errors[field.name as string]}
                       </span>
                     )}
-                  </>
+                  </Col>
                 )}
                 {field.type === "marketValue" && (
-                  <>
-                    <label>
-                      <input
-                        type="text"
-                        inputMode="numeric"
-                        pattern="\d*"
-                        value={value as number}
-                        onChange={(e) =>
-                          e.target.value
-                            ? handleOnChange(
-                                field.name,
-                                parseFloat(e.target.value),
-                              )
-                            : handleOnChange(field.name, 0)
-                        }
-                        onBlur={() => handleOnBlur(field.name)}
-                        placeholder={field.placeholder}
-                        required={field.required}
-                      />
-                    </label>
+                  <Col xl="10">
+                    <Form.Control
+                      type="text"
+                      inputMode="numeric"
+                      pattern="\d*"
+                      value={value as number}
+                      onChange={(e) =>
+                        e.target.value
+                          ? handleOnChange(
+                              field.name,
+                              parseFloat(e.target.value),
+                            )
+                          : handleOnChange(field.name, 0)
+                      }
+                      onBlur={() => handleOnBlur(field.name)}
+                      placeholder={field.placeholder}
+                      required={field.required}
+                    />
                     {errors[field.name as string] && (
                       <span className="error-message">
                         {errors[field.name as string]}
                       </span>
                     )}
-                  </>
+                  </Col>
                 )}
                 {field.type === "maxValue" && (
-                  <>
-                    <label>
-                      <input
-                        type="text"
-                        inputMode="numeric"
-                        pattern="\d*"
-                        value={value as number}
-                        onChange={(e) =>
-                          !Number.isNaN(Math.round(parseFloat(e.target.value)))
-                            ? handleOnChange(
-                                field.name,
-                                Math.round(parseFloat(e.target.value)),
-                              )
-                            : handleOnChange(field.name, "")
-                        }
-                        onBlur={() => handleOnBlur(field.name)}
-                        placeholder={getMaxValuePlaceholder()}
-                      />
-                    </label>
+                  <Col xl="10">
+                    <Form.Control
+                      type="text"
+                      inputMode="numeric"
+                      pattern="\d*"
+                      value={value as number}
+                      onChange={(e) =>
+                        !Number.isNaN(Math.round(parseFloat(e.target.value)))
+                          ? handleOnChange(
+                              field.name,
+                              Math.round(parseFloat(e.target.value)),
+                            )
+                          : handleOnChange(field.name, "")
+                      }
+                      onBlur={() => handleOnBlur(field.name)}
+                      placeholder={getMaxValuePlaceholder()}
+                    />
                     {errors[field.name as string] && (
                       <span className="error-message">
                         {errors[field.name as string]}
                       </span>
                     )}
-                  </>
+                  </Col>
                 )}
                 {field.type === "address" && (
                   <Address
@@ -352,12 +378,12 @@ export const DictionaryForm = <T extends {}>({
                     errors={errors[field.name]}
                   />
                 )}
-              </div>
+              </Form.Group>
             );
           })}
         </div>
-        <div className="admin-upsert-buttons">
-          <button
+        <div className="d-flex justify-content-between admin-upsert-buttons">
+          {/* <button
             className="admin-upsert-cancel"
             type="button"
             onClick={() => {
@@ -368,10 +394,25 @@ export const DictionaryForm = <T extends {}>({
           </button>
           <button type="submit" className="admin-upsert-submit">
             {id !== undefined ? "Edytuj" : "Dodaj"}
-          </button>
+          </button> */}
+          <Button
+            variant="secondary"
+            className="admin-upsert-cancel"
+            onClick={() =>
+              id !== undefined ? navigate(`../${apiEndpoint}`) : navigate(-1)
+            }
+          >
+            Anuluj
+          </Button>
+          <Button
+            variant="primary"
+            type="submit"
+            className="admin-upsert-submit"
+          >
+            {id !== undefined ? "Edytuj" : "Dodaj"}
+          </Button>
         </div>
-      </form>
-      {announcement && <p>{announcement}</p>}
+      </Form>
     </div>
   );
 };

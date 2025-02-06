@@ -7,6 +7,7 @@ import {
   IFormSchema,
 } from "../../components/Dictionaries/DictionaryForm";
 import { useParams } from "react-router-dom";
+import { Container } from "react-bootstrap";
 
 interface ICropVarietyDict {
   idUprawa: number;
@@ -43,21 +44,23 @@ export const CropVarietyFrom: React.FC = () => {
     <>
       <AdminPanelNav />
       <div className="background">
-        <div className="admin-content-space">
-          <div className="admin-title-container">
-            <h1>{id !== undefined ? "EDYTUJ GATUNEK" : "DODAJ GATUNEK"}</h1>
+        <Container>
+          <div className="admin-content-space">
+            <div className="admin-title-container">
+              <h1>{id !== undefined ? "EDYTUJ GATUNEK" : "DODAJ GATUNEK"}</h1>
+            </div>
+            <DictionaryForm<ICropVarietyDict>
+              apiEndpoint="cropkindvariety"
+              initialData={{
+                idUprawa: 0,
+                nazwaGatunku: "",
+                czyAktywna: true,
+              }}
+              fields={cropVarietyFields}
+              additionalValidationSchema={additionalValidationSchema}
+            />
           </div>
-          <DictionaryForm<ICropVarietyDict>
-            apiEndpoint="cropkindvariety"
-            initialData={{
-              idUprawa: 0,
-              nazwaGatunku: "",
-              czyAktywna: true,
-            }}
-            fields={cropVarietyFields}
-            additionalValidationSchema={additionalValidationSchema}
-          />
-        </div>
+        </Container>
       </div>
     </>
   );

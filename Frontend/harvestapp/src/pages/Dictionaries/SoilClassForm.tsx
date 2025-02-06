@@ -5,6 +5,7 @@ import {
 } from "../../components/Dictionaries/DictionaryForm";
 import { AdminPanelNav } from "../../components/Dictionaries/AdminPanelNav";
 import { useParams } from "react-router-dom";
+import { Container } from "react-bootstrap";
 
 interface ISoilClassDict {
   klasaGleby: string;
@@ -44,7 +45,7 @@ export const SoilClassForm: React.FC = () => {
     },
     {
       name: "opis",
-      type: "text",
+      type: "textarea",
       label: "opis",
     },
     {
@@ -59,24 +60,26 @@ export const SoilClassForm: React.FC = () => {
     <>
       <AdminPanelNav />
       <div className="background">
-        <div className="admin-content-space">
-          <div className="admin-title-container">
-            <h1>
-              {id !== undefined ? "EDYTUJ KLASĘ GLEBY" : "DODAJ KLASĘ GLEBY"}
-            </h1>
+        <Container>
+          <div className="admin-content-space">
+            <div className="admin-title-container">
+              <h1>
+                {id !== undefined ? "EDYTUJ KLASĘ GLEBY" : "DODAJ KLASĘ GLEBY"}
+              </h1>
+            </div>
+            <DictionaryForm<ISoilClassDict>
+              apiEndpoint="soilclass"
+              initialData={{
+                klasaGleby: "",
+                opis: "",
+                taryfa: "WIOSNA",
+                czyAktywna: true,
+              }}
+              fields={soilClassFields}
+              additionalValidationSchema={additionalValidationSchema}
+            />
           </div>
-          <DictionaryForm<ISoilClassDict>
-            apiEndpoint="soilclass"
-            initialData={{
-              klasaGleby: "",
-              opis: "",
-              taryfa: "WIOSNA",
-              czyAktywna: true,
-            }}
-            fields={soilClassFields}
-            additionalValidationSchema={additionalValidationSchema}
-          />
-        </div>
+        </Container>
       </div>
     </>
   );

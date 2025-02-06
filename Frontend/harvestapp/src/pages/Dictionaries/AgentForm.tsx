@@ -6,6 +6,7 @@ import {
 } from "../../components/Dictionaries/DictionaryForm";
 import { AdminPanelNav } from "../../components/Dictionaries/AdminPanelNav";
 import { useParams } from "react-router-dom";
+import { Container } from "react-bootstrap";
 
 interface IAgentDict {
   nazwa: string;
@@ -104,33 +105,35 @@ export const AgentForm: React.FC = () => {
     <>
       <AdminPanelNav />
       <div className="background">
-        <div className="admin-content-space">
-          <div className="admin-title-container">
-            <h1>{id !== undefined ? "EDYTUJ AGENTA" : "DODAJ AGENTA"}</h1>
+        <Container>
+          <div className="admin-content-space">
+            <div className="admin-title-container">
+              <h1>{id !== undefined ? "EDYTUJ AGENTA" : "DODAJ AGENTA"}</h1>
+            </div>
+            <DictionaryForm<IAgentDict>
+              apiEndpoint="agent"
+              initialData={{
+                nazwa: "",
+                kodAgencji: "",
+                nip: "",
+                krs: "",
+                nrTel: "",
+                czyAktywna: true,
+                liczbaPosrednikow: 50,
+                teryt: "",
+                addressData: {
+                  kodPocztowy: "",
+                  miejscowosc: "",
+                  ulica: "",
+                  numerDomu: "",
+                  numerMieszkania: "",
+                },
+              }}
+              fields={agentFields}
+              additionalValidationSchema={additionalValidationSchema}
+            />
           </div>
-          <DictionaryForm<IAgentDict>
-            apiEndpoint="agent"
-            initialData={{
-              nazwa: "",
-              kodAgencji: "",
-              nip: "",
-              krs: "",
-              nrTel: "",
-              czyAktywna: true,
-              liczbaPosrednikow: 50,
-              teryt: "",
-              addressData: {
-                kodPocztowy: "",
-                miejscowosc: "",
-                ulica: "",
-                numerDomu: "",
-                numerMieszkania: "",
-              },
-            }}
-            fields={agentFields}
-            additionalValidationSchema={additionalValidationSchema}
-          />
-        </div>
+        </Container>
       </div>
     </>
   );

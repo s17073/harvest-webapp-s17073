@@ -3,6 +3,7 @@ import { fetchWojewodztwa } from "../../api/Shared/fetchWojewodztwa";
 import { fetchPowiaty } from "../../api/Shared/fetchPowiaty";
 import { fetchGminy } from "../../api/Shared/fetchGminy";
 import { PartOfTeryt } from "../../interfaces/PartOfTeryt";
+import { Col, Form, Row } from "react-bootstrap";
 
 interface IterytData {
   wojewodztwo: string;
@@ -70,57 +71,62 @@ export const Teryt: React.FC<TerytProps> = ({
 
   return (
     <div>
-      <div>
-        <label>Województwo:</label>
-        <select
-          value={terytData.wojewodztwo}
-          onChange={(e) => handleFieldChange("wojewodztwo", e.target.value)}
-        >
-          <option value="">Wybierz województwo</option>
-          {wojewodztwa.map((wojewodztwo) => (
-            <option key={wojewodztwo.kodTeryt} value={wojewodztwo.kodTeryt}>
-              {wojewodztwo.nazwa}
-            </option>
-          ))}
-        </select>
-        {errors?.wojewodztwo && (
-          <span className="error-message">{errors.wojewodztwo}</span>
-        )}
-      </div>
-      <div>
-        <label>Powiat:</label>
-        <select
-          value={terytData.powiat}
-          onChange={(e) => handleFieldChange("powiat", e.target.value)}
-          disabled={!terytData.wojewodztwo}
-        >
-          <option value="">Wybierz powiat</option>
-          {powiaty.map((powiat) => (
-            <option key={powiat.kodTeryt} value={powiat.kodTeryt}>
-              {powiat.nazwa}
-            </option>
-          ))}
-        </select>
-        {errors?.powiat && (
-          <span className="error-message">{errors.powiat}</span>
-        )}
-      </div>
-      <div>
-        <label>Gmina:</label>
-        <select
-          value={terytData.gmina}
-          onChange={(e) => handleFieldChange("gmina", e.target.value)}
-          disabled={!terytData.powiat}
-        >
-          <option value="">Wybierz gminę</option>
-          {gminy.map((gmina) => (
-            <option key={gmina.kodTeryt} value={gmina.kodTeryt}>
-              {gmina.nazwa}
-            </option>
-          ))}
-        </select>
-        {errors?.gmina && <span className="error-message">{errors.gmina}</span>}
-      </div>
+      <Row>
+        <Col xl={2}></Col>
+        <Form.Group as={Col} sm="4" xl="3" controlId="wojewodztwo">
+          <Form.Label className="teryt-label">Województwo</Form.Label>
+          <Form.Select
+            value={terytData.wojewodztwo}
+            onChange={(e) => handleFieldChange("wojewodztwo", e.target.value)}
+          >
+            <option value="">Wybierz województwo</option>
+            {wojewodztwa.map((wojewodztwo) => (
+              <option key={wojewodztwo.kodTeryt} value={wojewodztwo.kodTeryt}>
+                {wojewodztwo.nazwa}
+              </option>
+            ))}
+          </Form.Select>
+          {errors?.wojewodztwo && (
+            <span className="error-message">{errors.wojewodztwo}</span>
+          )}
+        </Form.Group>
+        <Form.Group as={Col} sm="4" xl="3" controlId="powiat">
+          <Form.Label className="teryt-label">Powiat</Form.Label>
+          <Form.Select
+            value={terytData.powiat}
+            onChange={(e) => handleFieldChange("powiat", e.target.value)}
+            disabled={!terytData.wojewodztwo}
+          >
+            <option value="">Wybierz powiat</option>
+            {powiaty.map((powiat) => (
+              <option key={powiat.kodTeryt} value={powiat.kodTeryt}>
+                {powiat.nazwa}
+              </option>
+            ))}
+          </Form.Select>
+          {errors?.powiat && (
+            <span className="error-message">{errors.powiat}</span>
+          )}
+        </Form.Group>
+        <Form.Group as={Col} sm="4" xl="4" controlId="gmina">
+          <Form.Label className="teryt-label">Gmina</Form.Label>
+          <Form.Select
+            value={terytData.gmina}
+            onChange={(e) => handleFieldChange("gmina", e.target.value)}
+            disabled={!terytData.powiat}
+          >
+            <option value="">Wybierz gminę</option>
+            {gminy.map((gmina) => (
+              <option key={gmina.kodTeryt} value={gmina.kodTeryt}>
+                {gmina.nazwa}
+              </option>
+            ))}
+          </Form.Select>
+          {errors?.gmina && (
+            <span className="error-message">{errors.gmina}</span>
+          )}
+        </Form.Group>
+      </Row>
     </div>
   );
 };

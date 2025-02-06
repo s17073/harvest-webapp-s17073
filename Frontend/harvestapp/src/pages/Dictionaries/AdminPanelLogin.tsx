@@ -1,5 +1,6 @@
 import axios from "axios";
 import { useState } from "react";
+import { Col, Container, Row } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 
 export const AdminPanelLogin: React.FC = () => {
@@ -32,14 +33,14 @@ export const AdminPanelLogin: React.FC = () => {
 
   return (
     <div className="admin-login-background">
-      <div className="admin-login-section">
-        <div className="admin-login-sections">
-          <div className="admin-login-side-section">
+      <Container className="admin-login-container">
+        <Row>
+          {/* <Col className="admin-login-side-section d-none d-xl-flex"> */}
+          <Col xs={12} xl={6} className="admin-login-side-section">
             <h2>HARVEST</h2>
             <div>Witaj w panelu logowania administratora!</div>
-          </div>
-
-          <div className="admin-login-main-section">
+          </Col>
+          <Col xs={12} xl={6} className="admin-login-main-section">
             <div className="admin-login-title">
               <h1>Zaloguj się</h1>
             </div>
@@ -71,9 +72,9 @@ export const AdminPanelLogin: React.FC = () => {
               </button>
               {error && <p className="admin-login-error">{error}</p>}
             </form>
-          </div>
-        </div>
-      </div>
+          </Col>
+        </Row>
+      </Container>
     </div>
   );
 };

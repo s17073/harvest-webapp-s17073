@@ -5,6 +5,7 @@ import {
 } from "../../components/Dictionaries/DictionaryForm";
 import { AdminPanelNav } from "../../components/Dictionaries/AdminPanelNav";
 import { useParams } from "react-router-dom";
+import { Container } from "react-bootstrap";
 
 interface ICoverDict {
   nazwa: string;
@@ -83,25 +84,27 @@ export const CoverForm: React.FC = () => {
     <>
       <AdminPanelNav />
       <div className="background">
-        <div className="admin-content-space">
-          <div className="admin-title-container">
-            <h1>{id !== undefined ? "EDYTUJ OCHRONĘ" : "DODAJ OCHRONĘ"}</h1>
+        <Container>
+          <div className="admin-content-space">
+            <div className="admin-title-container">
+              <h1>{id !== undefined ? "EDYTUJ OCHRONĘ" : "DODAJ OCHRONĘ"}</h1>
+            </div>
+            <DictionaryForm<ICoverDict>
+              apiEndpoint="cover"
+              initialData={{
+                nazwa: "",
+                grupaMinisterialna: "08",
+                taryfa: "WIOSNA",
+                opis: "",
+                czyUprawa: true,
+                czyZwierze: true,
+                czyAktywna: true,
+              }}
+              fields={coverFields}
+              additionalValidationSchema={additionalValidationSchema}
+            />
           </div>
-          <DictionaryForm<ICoverDict>
-            apiEndpoint="cover"
-            initialData={{
-              nazwa: "",
-              grupaMinisterialna: "08",
-              taryfa: "WIOSNA",
-              opis: "",
-              czyUprawa: true,
-              czyZwierze: true,
-              czyAktywna: true,
-            }}
-            fields={coverFields}
-            additionalValidationSchema={additionalValidationSchema}
-          />
-        </div>
+        </Container>
       </div>
     </>
   );

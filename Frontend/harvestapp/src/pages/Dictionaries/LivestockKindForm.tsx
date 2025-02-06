@@ -5,6 +5,7 @@ import {
 } from "../../components/Dictionaries/DictionaryForm";
 import { AdminPanelNav } from "../../components/Dictionaries/AdminPanelNav";
 import { useParams } from "react-router-dom";
+import { Container } from "react-bootstrap";
 
 interface ILivestockKindDict {
   nazwaZwierzecia: string;
@@ -57,23 +58,25 @@ export const LivestockKindForm: React.FC = () => {
     <>
       <AdminPanelNav />
       <div className="background">
-        <div className="admin-content-space">
-          <div className="admin-title-container">
-            <h1>{id !== undefined ? "EDYTUJ ZWIERZĘ" : "DODAJ ZWIERZĘ"}</h1>
+        <Container>
+          <div className="admin-content-space">
+            <div className="admin-title-container">
+              <h1>{id !== undefined ? "EDYTUJ ZWIERZĘ" : "DODAJ ZWIERZĘ"}</h1>
+            </div>
+            <DictionaryForm<ILivestockKindDict>
+              apiEndpoint="livestockkind"
+              initialData={{
+                nazwaZwierzecia: "",
+                taryfa: "WIOSNA",
+                czyAktywna: true,
+                wartoscRynkowa: 0,
+                wartoscMax: undefined,
+              }}
+              fields={livestockKindFields}
+              additionalValidationSchema={additionalValidationSchema}
+            />
           </div>
-          <DictionaryForm<ILivestockKindDict>
-            apiEndpoint="livestockkind"
-            initialData={{
-              nazwaZwierzecia: "",
-              taryfa: "WIOSNA",
-              czyAktywna: true,
-              wartoscRynkowa: 0,
-              wartoscMax: undefined,
-            }}
-            fields={livestockKindFields}
-            additionalValidationSchema={additionalValidationSchema}
-          />
-        </div>
+        </Container>
       </div>
     </>
   );

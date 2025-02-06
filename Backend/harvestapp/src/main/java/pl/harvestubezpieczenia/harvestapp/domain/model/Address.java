@@ -36,7 +36,7 @@ public class Address {
         return lokalizacja.kodPocztowy() + " " +
                 lokalizacja.miejscowosc() + " " +
                 lokalizacja.ulica() + " " +
-                lokalizacja.numerDomu() + " " +
+                lokalizacja.numerDomu() +
                 (!lokalizacja.numerMieszkania().isEmpty() ? "/" + lokalizacja.numerMieszkania() : "");
 
     }

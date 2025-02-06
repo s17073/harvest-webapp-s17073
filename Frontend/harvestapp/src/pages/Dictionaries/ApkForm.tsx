@@ -5,6 +5,7 @@ import {
 } from "../../components/Dictionaries/DictionaryForm";
 import { AdminPanelNav } from "../../components/Dictionaries/AdminPanelNav";
 import { useParams } from "react-router-dom";
+import { Container } from "react-bootstrap";
 
 interface IApkDict {
   pytanie: string;
@@ -55,21 +56,23 @@ export const ApkForm: React.FC = () => {
     <>
       <AdminPanelNav />
       <div className="background">
-        <div className="admin-content-space">
-          <div className="admin-title-container">
-            <h1>{id !== undefined ? "EDYTUJ PYTANIE" : "DODAJ PYTANIE"}</h1>
+        <Container>
+          <div className="admin-content-space">
+            <div className="admin-title-container">
+              <h1>{id !== undefined ? "EDYTUJ PYTANIE" : "DODAJ PYTANIE"}</h1>
+            </div>
+            <DictionaryForm<IApkDict>
+              apiEndpoint="apk"
+              initialData={{
+                pytanie: "",
+                komunikat: "",
+                czyAktywna: true,
+              }}
+              fields={apkFields}
+              additionalValidationSchema={additionalValidationSchema}
+            />
           </div>
-          <DictionaryForm<IApkDict>
-            apiEndpoint="apk"
-            initialData={{
-              pytanie: "",
-              komunikat: "",
-              czyAktywna: true,
-            }}
-            fields={apkFields}
-            additionalValidationSchema={additionalValidationSchema}
-          />
-        </div>
+        </Container>
       </div>
     </>
   );
