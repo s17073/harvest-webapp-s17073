@@ -8,7 +8,7 @@ export const AdminPanelMainPage: React.FC = () => {
       <AdminPanelNav />
       <div className="background">
         <Container>
-          <div className="admin-content-space">
+          <div className="admin-content-space-no-bottom-bar">
             <Row>
               <Col>
                 <div className="admin-title-container">

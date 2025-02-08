@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams, useSubmit } from "react-router-dom";
 import * as yup from "yup";
 import { Address } from "./Address";
 import { Teryt } from "./Teryt";
@@ -7,6 +7,7 @@ import { CropList } from "./CropList";
 import { fetchDictionaryDataById } from "../../api/Dictionaries/fetchDictionaryDataById";
 import { handleDictionaryUpsert } from "../../api/Dictionaries/handleDictionaryUpsert";
 import { Button, Col, Form, Row } from "react-bootstrap";
+import BottomBar from "../Shared/BottomBar";
 
 export interface IFormSchema<T> {
   name: keyof T;
@@ -382,8 +383,8 @@ export const DictionaryForm = <T extends {}>({
             );
           })}
         </div>
-        <div className="d-flex justify-content-between admin-upsert-buttons">
-          {/* <button
+        {/* <div className="d-flex justify-content-between admin-upsert-buttons"> */}
+        {/* <button
             className="admin-upsert-cancel"
             type="button"
             onClick={() => {
@@ -395,7 +396,7 @@ export const DictionaryForm = <T extends {}>({
           <button type="submit" className="admin-upsert-submit">
             {id !== undefined ? "Edytuj" : "Dodaj"}
           </button> */}
-          <Button
+        {/* <Button
             variant="secondary"
             className="admin-upsert-cancel"
             onClick={() =>
@@ -411,7 +412,20 @@ export const DictionaryForm = <T extends {}>({
           >
             {id !== undefined ? "Edytuj" : "Dodaj"}
           </Button>
-        </div>
+        </div> */}
+        <BottomBar
+          button1={{
+            label: "ANULUJ",
+            className: "admin-upsert-cancel",
+            onClick: () =>
+              id !== undefined ? navigate(`../${apiEndpoint}`) : navigate(-1),
+          }}
+          button2={{
+            label: "DODAJ",
+            className: "admin-upsert-submit",
+            onClick: () => useSubmit(),
+          }}
+        />
       </Form>
     </div>
   );

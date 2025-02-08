@@ -3,6 +3,10 @@ import { IAgriculturalLand } from "../../interfaces/IAgriculturalLand";
 import { useNavigate, useParams } from "react-router-dom";
 import { fetchCrops } from "../../api/Calculation/fetchCrops";
 import { handleDeleteCrop } from "../../api/Calculation/handleDeleteCrop";
+import { Table } from "react-bootstrap";
+import { iconDelete } from "../../assets/icons/delete";
+import { iconEdit } from "../../assets/icons/edit";
+import BottomBar from "../Shared/BottomBar";
 
 export interface ICropData {
   id: number;
@@ -31,7 +35,7 @@ export const CropsFormTable: React.FC = () => {
   const navigate = useNavigate();
 
   //TODO
-  console.log(loading, setLoading(null), info, setInfo(null));
+  // console.log(loading, setLoading(null), info, setInfo(null));
 
   const fetchData = async () => {
     if (id) {
@@ -75,74 +79,92 @@ export const CropsFormTable: React.FC = () => {
 
   return (
     <>
-      <div className="calc-form-title">
+      <div className="admin-title-container">
         <h1>uprawy</h1>
       </div>
       <div>
-        <div className="calc-form-table-space">
-          <table className="calc-form-table">
+        <div className="admin-table-space">
+          <Table
+            striped
+            bordered
+            hover
+            responsive="xl"
+            size="xl"
+            className="admin-table"
+          >
             <thead>
               <tr>
-                <th>Uprawa</th>
-                <th>Nasienna</th>
-                <th>Powierzchnia</th>
-                <th>Wartość</th>
-                <th>Suma ubezpieczenia</th>
-                <th>Edytuj</th>
-                <th>Usuń</th>
+                <th className="text-center align-middle lh-base px-0 px-xl-4">
+                  Uprawa
+                </th>
+                <th className="text-center align-middle lh-base px-0 px-xl-4">
+                  Nasienna
+                </th>
+                <th className="text-center align-middle lh-base px-0 px-xl-4">
+                  Powierzchnia
+                </th>
+                <th className="text-center align-middle lh-base px-0 px-xl-4">
+                  Wartość
+                </th>
+                <th className="text-center align-middle lh-base px-0 px-xl-4">
+                  Suma ubezpieczenia
+                </th>
+                <th className="text-center align-middle lh-base px-0 px-xl-4">
+                  Edytuj
+                </th>
+                <th className="text-center align-middle lh-base px-0 px-xl-4">
+                  Usuń
+                </th>
               </tr>
             </thead>
             <tbody>
               {crops.map((crop) => (
-                <tr key={crop.id} className={`row-${crop.id}`}>
+                <tr
+                  key={crop.id}
+                  className={`row-${crop.id} text-center align-middle lh-1 px-0 px-xl-4`}
+                >
                   <td>{crop.uprawa}</td>
                   <td>{crop.czyNasienna}</td>
                   <td>{crop.powierzchnia}</td>
                   <td>{crop.wartosc}</td>
                   <td>{crop.sumaUbezpieczenia}</td>
-                  <td>
-                    <button
-                      type="button"
-                      onClick={() => handleEditCrop(crop.id)}
-                    >
-                      Edytuj
-                    </button>
+                  <td className="dict-delete-icon">
+                    <div onClick={() => handleEditCrop(crop.id)}>
+                      {iconEdit()}
+                    </div>
                   </td>
-                  <td>
-                    <button
-                      type="button"
-                      onClick={() => handleRemoveCrop(crop.id)}
-                    >
-                      Usuń
-                    </button>
+                  <td className="dict-delete-icon">
+                    <div onClick={() => handleRemoveCrop(crop.id)}>
+                      {iconDelete()}
+                    </div>
                   </td>
                 </tr>
               ))}
             </tbody>
-          </table>
+          </Table>
+        </div>
+        <div className="d-flex justify-content-end">
           <button
-            className="calc-form-add-crop"
+            className="btn-admin-add w-auto"
             type="button"
             onClick={handleAddCrop}
           >
             Dodaj Uprawę
           </button>
-          <button
-            className="calc-form-previous-button"
-            type="button"
-            onClick={handleGoBack}
-          >
-            Wstecz
-          </button>
-          <button
-            className="calc-form-next-button"
-            type="submit"
-            onClick={handleSubmit}
-          >
-            Dalej
-          </button>
-          <div>{error && error}</div>
         </div>
+        <BottomBar
+          button1={{
+            label: "WSTECZ",
+            className: "admin-table-cancel",
+            onClick: () => handleGoBack(),
+          }}
+          button2={{
+            label: "DALEJ",
+            className: "btn-admin-add",
+            onClick: () => handleSubmit(),
+          }}
+        />
+        <div>{error && error}</div>
       </div>
     </>
   );

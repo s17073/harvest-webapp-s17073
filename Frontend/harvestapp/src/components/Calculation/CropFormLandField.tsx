@@ -6,6 +6,7 @@ import { fetchPowiaty } from "../../api/Shared/fetchPowiaty";
 import { fetchGminy } from "../../api/Shared/fetchGminy";
 import { fetchObreby } from "../../api/Shared/fetchObreby";
 import { fetchCheckFieldId } from "../../api/Shared/fetchCheckFieldId";
+import { Col, Form, Row, Spinner } from "react-bootstrap";
 
 interface ICropFormLandFieldProps {
   dzialka: IAgriculturalLand;
@@ -29,6 +30,7 @@ export const CropFormLandField: React.FC<ICropFormLandFieldProps> = ({
   const [gminy, setGminy] = useState<PartOfTeryt[]>([]);
   const [obreby, setObreby] = useState<PartOfTeryt[]>([]);
   const [loading, setLoading] = useState<string | undefined>(undefined);
+  const [loadingId, setLoadingId] = useState<string | undefined>(undefined);
 
   useEffect(() => {
     fetchWojewodztwa().then(setWojewodztwa);
@@ -64,7 +66,7 @@ export const CropFormLandField: React.FC<ICropFormLandFieldProps> = ({
 
   const checkFieldId = async (value: string) => {
     if (value.length > 14) {
-      const isValid = fetchCheckFieldId(value, setLoading);
+      const isValid = fetchCheckFieldId(value, setLoadingId);
       onUpdateField("czyPoprawna", await isValid);
     }
   };
@@ -103,109 +105,142 @@ export const CropFormLandField: React.FC<ICropFormLandFieldProps> = ({
 
   return (
     <>
-      <div className="calc-form-field">
-        <label className="calc-form-field-label">Województwo</label>
-        <select
-          value={dzialka.teryt.substring(0, 2)}
-          onChange={(e) => {
-            onUpdateField("teryt", e.target.value);
-            onUpdateField("identyfikatorDzialki", e.target.value);
-          }}
-        >
-          <option value="">Wybierz województwo</option>
-          {wojewodztwa.map((wojewodztwo) => (
-            <option key={wojewodztwo.kodTeryt} value={wojewodztwo.kodTeryt}>
-              {wojewodztwo.nazwa}
-            </option>
-          ))}
-        </select>
-      </div>
-      <div className="calc-form-field">
-        <label className="calc-form-field-label">Powiat</label>
-        <select
-          value={dzialka.teryt.substring(0, 4)}
-          onChange={(e) => {
-            onUpdateField("teryt", e.target.value);
-            onUpdateField("identyfikatorDzialki", e.target.value);
-          }}
-        >
-          <option value="">Wybierz powiat</option>
-          {powiaty.map((powiat) => (
-            <option key={powiat.kodTeryt} value={powiat.kodTeryt}>
-              {powiat.nazwa}
-            </option>
-          ))}
-        </select>
-      </div>
-      <div className="calc-form-field">
-        <label className="calc-form-field-label">Gmina</label>
-        <select
-          value={dzialka.teryt}
-          onChange={(e) => {
-            onUpdateField("teryt", e.target.value);
-            onUpdateField("identyfikatorDzialki", e.target.value);
-          }}
-        >
-          <option value="">Wybierz gminę</option>
-          {gminy.map((gmina) => (
-            <option key={gmina.kodTeryt} value={gmina.kodTeryt}>
-              {gmina.nazwa}
-            </option>
-          ))}
-        </select>
-      </div>
-      <div className="calc-form-field">
-        <label className="calc-form-field-label">Obręb</label>
-        <select
-          value={dzialka.kodObrebu}
-          onChange={(e) => {
-            const selectedObreb = obreby.find(
-              (obreb) => obreb.kodTeryt === e.target.value,
-            );
-            if (selectedObreb) {
-              onUpdateField("kodObrebu", selectedObreb.kodTeryt);
-              onUpdateField("obreb", selectedObreb.nazwa);
-              onUpdateField("identyfikatorDzialki", selectedObreb.kodTeryt);
+      <Row>
+        <Col xl="4">
+          <Form.Label className="teryt-label">Województwo</Form.Label>
+          <Form.Select
+            value={dzialka.teryt.substring(0, 2)}
+            onChange={(e) => {
+              onUpdateField("teryt", e.target.value);
+              onUpdateField("identyfikatorDzialki", e.target.value);
+            }}
+          >
+            <option value="">Wybierz województwo</option>
+            {wojewodztwa.map((wojewodztwo) => (
+              <option key={wojewodztwo.kodTeryt} value={wojewodztwo.kodTeryt}>
+                {wojewodztwo.nazwa}
+              </option>
+            ))}
+          </Form.Select>
+        </Col>
+
+        <Col xl="4">
+          <Form.Label className="teryt-label">Powiat</Form.Label>
+          <Form.Select
+            value={dzialka.teryt.substring(0, 4)}
+            onChange={(e) => {
+              onUpdateField("teryt", e.target.value);
+              onUpdateField("identyfikatorDzialki", e.target.value);
+            }}
+          >
+            <option value="">Wybierz powiat</option>
+            {powiaty.map((powiat) => (
+              <option key={powiat.kodTeryt} value={powiat.kodTeryt}>
+                {powiat.nazwa}
+              </option>
+            ))}
+          </Form.Select>
+        </Col>
+
+        <Col xl="4">
+          <Form.Label className="teryt-label">Gmina</Form.Label>
+          <Form.Select
+            value={dzialka.teryt}
+            onChange={(e) => {
+              onUpdateField("teryt", e.target.value);
+              onUpdateField("identyfikatorDzialki", e.target.value);
+            }}
+          >
+            <option value="">Wybierz gminę</option>
+            {gminy.map((gmina) => (
+              <option key={gmina.kodTeryt} value={gmina.kodTeryt}>
+                {gmina.nazwa}
+              </option>
+            ))}
+          </Form.Select>
+        </Col>
+        <Col xs="10" xl="7">
+          <Form.Label className="teryt-label">Obręb</Form.Label>
+
+          <Form.Select
+            value={dzialka.kodObrebu}
+            onChange={(e) => {
+              const selectedObreb = obreby.find(
+                (obreb) => obreb.kodTeryt === e.target.value,
+              );
+              if (selectedObreb) {
+                onUpdateField("kodObrebu", selectedObreb.kodTeryt);
+                onUpdateField("obreb", selectedObreb.nazwa);
+                onUpdateField("identyfikatorDzialki", selectedObreb.kodTeryt);
+              }
+            }}
+          >
+            <option value="">Wybierz obręb</option>
+            {obreby.map((obreb) => (
+              <option key={obreb.kodTeryt} value={obreb.kodTeryt}>
+                {obreb.nazwa}
+              </option>
+            ))}
+          </Form.Select>
+        </Col>
+        <Col xs="2" xl="1" className="d-flex align-items-end pb-1">
+          {loading && (
+            <Spinner animation="border" role="status">
+              <span className="visually-hidden">Loading...</span>
+            </Spinner>
+          )}
+        </Col>
+        <Col xl="4">
+          <Form.Label className="teryt-label">Numer działki</Form.Label>
+          <Form.Control
+            type="text"
+            value={dzialka.numerDzialki}
+            onChange={(e) => {
+              onUpdateField("numerDzialki", e.target.value);
+              onUpdateField(
+                "identyfikatorDzialki",
+                dzialka.kodObrebu + "." + e.target.value,
+              );
+            }}
+          />
+        </Col>
+      </Row>
+      <Row>
+        <Col sm="6">
+          <Form.Label className="teryt-label">Identyfikator działki</Form.Label>
+          <Form.Control
+            type="text"
+            value={dzialka.identyfikatorDzialki}
+            onChange={(e) => {
+              handleTypeFieldId(e.target.value);
+            }}
+          />
+        </Col>
+        <Col sm="3" className="d-flex align-items-end pb-1">
+          {loadingId && (
+            <Spinner animation="border" role="status">
+              <span className="visually-hidden">Loading...</span>
+            </Spinner>
+          )}
+          <div
+            className={
+              dzialka.czyPoprawna ? "crop-id-valid" : "crop-id-invalid"
             }
-          }}
-        >
-          <option value="">Wybierz obręb</option>
-          {obreby.map((obreb) => (
-            <option key={obreb.kodTeryt} value={obreb.kodTeryt}>
-              {obreb.nazwa}
-            </option>
-          ))}
-        </select>
-      </div>
-      <div className="calc-form-field">
-        <label className="calc-form-field-label">Numer działki</label>
-        <input
-          type="text"
-          value={dzialka.numerDzialki}
-          onChange={(e) => {
-            onUpdateField("numerDzialki", e.target.value);
-            onUpdateField(
-              "identyfikatorDzialki",
-              dzialka.kodObrebu + "." + e.target.value,
-            );
-          }}
-        />
-      </div>
-      <div className="calc-form-field">
-        <label className="calc-form-field-label">Identyfikator działki</label>
-        <input
-          type="text"
-          value={dzialka.identyfikatorDzialki}
-          onChange={(e) => {
-            handleTypeFieldId(e.target.value);
-          }}
-        />
-      </div>
-      {loading && loading}
-      <div>{dzialka.czyPoprawna ? "POPRAWNA" : "NIEPOPRAWNA"}</div>
-      <button type="button" onClick={onRemove} disabled={removeButtonDisable}>
-        Usuń działkę
-      </button>
+          >
+            {loadingId ? "" : dzialka.czyPoprawna ? "POPRAWNA" : "NIEPOPRAWNA"}
+          </div>
+        </Col>
+        <Col sm="12" md="3" className="d-flex align-items-end my-sm-2 my-md-0">
+          <button
+            className="btn-delete-land m-0"
+            type="button"
+            onClick={onRemove}
+            disabled={removeButtonDisable}
+          >
+            Usuń działkę
+          </button>
+        </Col>
+      </Row>
     </>
   );
 };

@@ -62,10 +62,28 @@ export const Teryt: React.FC<TerytProps> = ({
   }, [terytData.wojewodztwo, terytData.powiat]);
 
   const handleFieldChange = (field: string, value: string) => {
-    const newTerytData: IterytData = { ...terytData, [field]: value };
+    let newTerytData: IterytData = { ...terytData, [field]: value };
+
+    if (field === "wojewodztwo") {
+      newTerytData = { wojewodztwo: value, powiat: "", gmina: "" };
+      setPowiaty([]);
+      setGminy([]);
+    }
+
+    if (field === "powiat") {
+      newTerytData = { ...newTerytData, powiat: value, gmina: "" };
+      setGminy([]);
+    }
+
     setTerytData(newTerytData);
+
+    //   const newTerytData: IterytData = { ...terytData, [field]: value };
+    // setTerytData(newTerytData);
+
     if (field === "gmina") {
       onChange(value);
+    } else {
+      onChange("");
     }
   };
 

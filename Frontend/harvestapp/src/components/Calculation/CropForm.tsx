@@ -13,6 +13,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { ILand, IStepCrop } from "../../interfaces/IStepCrop";
 import { handleAddCrop } from "../../api/Calculation/handleAddCrop";
 import { fetchUprawa } from "../../api/Calculation/fetchUprawa";
+import { Col, Form, Row } from "react-bootstrap";
 
 export const CropForm: React.FC = () => {
   const [cropsList, setCropsList] = useState<ICrop[]>([]);
@@ -133,12 +134,20 @@ export const CropForm: React.FC = () => {
 
   const setField = (
     field: keyof ICropData,
-    value: string | boolean | string[],
+    value: string | boolean | number[],
   ) => {
     setCrop((cropFields) => ({
       ...cropFields,
       [field]: value,
     }));
+  };
+
+  const handleCoverChange = (id: number) => {
+    const newRyzyka = crop.ryzyka.includes(id)
+      ? crop.ryzyka.filter((item) => item !== id)
+      : [...crop.ryzyka, id];
+
+    setField("ryzyka", newRyzyka);
   };
 
   const isPreviousLandComplete = (index: number) => {
@@ -194,127 +203,167 @@ export const CropForm: React.FC = () => {
 
   return (
     <>
-      <div className="calc-form-title">
+      <div className="admin-title-container">
         <h1>uprawy</h1>
       </div>
       <div>
-        <form onSubmit={handleSubmit}>
-          <div className="calc-form-section-title">Dodaj uprawę</div>
-          <div className="calc-form-field">
-            <label className="calc-form-field-label">Rodzaj uprawy</label>
-            <select
-              value={crop.idUprawy}
-              onChange={(e) => setField("idUprawy", e.target.value)}
-            >
-              <option value="">Wybierz uprawę</option>
-              {cropsList.map((crop) => (
-                <option key={crop.idUprawy} value={crop.idUprawy}>
-                  {crop.nazwaUprawy}
-                </option>
-              ))}
-            </select>
-          </div>
-          {!(cropVarietyList.length == 0) ? (
-            <div className="calc-form-field">
-              <label className="calc-form-field-label">Gatunek uprawy</label>
-              <select
-                value={crop.idGatunek}
-                onChange={(e) => setField("idGatunek", e.target.value)}
-              >
-                <option value="">Wybierz gatunek</option>
-                {cropVarietyList.map((cropVariety) => (
-                  <option
-                    key={cropVariety.idGatunek}
-                    value={cropVariety.idGatunek}
-                  >
-                    {cropVariety.nazwaGatunku}
-                  </option>
-                ))}
-              </select>
-            </div>
-          ) : undefined}
-          <div className="calc-form-field">
-            <label className="calc-form-field-label">Klasa gleby</label>
-            <select
-              value={crop.idKlasaGleby}
-              onChange={(e) => setField("idKlasaGleby", e.target.value)}
-            >
-              <option value="">Wybierz klasę</option>
-              {soilClassList.map((soilClass) => (
-                <option
-                  key={soilClass.idKlasaGleby}
-                  value={soilClass.idKlasaGleby}
+        <Form onSubmit={handleSubmit}>
+          <div className="section-heading">Dodaj uprawę</div>
+          <Row className="form-indent mb-3">
+            <Row className="mt-3">
+              <Form.Label column lg="2">
+                Rodzaj uprawy
+              </Form.Label>
+              <Col lg="4">
+                <Form.Select
+                  value={crop.idUprawy}
+                  onChange={(e) => setField("idUprawy", e.target.value)}
                 >
-                  {soilClass.klasaGleby}
-                </option>
-              ))}
-            </select>
-          </div>
-          <div className="calc-form-field">
-            <label className="calc-form-field-label">Uprawa nasienna</label>
-            <input
-              className="calc-form-field-input"
-              type="checkbox"
-              checked={crop.czyNasienna}
-              onChange={() => setField("czyNasienna", !crop.czyNasienna)}
-            />
-          </div>
-          <div className="calc-form-field">
-            <label className="calc-form-field-label">Powierzchnia (w ha)</label>
-            <input
-              className="calc-form-field-input"
-              type="number"
-              value={crop.powierzchnia}
-              onChange={(e) => setField("powierzchnia", e.target.value)}
-            />
-          </div>
-          <div className="calc-form-field">
-            <label className="calc-form-field-label">Wartość</label>
-            <input
-              className="calc-form-field-input"
-              type="number"
-              value={crop.wartosc}
-              onChange={(e) => setField("wartosc", e.target.value)}
-            />
-          </div>
-          <div className="calc-form-field">
-            <label className="calc-form-field-label">Ochrona</label>
-            <select
-              multiple
-              value={crop.ryzyka.map(String)}
-              onChange={(e) => {
-                setField(
-                  "ryzyka",
-                  Array.from(
-                    e.target.selectedOptions,
-                    (option) => option.value,
-                  ),
-                );
-              }}
-              size={coverList.length}
-            >
-              <option value="">Wybierz ochronę</option>
-              {coverList.map((cover) => (
-                <option key={cover.idOchrona} value={cover.idOchrona}>
-                  {cover.nazwa}
-                </option>
-              ))}
-            </select>
-          </div>
-          <div className="calc-form-section-title">Dodaj działki</div>
-          {crop.dzialki.map((dzialka) => (
-            <div key={dzialka.id}>
-              <CropFormLandField
-                dzialka={dzialka}
-                onUpdateField={(field, value) => {
-                  updateLandField(dzialka.id, field, value);
-                }}
-                onRemove={() => removeLand(dzialka.id)}
-                removeButtonDisable={crop.dzialki.length === 1}
-                setTerytIsIncorrect={setTerytIsIncorrect}
-              />
-            </div>
-          ))}
+                  <option value="">Wybierz uprawę</option>
+                  {cropsList.map((crop) => (
+                    <option key={crop.idUprawy} value={crop.idUprawy}>
+                      {crop.nazwaUprawy}
+                    </option>
+                  ))}
+                </Form.Select>
+              </Col>
+            </Row>
+
+            {!(cropVarietyList.length == 0) ? (
+              <Row className="mt-3">
+                <Form.Label column lg="2">
+                  Gatunek uprawy
+                </Form.Label>
+                <Col lg="4">
+                  <Form.Select
+                    value={crop.idGatunek}
+                    onChange={(e) => setField("idGatunek", e.target.value)}
+                  >
+                    <option value="">Wybierz gatunek</option>
+                    {cropVarietyList.map((cropVariety) => (
+                      <option
+                        key={cropVariety.idGatunek}
+                        value={cropVariety.idGatunek}
+                      >
+                        {cropVariety.nazwaGatunku}
+                      </option>
+                    ))}
+                  </Form.Select>
+                </Col>
+              </Row>
+            ) : undefined}
+
+            <Row className="mt-3">
+              <Form.Label column lg="2">
+                Klasa gleby
+              </Form.Label>
+              <Col lg="4">
+                <Form.Select
+                  value={crop.idKlasaGleby}
+                  onChange={(e) => setField("idKlasaGleby", e.target.value)}
+                >
+                  <option value="">Wybierz klasę</option>
+                  {soilClassList.map((soilClass) => (
+                    <option
+                      key={soilClass.idKlasaGleby}
+                      value={soilClass.idKlasaGleby}
+                    >
+                      {soilClass.klasaGleby}
+                    </option>
+                  ))}
+                </Form.Select>
+              </Col>
+            </Row>
+
+            <Row className="mt-3">
+              <Form.Label column lg="2">
+                Uprawa nasienna
+              </Form.Label>
+              <Col lg="4">
+                <Form.Check
+                  className="calc-form-field-input admin-form-checkbox"
+                  type="checkbox"
+                  checked={crop.czyNasienna}
+                  onChange={() => setField("czyNasienna", !crop.czyNasienna)}
+                />
+              </Col>
+            </Row>
+
+            <Row className="mt-3">
+              <Form.Label column lg="2">
+                Powierzchnia (w ha)
+              </Form.Label>
+              <Col lg="4">
+                <Form.Control
+                  className="calc-form-field-input"
+                  type="number"
+                  value={crop.powierzchnia}
+                  onChange={(e) => setField("powierzchnia", e.target.value)}
+                />
+              </Col>
+            </Row>
+
+            <Row className="mt-3">
+              <Form.Label column lg="2">
+                Wartość
+              </Form.Label>
+              <Col lg="4">
+                <Form.Control
+                  className="calc-form-field-input"
+                  type="number"
+                  value={crop.wartosc}
+                  onChange={(e) => setField("wartosc", e.target.value)}
+                />
+              </Col>
+            </Row>
+
+            <Row className="mt-3">
+              <Form.Label column lg="2">
+                Ochrona
+              </Form.Label>
+              <Col lg="10">
+                <Row>
+                  {coverList.map((cover) => {
+                    return (
+                      <Col xs="6" md="4">
+                        <Form.Group
+                          controlId={`${cover.idOchrona}`}
+                          className="d-flex"
+                        >
+                          <Form.Check
+                            className="admin-form-checkbox"
+                            type="checkbox"
+                            onChange={() => handleCoverChange(cover.idOchrona)}
+                            checked={crop.ryzyka.includes(cover.idOchrona)}
+                          />
+                          <Form.Label className="admin-form-checkbox px-3">
+                            {cover.nazwa}
+                          </Form.Label>
+                        </Form.Group>
+                      </Col>
+                    );
+                  })}
+                </Row>
+              </Col>
+            </Row>
+          </Row>
+
+          <div className="section-heading mb-3">Dodaj działki</div>
+          <Row className="form-indent mb-3">
+            {crop.dzialki.map((dzialka) => (
+              <div key={dzialka.id}>
+                <CropFormLandField
+                  dzialka={dzialka}
+                  onUpdateField={(field, value) => {
+                    updateLandField(dzialka.id, field, value);
+                  }}
+                  onRemove={() => removeLand(dzialka.id)}
+                  removeButtonDisable={crop.dzialki.length === 1}
+                  setTerytIsIncorrect={setTerytIsIncorrect}
+                />
+              </div>
+            ))}
+          </Row>
           <button type="button" onClick={addLand} disabled={terytIsIncorrect}>
             Dodaj działkę
           </button>
@@ -331,7 +380,7 @@ export const CropForm: React.FC = () => {
           <button className="calc-form-next-button" type="submit">
             Dodaj
           </button>
-        </form>
+        </Form>
         {error && error}
       </div>
     </>

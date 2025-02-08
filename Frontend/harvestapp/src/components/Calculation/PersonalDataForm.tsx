@@ -7,6 +7,8 @@ import { PartOfTeryt } from "../../interfaces/PartOfTeryt";
 import { IStepPersonalData } from "../../interfaces/IStepPersonalData";
 import { handleAddPersonalData } from "../../api/Calculation/handleAddPersonalData";
 import { fetchPersonalData } from "../../api/Calculation/fetchPersonalData";
+import { Col, FloatingLabel, Form, Row } from "react-bootstrap";
+import BottomBar from "../Shared/BottomBar";
 
 interface IPersonalData {
   imie: string;
@@ -182,331 +184,514 @@ export const PersonalDataForm: React.FC = () => {
 
   return (
     <>
-      <div className="calc-form-title">
-        <h1>dane osobowe</h1>
-      </div>
+      <Row>
+        <Col>
+          <div className="admin-title-container">
+            <h1>dane osobowe</h1>
+          </div>
+        </Col>
+      </Row>
       <div>
-        <form onSubmit={handleSubmit}>
-          <div className="calc-form-section-title">Dane ubezpieczającego</div>
-          <div className="calc-form-field">
-            <label className="calc-form-field-label">Imię</label>
-            <input
-              className="calc-form-field-input"
-              type="text"
-              value={policyHolder.imie}
-              onChange={(e) =>
-                setField("imie", setPolicyHolder, e.target.value)
-              }
-            />
+        <Form onSubmit={handleSubmit}>
+          <div className="admin-upsert-fields">
+            <div className="section-heading">Dane ubezpieczającego</div>
+            <Row className="form-indent mb-3">
+              <Row className="mt-3">
+                <Form.Label column lg="2">
+                  Imię
+                </Form.Label>
+                <Col lg="4">
+                  <Form.Control
+                    className="calc-form-field-input"
+                    type="text"
+                    value={policyHolder.imie}
+                    onChange={(e) =>
+                      setField("imie", setPolicyHolder, e.target.value)
+                    }
+                  />
+                </Col>
+              </Row>
+              <Row className="mt-3">
+                <Form.Label column lg="2">
+                  Nazwisko
+                </Form.Label>
+                <Col lg="4">
+                  <Form.Control
+                    className="calc-form-field-input"
+                    type="text"
+                    value={policyHolder.nazwisko}
+                    onChange={(e) =>
+                      setField("nazwisko", setPolicyHolder, e.target.value)
+                    }
+                  />
+                </Col>
+              </Row>
+              <Row className="mt-3">
+                <Form.Label column lg="2">
+                  Pesel
+                </Form.Label>
+                <Col lg="4">
+                  <Form.Control
+                    className="calc-form-field-input"
+                    type="number"
+                    value={policyHolder.pesel}
+                    onChange={(e) =>
+                      setField("pesel", setPolicyHolder, e.target.value)
+                    }
+                  />
+                </Col>
+              </Row>
+              <Row className="mt-3">
+                <Form.Label column lg="2">
+                  Data urodzenia
+                </Form.Label>
+                <Col lg="4">
+                  <Form.Control
+                    className="calc-form-field-input"
+                    type="date"
+                    value={policyHolder.dataUrodzenia}
+                    onChange={(e) =>
+                      setField("dataUrodzenia", setPolicyHolder, e.target.value)
+                    }
+                  />
+                </Col>
+              </Row>
+              <Row className="mt-3">
+                <Form.Label column lg="2">
+                  Adres e-mail
+                </Form.Label>
+                <Col lg="4">
+                  <Form.Control
+                    className="calc-form-field-input"
+                    type="email"
+                    value={policyHolder.adresEmail}
+                    onChange={(e) =>
+                      setField("adresEmail", setPolicyHolder, e.target.value)
+                    }
+                  />
+                </Col>
+              </Row>
+            </Row>
+            <div className="section-heading ml-0">Adres do korespondencji</div>
+            <Row className="form-indent mt-3">
+              {/* <Col lg="4"> */}
+              {/* <Row className="mb-3 mt-3"> */}
+              <Form.Group
+                as={Col}
+                lg="4"
+                controlId="wojewodztwo"
+                className="mb-3"
+              >
+                <Form.Label className="teryt-label">Województwo</Form.Label>
+
+                <Form.Select
+                  value={policyHolder.teryt.substring(0, 2)}
+                  onChange={(e) =>
+                    setField("teryt", setPolicyHolder, e.target.value)
+                  }
+                >
+                  <option value="">Wybierz województwo</option>
+                  {wojewodztwa.map((wojewodztwo) => (
+                    <option
+                      key={wojewodztwo.kodTeryt}
+                      value={wojewodztwo.kodTeryt}
+                    >
+                      {wojewodztwo.nazwa}
+                    </option>
+                  ))}
+                </Form.Select>
+              </Form.Group>
+
+              <Form.Group as={Col} lg="4" controlId="powiat" className="mb-3">
+                <Form.Label className="teryt-label">Powiat</Form.Label>
+
+                <Form.Select
+                  value={policyHolder.teryt.substring(0, 4)}
+                  onChange={(e) =>
+                    setField("teryt", setPolicyHolder, e.target.value)
+                  }
+                >
+                  <option value="">Wybierz powiat</option>
+                  {powiaty.map((powiat) => (
+                    <option key={powiat.kodTeryt} value={powiat.kodTeryt}>
+                      {powiat.nazwa}
+                    </option>
+                  ))}
+                </Form.Select>
+              </Form.Group>
+
+              <Form.Group as={Col} lg="4" controlId="powiat" className="mb-3">
+                <Form.Label className="teryt-label">Gmina</Form.Label>
+
+                <Form.Select
+                  value={policyHolder.teryt}
+                  onChange={(e) =>
+                    setField("teryt", setPolicyHolder, e.target.value)
+                  }
+                >
+                  <option value="">Wybierz gminę</option>
+                  {gminy.map((gmina) => (
+                    <option key={gmina.kodTeryt} value={gmina.kodTeryt}>
+                      {gmina.nazwa}
+                    </option>
+                  ))}
+                </Form.Select>
+              </Form.Group>
+
+              <Row className="mt-3">
+                <FloatingLabel
+                  as={Col}
+                  sm={4}
+                  xl={2}
+                  label="Kod pocztowy"
+                  className="mb-3"
+                  contolId="kodPocztowy"
+                >
+                  <Form.Control
+                    type="text"
+                    placeholder="Kod pocztowy"
+                    value={policyHolder.kodPocztowy}
+                    onChange={(e) =>
+                      setField("kodPocztowy", setPolicyHolder, e.target.value)
+                    }
+                  />
+                </FloatingLabel>
+
+                <FloatingLabel
+                  as={Col}
+                  sm={8}
+                  xl={10}
+                  label="Miejscowość"
+                  className="mb-3"
+                  contolId="miejscowosc"
+                >
+                  <Form.Control
+                    type="text"
+                    placeholder="Miejscowość"
+                    value={policyHolder.miejscowosc}
+                    onChange={(e) =>
+                      setField("miejscowosc", setPolicyHolder, e.target.value)
+                    }
+                  />
+                </FloatingLabel>
+
+                <FloatingLabel
+                  as={Col}
+                  md={6}
+                  xl={8}
+                  label="Ulica"
+                  className="mb-3"
+                  contolId="ulica"
+                >
+                  <Form.Control
+                    type="text"
+                    placeholder="Ulica"
+                    value={policyHolder.ulica}
+                    onChange={(e) =>
+                      setField("ulica", setPolicyHolder, e.target.value)
+                    }
+                  />
+                </FloatingLabel>
+
+                <FloatingLabel
+                  as={Col}
+                  md={3}
+                  xl={2}
+                  label="Nr. domu"
+                  className="mb-3"
+                  contolId="numerDomu"
+                >
+                  <Form.Control
+                    type="text"
+                    placeholder="Nr. domu"
+                    value={policyHolder.numerDomu}
+                    onChange={(e) =>
+                      setField("numerDomu", setPolicyHolder, e.target.value)
+                    }
+                  />
+                </FloatingLabel>
+
+                <FloatingLabel
+                  as={Col}
+                  md={3}
+                  xl={2}
+                  label="Nr. mieszkania"
+                  className="mb-3"
+                  contolId="numerMieszkania"
+                >
+                  <Form.Control
+                    type="text"
+                    placeholder="Nr. mieszkania"
+                    value={policyHolder.numerMieszkania}
+                    onChange={(e) =>
+                      setField(
+                        "numerMieszkania",
+                        setPolicyHolder,
+                        e.target.value,
+                      )
+                    }
+                  />
+                </FloatingLabel>
+              </Row>
+            </Row>
+            <div>
+              <div className="section-heading">Dane ubezpieczającego</div>
+              <div
+                className="copy-policy-holder"
+                onClick={copyPolicyHolderData}
+              >
+                Kliknij, żeby przekopiować dane ubezpieczającego.
+              </div>
+            </div>
+            <Row className="form-indent mb-3">
+              <Row className="mt-3">
+                <Form.Label column lg="2">
+                  Imię
+                </Form.Label>
+                <Col lg="4">
+                  <Form.Control
+                    className="calc-form-field-input"
+                    type="text"
+                    value={insured.imie}
+                    onChange={(e) =>
+                      setField("imie", setInsured, e.target.value)
+                    }
+                  />
+                </Col>
+              </Row>
+              <Row className="mt-3">
+                <Form.Label column lg="2">
+                  Nazwisko
+                </Form.Label>
+                <Col lg="4">
+                  <Form.Control
+                    className="calc-form-field-input"
+                    type="text"
+                    value={insured.nazwisko}
+                    onChange={(e) =>
+                      setField("nazwisko", setInsured, e.target.value)
+                    }
+                  />
+                </Col>
+              </Row>
+              <Row className="mt-3">
+                <Form.Label column lg="2">
+                  Pesel
+                </Form.Label>
+                <Col lg="4">
+                  <Form.Control
+                    className="calc-form-field-input"
+                    type="number"
+                    value={insured.pesel}
+                    onChange={(e) =>
+                      setField("pesel", setInsured, e.target.value)
+                    }
+                  />
+                </Col>
+              </Row>
+              <Row className="mt-3">
+                <Form.Label column lg="2">
+                  Data urodzenia
+                </Form.Label>
+                <Col lg="4">
+                  <Form.Control
+                    className="calc-form-field-input"
+                    type="date"
+                    value={insured.dataUrodzenia}
+                    onChange={(e) =>
+                      setField("dataUrodzenia", setInsured, e.target.value)
+                    }
+                  />
+                </Col>
+              </Row>
+              <Row className="mt-3">
+                <Form.Label column lg="2">
+                  Adres e-mail
+                </Form.Label>
+                <Col lg="4">
+                  <Form.Control
+                    className="calc-form-field-input"
+                    type="email"
+                    value={insured.adresEmail}
+                    onChange={(e) =>
+                      setField("adresEmail", setInsured, e.target.value)
+                    }
+                  />
+                </Col>
+              </Row>
+            </Row>
+            <div className="section-heading ml-0">Adres do korespondencji</div>
+            <Row className="form-indent mt-3">
+              <Form.Group
+                as={Col}
+                lg="4"
+                controlId="wojewodztwo"
+                className="mb-3"
+              >
+                <Form.Label className="teryt-label">Województwo</Form.Label>
+
+                <Form.Select
+                  value={insured.teryt.substring(0, 2)}
+                  onChange={(e) =>
+                    setField("teryt", setInsured, e.target.value)
+                  }
+                >
+                  <option value="">Wybierz województwo</option>
+                  {wojewodztwa.map((wojewodztwo) => (
+                    <option
+                      key={wojewodztwo.kodTeryt}
+                      value={wojewodztwo.kodTeryt}
+                    >
+                      {wojewodztwo.nazwa}
+                    </option>
+                  ))}
+                </Form.Select>
+              </Form.Group>
+
+              <Form.Group as={Col} lg="4" controlId="powiat" className="mb-3">
+                <Form.Label className="teryt-label">Powiat</Form.Label>
+
+                <Form.Select
+                  value={insured.teryt.substring(0, 4)}
+                  onChange={(e) =>
+                    setField("teryt", setInsured, e.target.value)
+                  }
+                >
+                  <option value="">Wybierz powiat</option>
+                  {powiatyInsurer.map((powiat) => (
+                    <option key={powiat.kodTeryt} value={powiat.kodTeryt}>
+                      {powiat.nazwa}
+                    </option>
+                  ))}
+                </Form.Select>
+              </Form.Group>
+
+              <Form.Group as={Col} lg="4" controlId="powiat" className="mb-3">
+                <Form.Label className="teryt-label">Gmina</Form.Label>
+
+                <Form.Select
+                  value={insured.teryt}
+                  onChange={(e) =>
+                    setField("teryt", setInsured, e.target.value)
+                  }
+                >
+                  <option value="">Wybierz gminę</option>
+                  {gminyInsurer.map((gmina) => (
+                    <option key={gmina.kodTeryt} value={gmina.kodTeryt}>
+                      {gmina.nazwa}
+                    </option>
+                  ))}
+                </Form.Select>
+              </Form.Group>
+
+              <Row className="mt-3">
+                <FloatingLabel
+                  as={Col}
+                  sm={4}
+                  xl={2}
+                  label="Kod pocztowy"
+                  className="mb-3"
+                  contolId="kodPocztowy"
+                >
+                  <Form.Control
+                    type="text"
+                    placeholder="Kod pocztowy"
+                    value={insured.kodPocztowy}
+                    onChange={(e) =>
+                      setField("kodPocztowy", setInsured, e.target.value)
+                    }
+                  />
+                </FloatingLabel>
+
+                <FloatingLabel
+                  as={Col}
+                  sm={8}
+                  xl={10}
+                  label="Miejscowość"
+                  className="mb-3"
+                  contolId="miejscowosc"
+                >
+                  <Form.Control
+                    type="text"
+                    placeholder="Miejscowość"
+                    value={insured.miejscowosc}
+                    onChange={(e) =>
+                      setField("miejscowosc", setInsured, e.target.value)
+                    }
+                  />
+                </FloatingLabel>
+
+                <FloatingLabel
+                  as={Col}
+                  md={6}
+                  xl={8}
+                  label="Ulica"
+                  className="mb-3"
+                  contolId="ulica"
+                >
+                  <Form.Control
+                    type="text"
+                    placeholder="Ulica"
+                    value={insured.ulica}
+                    onChange={(e) =>
+                      setField("ulica", setInsured, e.target.value)
+                    }
+                  />
+                </FloatingLabel>
+
+                <FloatingLabel
+                  as={Col}
+                  md={3}
+                  xl={2}
+                  label="Nr. domu"
+                  className="mb-3"
+                  contolId="numerDomu"
+                >
+                  <Form.Control
+                    type="text"
+                    placeholder="Nr. domu"
+                    value={insured.numerDomu}
+                    onChange={(e) =>
+                      setField("numerDomu", setInsured, e.target.value)
+                    }
+                  />
+                </FloatingLabel>
+
+                <FloatingLabel
+                  as={Col}
+                  md={3}
+                  xl={2}
+                  label="Nr. mieszkania"
+                  className="mb-3"
+                  contolId="numerMieszkania"
+                >
+                  <Form.Control
+                    type="text"
+                    placeholder="Nr. mieszkania"
+                    value={insured.numerMieszkania}
+                    onChange={(e) =>
+                      setField("numerMieszkania", setInsured, e.target.value)
+                    }
+                  />
+                </FloatingLabel>
+              </Row>
+            </Row>
           </div>
-          <div className="calc-form-field">
-            <label className="calc-form-field-label">Nazwisko</label>
-            <input
-              className="calc-form-field-input"
-              type="text"
-              value={policyHolder.nazwisko}
-              onChange={(e) =>
-                setField("nazwisko", setPolicyHolder, e.target.value)
-              }
-            />
-          </div>
-          <div className="calc-form-field">
-            <label className="calc-form-field-label">Pesel</label>
-            <input
-              className="calc-form-field-input"
-              type="number"
-              value={policyHolder.pesel}
-              onChange={(e) =>
-                setField("pesel", setPolicyHolder, e.target.value)
-              }
-            />
-          </div>
-          <div className="calc-form-field">
-            <label className="calc-form-field-label">Data urodzenia</label>
-            <input
-              className="calc-form-field-input"
-              type="date"
-              value={policyHolder.dataUrodzenia}
-              onChange={(e) =>
-                setField("dataUrodzenia", setPolicyHolder, e.target.value)
-              }
-            />
-          </div>
-          <div className="calc-form-field">
-            <label className="calc-form-field-label">Adres e-mail</label>
-            <input
-              className="calc-form-field-input"
-              type="email"
-              value={policyHolder.adresEmail}
-              onChange={(e) =>
-                setField("adresEmail", setPolicyHolder, e.target.value)
-              }
-            />
-          </div>
-          <div className="calc-form-section-title">Adres do korespondencji</div>
-          <div className="calc-form-field">
-            <label className="calc-form-field-label">Województwo</label>
-            <select
-              value={policyHolder.teryt.substring(0, 2)}
-              onChange={(e) =>
-                setField("teryt", setPolicyHolder, e.target.value)
-              }
-            >
-              <option value="">Wybierz województwo</option>
-              {wojewodztwa.map((wojewodztwo) => (
-                <option key={wojewodztwo.kodTeryt} value={wojewodztwo.kodTeryt}>
-                  {wojewodztwo.nazwa}
-                </option>
-              ))}
-            </select>
-          </div>
-          <div className="calc-form-field">
-            <label className="calc-form-field-label">Powiat</label>
-            <select
-              value={policyHolder.teryt.substring(0, 4)}
-              onChange={(e) =>
-                setField("teryt", setPolicyHolder, e.target.value)
-              }
-            >
-              <option value="">Wybierz powiat</option>
-              {powiaty.map((powiat) => (
-                <option key={powiat.kodTeryt} value={powiat.kodTeryt}>
-                  {powiat.nazwa}
-                </option>
-              ))}
-            </select>
-          </div>
-          <div className="calc-form-field">
-            <label className="calc-form-field-label">Gmina</label>
-            <select
-              value={policyHolder.teryt}
-              onChange={(e) =>
-                setField("teryt", setPolicyHolder, e.target.value)
-              }
-            >
-              <option value="">Wybierz gminę</option>
-              {gminy.map((gmina) => (
-                <option key={gmina.kodTeryt} value={gmina.kodTeryt}>
-                  {gmina.nazwa}
-                </option>
-              ))}
-            </select>
-          </div>
-          <div className="calc-form-field">
-            <label className="calc-form-field-label">Kod pocztowy</label>
-            <input
-              className="calc-form-field-input"
-              type="text"
-              value={policyHolder.kodPocztowy}
-              onChange={(e) =>
-                setField("kodPocztowy", setPolicyHolder, e.target.value)
-              }
-            />
-          </div>
-          <div className="calc-form-field">
-            <label className="calc-form-field-label">Miejscowość</label>
-            <input
-              className="calc-form-field-input"
-              type="text"
-              value={policyHolder.miejscowosc}
-              onChange={(e) =>
-                setField("miejscowosc", setPolicyHolder, e.target.value)
-              }
-            />
-          </div>
-          <div className="calc-form-field">
-            <label className="calc-form-field-label">Ulica</label>
-            <input
-              className="calc-form-field-input"
-              type="text"
-              value={policyHolder.ulica}
-              onChange={(e) =>
-                setField("ulica", setPolicyHolder, e.target.value)
-              }
-            />
-          </div>
-          <div className="calc-form-field">
-            <label className="calc-form-field-label">Numer domu</label>
-            <input
-              className="calc-form-field-input"
-              type="text"
-              value={policyHolder.numerDomu}
-              onChange={(e) =>
-                setField("numerDomu", setPolicyHolder, e.target.value)
-              }
-            />
-          </div>
-          <div className="calc-form-field">
-            <label className="calc-form-field-label">Numer mieszkania</label>
-            <input
-              className="calc-form-field-input"
-              type="text"
-              value={policyHolder.numerMieszkania}
-              onChange={(e) =>
-                setField("numerMieszkania", setPolicyHolder, e.target.value)
-              }
-            />
-          </div>
-          <div className="calc-form-section-title">Dane ubezpieczonego</div>
-          <div className="copy-policy-holder" onClick={copyPolicyHolderData}>
-            Takie same jak ubezpieczającego
-          </div>
-          <div className="calc-form-field">
-            <label className="calc-form-field-label">Imię</label>
-            <input
-              className="calc-form-field-input"
-              type="text"
-              value={insured.imie}
-              onChange={(e) => setField("imie", setInsured, e.target.value)}
-            />
-          </div>
-          <div className="calc-form-field">
-            <label className="calc-form-field-label">Nazwisko</label>
-            <input
-              className="calc-form-field-input"
-              type="text"
-              value={insured.nazwisko}
-              onChange={(e) => setField("nazwisko", setInsured, e.target.value)}
-            />
-          </div>
-          <div className="calc-form-field">
-            <label className="calc-form-field-label">Pesel</label>
-            <input
-              className="calc-form-field-input"
-              type="number"
-              value={insured.pesel}
-              onChange={(e) => setField("pesel", setInsured, e.target.value)}
-            />
-          </div>
-          <div className="calc-form-field">
-            <label className="calc-form-field-label">Data urodzenia</label>
-            <input
-              className="calc-form-field-input"
-              type="date"
-              value={insured.dataUrodzenia}
-              onChange={(e) =>
-                setField("dataUrodzenia", setInsured, e.target.value)
-              }
-            />
-          </div>
-          <div className="calc-form-field">
-            <label className="calc-form-field-label">Adres e-mail</label>
-            <input
-              className="calc-form-field-input"
-              type="email"
-              value={insured.adresEmail}
-              onChange={(e) =>
-                setField("adresEmail", setInsured, e.target.value)
-              }
-            />
-          </div>
-          <div className="calc-form-section-title">Adres do korespondencji</div>
-          <div className="calc-form-field">
-            <label className="calc-form-field-label">Województwo</label>
-            <select
-              value={insured.teryt.substring(0, 2)}
-              onChange={(e) => setField("teryt", setInsured, e.target.value)}
-            >
-              <option value="">Wybierz województwo</option>
-              {wojewodztwa.map((wojewodztwo) => (
-                <option key={wojewodztwo.kodTeryt} value={wojewodztwo.kodTeryt}>
-                  {wojewodztwo.nazwa}
-                </option>
-              ))}
-            </select>
-          </div>
-          <div className="calc-form-field">
-            <label className="calc-form-field-label">Powiat</label>
-            <select
-              value={insured.teryt.substring(0, 4)}
-              onChange={(e) => setField("teryt", setInsured, e.target.value)}
-            >
-              <option value="">Wybierz powiat</option>
-              {powiatyInsurer.map((powiat) => (
-                <option key={powiat.kodTeryt} value={powiat.kodTeryt}>
-                  {powiat.nazwa}
-                </option>
-              ))}
-            </select>
-          </div>
-          <div className="calc-form-field">
-            <label className="calc-form-field-label">Gmina</label>
-            <select
-              value={insured.teryt}
-              onChange={(e) => setField("teryt", setInsured, e.target.value)}
-            >
-              <option value="">Wybierz gminę</option>
-              {gminyInsurer.map((gmina) => (
-                <option key={gmina.kodTeryt} value={gmina.kodTeryt}>
-                  {gmina.nazwa}
-                </option>
-              ))}
-            </select>
-          </div>
-          <div className="calc-form-field">
-            <label className="calc-form-field-label">Kod pocztowy</label>
-            <input
-              className="calc-form-field-input"
-              type="text"
-              value={insured.kodPocztowy}
-              onChange={(e) =>
-                setField("kodPocztowy", setInsured, e.target.value)
-              }
-            />
-          </div>
-          <div className="calc-form-field">
-            <label className="calc-form-field-label">Miejscowość</label>
-            <input
-              className="calc-form-field-input"
-              type="text"
-              value={insured.miejscowosc}
-              onChange={(e) =>
-                setField("miejscowosc", setInsured, e.target.value)
-              }
-            />
-          </div>
-          <div className="calc-form-field">
-            <label className="calc-form-field-label">Ulica</label>
-            <input
-              className="calc-form-field-input"
-              type="text"
-              value={insured.ulica}
-              onChange={(e) => setField("ulica", setInsured, e.target.value)}
-            />
-          </div>
-          <div className="calc-form-field">
-            <label className="calc-form-field-label">Numer domu</label>
-            <input
-              className="calc-form-field-input"
-              type="text"
-              value={insured.numerDomu}
-              onChange={(e) =>
-                setField("numerDomu", setInsured, e.target.value)
-              }
-            />
-          </div>
-          <div className="calc-form-field">
-            <label className="calc-form-field-label">Numer mieszkania</label>
-            <input
-              className="calc-form-field-input"
-              type="text"
-              value={insured.numerMieszkania}
-              onChange={(e) =>
-                setField("numerMieszkania", setInsured, e.target.value)
-              }
-            />
-          </div>
-          <button
-            className="calc-form-previous-button"
-            type="button"
-            onClick={handleGoBack}
-          >
-            Wstecz
-          </button>
-          <button className="calc-form-next-button" type="submit">
-            Dalej
-          </button>
-        </form>
+          <BottomBar
+            button1={{
+              label: "WSTECZ",
+              className: "admin-upsert-cancel",
+              onClick: () => {
+                handleGoBack;
+              },
+            }}
+            button2={{
+              label: "DALEJ",
+              className: "admin-upsert-submit",
+              onClick: () => handleSubmit,
+            }}
+          />
+        </Form>
         <div>{error && error}</div>
       </div>
     </>

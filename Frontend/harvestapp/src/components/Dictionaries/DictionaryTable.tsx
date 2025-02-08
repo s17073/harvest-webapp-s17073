@@ -6,6 +6,7 @@ import { AdminPanelNav } from "../../components/Dictionaries/AdminPanelNav";
 import { iconEdit } from "../../assets/icons/edit";
 import { iconDelete } from "../../assets/icons/delete";
 import { Alert, Container, Table } from "react-bootstrap";
+import BottomBar from "../Shared/BottomBar";
 
 interface DictionaryData {
   id: number;
@@ -148,12 +149,24 @@ const DictionaryTable: React.FC<DictionaryTableProps> = ({
             </div>
             {noData && <div className="no-data">{noData}</div>}
             <StateAnnoucement />
-            <button
+            {/* <button
               className="admin-table-cancel"
               onClick={() => navigate("/admin")}
             >
               POWRÓT
-            </button>
+            </button> */}
+            <BottomBar
+              button1={{
+                label: "POWRÓT",
+                className: "admin-table-cancel",
+                onClick: () => navigate("/admin"),
+              }}
+              button2={{
+                label: "DODAJ",
+                className: "btn-admin-add",
+                onClick: () => navigate(`/admin/${fetchApiName}/upsert`),
+              }}
+            />
           </div>
         </Container>
       </div>

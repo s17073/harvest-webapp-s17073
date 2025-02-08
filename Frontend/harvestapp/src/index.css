@@ -13,11 +13,33 @@
   margin: 10px 0;
 }
 
+.admin-content-space-no-bottom-bar,
 .admin-content-space {
   border-radius: 23px;
   background-color: var(--color-white);
   padding: 20px;
   box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
+  margin-bottom: 75px;
+}
+
+.admin-content-space-no-bottom-bar {
+  margin-bottom: 0;
+}
+
+.content-space {
+  border-radius: 23px;
+  background-color: var(--color-white);
+  /* padding: 20px; */
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
+  margin-bottom: 75px;
+}
+
+.content-space-no-bottom-bar {
+  margin-bottom: 0;
+}
+
+.calculation-form-section {
+  padding: 20px 0 20px 20px;
 }
 
 * {
@@ -38,14 +60,16 @@
 }
 
 nav.admin-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
   color: var(--color-white);
   min-height: 2rem;
   padding: 0 13% 0 13%;
   height: 10vh;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
   background-color: var(--color-primary-feldgrau);
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
 }
 
 .admin-nav-main-text {
@@ -137,7 +161,7 @@ nav.admin-nav {
 .background {
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  /* justify-content: center; */
   padding: 1% 0;
   background-color: var(--color-background-lavgray);
   height: 100%;
@@ -177,6 +201,8 @@ nav.admin-nav {
   cursor: pointer;
 }
 
+.btn-delete-land,
+.btn-admin-add,
 .admin-upsert-submit,
 .admin-upsert-cancel,
 .admin-table-cancel {
@@ -192,9 +218,18 @@ nav.admin-nav {
   box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
 }
 
+.btn-delete-land {
+  font-size: 0.9rem;
+  width: 8rem;
+}
+
+.btn-delete-land:hover,
+.btn-admin-add:hover,
 .admin-upsert-submit:hover,
 .admin-upsert-cancel:hover,
 .admin-table-cancel:hover,
+.btn-delete-land:active,
+.btn-admin-add:active,
 .admin-upsert-submit:active,
 .admin-upsert-cancel:active,
 .admin-table-cancel:active,
@@ -208,8 +243,12 @@ nav.admin-nav {
   margin-bottom: 30px;
 }
 
-.admin-table-cancel {
-  margin: 10px 0 20px 30px;
+.btn-delete-land,
+.btn-admin-add,
+.admin-table-cancel,
+.admin-upsert-cancel,
+.admin-upsert-submit {
+  margin: 10px 30px 10px 30px;
 }
 
 .admin-form-checkbox,
@@ -405,4 +444,87 @@ span.error-message {
   margin-top: 10px;
   justify-content: center;
   color: red;
+}
+
+.bottom-bar {
+  padding: 5px 0;
+  background-color: var(--color-white);
+  min-height: 75px;
+  box-shadow: 0px -4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.section-heading {
+  color: var(--color-primary-feldgrau);
+  font-weight: 800;
+}
+
+.form-indent {
+  padding-left: 100px;
+}
+
+.calculation-steps-section {
+  background-color: var(--color-primary-feldgrau);
+  border-radius: 0 23px 23px 0;
+  height: 100%;
+  padding: 20px 0 0 10px;
+}
+
+.steps-section-step {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+}
+
+.steps-section-circle {
+  background-color: var(--color-white);
+  border-radius: 50%;
+  height: 10px;
+  width: 10px;
+  margin-right: 10px;
+}
+
+.steps-section-name {
+  font-size: 1rem;
+  color: var(--color-white);
+}
+
+.selected .steps-section-circle {
+  background-color: var(--color-primary-peru);
+}
+
+.selected .steps-section-name {
+  color: var(--color-primary-peru);
+}
+
+.steps-section-separator {
+  background-color: var(--color-white);
+  width: 2px;
+  height: 50px;
+  margin-left: 14px;
+}
+
+.crop-id-valid {
+  color: green;
+}
+
+.crop-id-invalid {
+  color: red;
+}
+
+@media (max-width: 1400px) {
+  .form-indent {
+    padding-left: 50px;
+  }
+}
+
+@media (max-width: 1200px) {
+  .calculation-form-section {
+    padding: 20px;
+  }
+}
+
+@media (max-width: 768px) {
+  .form-indent {
+    padding-left: 0;
+  }
 }

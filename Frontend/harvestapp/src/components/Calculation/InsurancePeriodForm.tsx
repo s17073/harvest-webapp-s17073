@@ -8,6 +8,8 @@ import {
   IStepInsurancePeriod,
 } from "../../interfaces/IStepInsurancePeriod";
 import { fetchInsurancePeriodData } from "../../api/Calculation/fetchInsurancePeriodData";
+import { Col, Form, Row } from "react-bootstrap";
+import BottomBar from "../Shared/BottomBar";
 
 interface IInsurancePeriodData {
   dateFrom: string;
@@ -17,8 +19,8 @@ interface IInsurancePeriodData {
 
 export const InsurancePeriodForm: React.FC = () => {
   const [data, setData] = useState<IInsurancePeriodData>({
-    dateFrom: String(new Date().toISOString().slice(0, 10)),
-    dateTo: String(new Date().toISOString().slice(0, 10)),
+    dateFrom: String(""),
+    dateTo: String(""),
     apkQuestions: [],
   });
   const [error, setError] = useState<string | undefined>(undefined);
@@ -68,6 +70,7 @@ export const InsurancePeriodForm: React.FC = () => {
   const setDates = (dateFrom: string) => {
     const newDateTo = new Date(dateFrom);
     newDateTo.setFullYear(newDateTo.getFullYear() + 1);
+    newDateTo.setDate(newDateTo.getDate() - 1);
 
     setData({
       ...data,
@@ -118,58 +121,123 @@ export const InsurancePeriodForm: React.FC = () => {
 
   return (
     <>
-      <div>
-        <h1>okres ubezpieczenia</h1>
-      </div>
-      <div>
-        <form onSubmit={handleSubmit}>
-          <div>Sezon zimowy, sezon letni</div>
-          <div>
-            <label>Data rozpoczęcia ochrony:</label>
-            <input
-              type="date"
-              value={data.dateFrom}
-              onChange={(e) => setDates(e.target.value)}
-            />
+      <Row>
+        <Col>
+          <div className="admin-title-container">
+            <h1>Okres ubezpieczenia</h1>
           </div>
-          <div>
-            <label>Data końca ochrony:</label>
-            <input type="date" value={data.dateTo} readOnly={true} />
-          </div>
-          <div>Analiza potrzeb klienta</div>
-          <div>
+        </Col>
+      </Row>
+      <div>
+        <Form onSubmit={handleSubmit}>
+          <div className="admin-upsert-fields">
+            <div className="section-heading">
+              <span className="d-none">Sezon zimowy</span>
+              <span>Sezon letni</span>
+            </div>
+            <Row className="form-indent mb-3 mt-3">
+              <Col lg="12" className="mb-3">
+                <Row>
+                  <Form.Label column lg="3">
+                    Data rozpoczęcia ochrony:
+                  </Form.Label>
+                  <Col lg="3">
+                    <Form.Control
+                      type="date"
+                      value={data.dateFrom}
+                      onChange={(e) => setDates(e.target.value)}
+                      min={new Date().toISOString().split("T")[0]}
+                    />
+                  </Col>
+                </Row>
+              </Col>
+              <Col lg="12">
+                <Row>
+                  <Form.Label column lg="3">
+                    Data końca ochrony:
+                  </Form.Label>
+                  <Col lg="3">
+                    <Form.Control
+                      type="date"
+                      value={data.dateTo}
+                      readOnly
+                      disabled
+                    />
+                  </Col>
+                </Row>
+              </Col>
+            </Row>
+            <Row className="mb-3 mt-3">
+              <div className="section-heading">Analiza potrzeb klienta</div>
+            </Row>
             {data.apkQuestions.map((q) => {
               return (
-                <div key={q.id}>
-                  <label>{q.pytanie}</label>
-                  <input
-                    type="radio"
-                    id={`question-${q.id}-true`}
-                    name={`question-${q.id}`}
-                    value={"Tak"}
-                    checked={q.odpowiedz === true}
-                    onChange={() => setChangeApkResponse(q.id, true)}
-                  />
-                  <label htmlFor={`question-${q.id}-true`}>Tak</label>
-                  <input
-                    type="radio"
-                    id={`question-${q.id}-false`}
-                    name={`question-${q.id}`}
-                    value={"Nie"}
-                    checked={q.odpowiedz === false}
-                    onChange={() => setChangeApkResponse(q.id, false)}
-                  />
-                  <label htmlFor={`question-${q.id}-false`}>Nie</label>
-                  <div>{q.odpowiedz ? q.komunikat : null}</div>
-                </div>
+                <Row className="form-indent mb-3 mt-3">
+                  <div key={q.id}>
+                    <Row>
+                      <Form.Label>{q.pytanie}</Form.Label>
+                    </Row>
+                    <Row>
+                      <Col
+                        lg="2"
+                        className="col-2 d-flex align-items-center gap-2"
+                      >
+                        <Form.Check
+                          type="radio"
+                          id={`question-${q.id}-true`}
+                          name={`question-${q.id}`}
+                          value={"Tak"}
+                          checked={q.odpowiedz === true}
+                          onChange={() => setChangeApkResponse(q.id, true)}
+                        />
+                        <Form.Label
+                          htmlFor={`question-${q.id}-true`}
+                          className="mb-0"
+                        >
+                          Tak
+                        </Form.Label>
+                      </Col>
+                      <Col
+                        lg="2"
+                        className="col-2 d-flex align-items-center gap-2"
+                      >
+                        <Form.Check
+                          type="radio"
+                          id={`question-${q.id}-false`}
+                          name={`question-${q.id}`}
+                          value={"Nie"}
+                          checked={q.odpowiedz === false}
+                          onChange={() => setChangeApkResponse(q.id, false)}
+                        />
+                        <Form.Label
+                          htmlFor={`question-${q.id}-false`}
+                          className="mb-0"
+                        >
+                          Nie
+                        </Form.Label>
+                      </Col>
+                      <Col lg="8">
+                        <div>{q.odpowiedz ? q.komunikat : null}</div>
+                      </Col>
+                    </Row>
+                  </div>
+                </Row>
               );
             })}
-            <button type="button" onClick={handleGoBack}>
-              Wstecz
-            </button>
-            <button type="submit">Dalej</button>
           </div>
-        </form>
+          <BottomBar
+            button1={{
+              label: "ANULUJ",
+              className: "admin-upsert-cancel",
+              onClick: () => handleGoBack(),
+            }}
+            button2={{
+              label: "DALEJ",
+              className: "admin-upsert-submit",
+              onClick: () => handleSubmit,
+            }}
+          />
+        </Form>
         <div>{error && error}</div>
       </div>
     </>

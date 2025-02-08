@@ -1,3 +1,8 @@
+import { Col, Container, Row } from "react-bootstrap";
+import { MainNav } from "../components/Calculation/MainNav";
+import { InsurancePeriodForm } from "../components/Calculation/InsurancePeriodForm";
+import { PersonalDataForm } from "../components/Calculation/PersonalDataForm";
+
 interface CalculationFormProps {
   CalculationStep: React.ComponentType;
 }
@@ -6,29 +11,57 @@ export const CalculationForm: React.FC<CalculationFormProps> = ({
   CalculationStep,
 }) => {
   return (
-    <div className="background">
-      <div className="content-space">
-        <div className="calculation-form-section">
-          <CalculationStep />
-        </div>
-        <section className="calculation-steps-section">
-          <div>*</div>
-          <div>1. okres ubezpieczenia</div>
-          <div>-</div>
-          <div>*</div>
-          <div>2. dane osobowe</div>
-          <div>-</div>
-          <div>*</div>
-          <div>3. uprawy</div>
-          <div>-</div>
-          <div>*</div>
-          <div>4. zwierzęta</div>
-          <div>-</div>
-          <div>*</div>
-          <div>5. oferty</div>
-          <div>-</div>
-        </section>
+    <>
+      <MainNav />
+      <div className="background">
+        <Container>
+          <div className="content-space">
+            <Row>
+              <Col className="content-space-form" xs={12} xl={10}>
+                <div className="calculation-form-section">
+                  <CalculationStep />
+                </div>
+              </Col>
+              <Col xl={2} className="d-none d-xl-block">
+                <section className="calculation-steps-section">
+                  <div
+                    className={`steps-section-step ${
+                      CalculationStep === InsurancePeriodForm ? "selected" : ""
+                    }`}
+                  >
+                    <div className="steps-section-circle"></div>
+                    <div className="steps-section-name">1. okres ubez.</div>
+                  </div>
+                  <div className="steps-section-separator"></div>
+                  <div
+                    className={`steps-section-step ${
+                      CalculationStep === PersonalDataForm ? "selected" : ""
+                    }`}
+                  >
+                    <div className="steps-section-circle"></div>
+                    <div className="steps-section-name">2. dane osobowe</div>
+                  </div>
+                  <div className="steps-section-separator"></div>
+                  <div className="steps-section-step">
+                    <div className="steps-section-circle"></div>
+                    <div className="steps-section-name">3. uprawy</div>
+                  </div>
+                  <div className="steps-section-separator"></div>
+                  <div className="steps-section-step">
+                    <div className="steps-section-circle"></div>
+                    <div className="steps-section-name">4. zwierzęta</div>
+                  </div>
+                  <div className="steps-section-separator"></div>
+                  <div className="steps-section-step">
+                    <div className="steps-section-circle"></div>
+                    <div className="steps-section-name">5. oferty</div>
+                  </div>
+                </section>
+              </Col>
+            </Row>
+          </div>
+        </Container>
       </div>
-    </div>
+    </>
   );
 };
