@@ -80,7 +80,7 @@ export const CropsFormTable: React.FC = () => {
   return (
     <>
       <div className="admin-title-container">
-        <h1>uprawy</h1>
+        <h1>Uprawy</h1>
       </div>
       <div>
         <div className="admin-table-space">

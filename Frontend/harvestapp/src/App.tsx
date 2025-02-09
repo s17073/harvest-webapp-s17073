@@ -26,6 +26,7 @@ import { AdminPanelLogin } from "./pages/Dictionaries/AdminPanelLogin";
 import { AdminAuthentication } from "./components/Dictionaries/AdminAuthentication";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { MainPage } from "./pages/MainPage";
+import { Offers } from "./components/Calculation/Offers";
 
 const AdminRoutes = () => (
   <Routes>
@@ -101,6 +102,10 @@ function App() {
         <Route
           path="calculation/:id/livestock/:livestockid"
           element={<CalculationForm CalculationStep={LivestockForm} />}
+        />
+        <Route
+          path="calculation/:id/offers"
+          element={<CalculationForm CalculationStep={Offers} />}
         />
       </Routes>
     </BrowserRouter>

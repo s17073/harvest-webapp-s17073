@@ -3,6 +3,10 @@ import { ILivestock } from "../../interfaces/ILivestock";
 import { useNavigate, useParams } from "react-router-dom";
 import { fetchLivestock } from "../../api/Calculation/fetchLivestock";
 import { handleDeleteLivestock } from "../../api/Calculation/handleDeleteLivestock";
+import { Table } from "react-bootstrap";
+import { iconEdit } from "../../assets/icons/edit";
+import { iconDelete } from "../../assets/icons/delete";
+import BottomBar from "../Shared/BottomBar";
 
 export const LivestockFormTable: React.FC = () => {
   const [livestock, setLivestock] = useState<ILivestock[]>([]);
@@ -49,72 +53,98 @@ export const LivestockFormTable: React.FC = () => {
     navigate(`/calculation/${id}/crops`);
   };
 
+  const handleSubmit = () => {
+    navigate(`/calculation/${id}/offers`);
+  };
+
   return (
     <>
-      <div className="calc-form-title">
-        <h1>zwierzeta</h1>
+      <div className="admin-title-container">
+        <h1>Zwierzęta</h1>
       </div>
       <div>
-        <div className="calc-form-table-space">
-          <table className="calc-form-table">
+        <div className="admin-table-space">
+          <Table
+            striped
+            bordered
+            hover
+            responsive="xl"
+            size="xl"
+            className="admin-table"
+          >
             <thead>
               <tr>
-                <th>Zwierzę</th>
-                <th>Liczba</th>
-                <th>Wartość</th>
-                <th>Hodowla na mięso</th>
-                <th>Suma ubezpieczenia</th>
-                <th>Edytuj</th>
-                <th>Usuń</th>
+                <th className="text-center align-middle lh-base px-0 px-xl-4">
+                  Zwierzę
+                </th>
+                <th className="text-center align-middle lh-base px-0 px-xl-4">
+                  Liczba
+                </th>
+                <th className="text-center align-middle lh-base px-0 px-xl-4">
+                  Wartość
+                </th>
+                <th className="text-center align-middle lh-base px-0 px-xl-4">
+                  Hodowla na mięso
+                </th>
+                <th className="text-center align-middle lh-base px-0 px-xl-4">
+                  Suma ubezpieczenia
+                </th>
+                <th className="text-center align-middle lh-base px-0 px-xl-4">
+                  Edytuj
+                </th>
+                <th className="text-center align-middle lh-base px-0 px-xl-4">
+                  Usuń
+                </th>
               </tr>
             </thead>
             <tbody>
               {livestock.map((animal) => (
-                <tr key={animal.id} className={`row-${animal.id}`}>
+                <tr
+                  key={animal.id}
+                  className={`row-${animal.id} text-center align-middle lh-1 px-0 px-xl-4`}
+                >
                   <td>{animal.nazwaZwierzecia}</td>
                   <td>{animal.liczba}</td>
                   <td>{animal.wartosc}</td>
                   <td>{animal.naMieso}</td>
                   <td>{animal.sumaUbezpieczenia}</td>
-                  <td>
-                    <button
-                      type="button"
-                      onClick={() => handleEditAnimal(animal.id)}
-                    >
-                      Edytuj
-                    </button>
+                  <td className="dict-delete-icon">
+                    <div onClick={() => handleEditAnimal(animal.id)}>
+                      {iconEdit()}
+                    </div>
                   </td>
-                  <td>
-                    <button
-                      type="button"
-                      onClick={() => handleRemoveAnimal(animal.id)}
-                    >
-                      Usuń
-                    </button>
+                  <td className="dict-delete-icon">
+                    <div onClick={() => handleRemoveAnimal(animal.id)}>
+                      {iconDelete()}
+                    </div>
                   </td>
                 </tr>
               ))}
             </tbody>
-          </table>
+          </Table>
+        </div>
+        <div className="d-flex justify-content-end">
           <button
-            className="calc-form-add-crop"
+            className="btn-admin-add w-auto"
             type="button"
             onClick={handleAddAnimal}
           >
             Dodaj Zwierzę
           </button>
-          <button
-            className="calc-form-previous-button"
-            type="button"
-            onClick={handleGoBack}
-          >
-            Wstecz
-          </button>
-          <button className="calc-form-next-button" type="submit">
-            Dalej
-          </button>
-          <div>{error && error}</div>
         </div>
+        <BottomBar
+          button1={{
+            label: "WSTECZ",
+            className: "admin-table-cancel",
+            onClick: () => handleGoBack(),
+          }}
+          button2={{
+            label: "DALEJ",
+            className: "btn-admin-add",
+            onClick: () => handleSubmit(),
+          }}
+        />
+        <div>{error && error}</div>
       </div>
     </>
   );

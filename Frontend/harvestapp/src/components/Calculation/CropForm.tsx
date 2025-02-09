@@ -14,6 +14,7 @@ import { ILand, IStepCrop } from "../../interfaces/IStepCrop";
 import { handleAddCrop } from "../../api/Calculation/handleAddCrop";
 import { fetchUprawa } from "../../api/Calculation/fetchUprawa";
 import { Col, Form, Row } from "react-bootstrap";
+import BottomBar from "../Shared/BottomBar";
 
 export const CropForm: React.FC = () => {
   const [cropsList, setCropsList] = useState<ICrop[]>([]);
@@ -204,7 +205,7 @@ export const CropForm: React.FC = () => {
   return (
     <>
       <div className="admin-title-container">
-        <h1>uprawy</h1>
+        <h1>Uprawy</h1>
       </div>
       <div>
         <Form onSubmit={handleSubmit}>
@@ -364,22 +365,31 @@ export const CropForm: React.FC = () => {
               </div>
             ))}
           </Row>
-          <button type="button" onClick={addLand} disabled={terytIsIncorrect}>
+          <div className="admin-title-container p-1"></div>
+          <button
+            className="btn-delete-land m-0 mt-2"
+            type="button"
+            onClick={addLand}
+            disabled={terytIsIncorrect}
+          >
             Dodaj działkę
           </button>
           {terytIsIncorrect &&
             "Dane przynajmniej w zakresie teryt muszą się zgadzać"}
           <div>{message && message}</div>
-          <button
-            className="calc-form-previous-button"
-            type="button"
-            onClick={handleGoBack}
-          >
-            Anuluj
-          </button>
-          <button className="calc-form-next-button" type="submit">
-            Dodaj
-          </button>
+
+          <BottomBar
+            button1={{
+              label: "ANULUJ",
+              className: "admin-upsert-cancel",
+              onClick: () => handleGoBack(),
+            }}
+            button2={{
+              label: "DODAJ",
+              className: "admin-upsert-submit",
+              onClick: () => handleSubmit,
+            }}
+          ></BottomBar>
         </Form>
         {error && error}
       </div>

@@ -7,6 +7,8 @@ import { fetchZwierzeta } from "../../api/Calculation/fetchZwierzeta";
 import { useNavigate, useParams } from "react-router-dom";
 import { handleAddLivestock } from "../../api/Calculation/handleAddLivestock";
 import { fetchZwierze } from "../../api/Calculation/fetchZwierze";
+import { Col, Form, Row } from "react-bootstrap";
+import BottomBar from "../Shared/BottomBar";
 
 export const LivestockForm: React.FC = () => {
   const [error, setError] = useState<String | undefined>(undefined);
@@ -54,7 +56,7 @@ export const LivestockForm: React.FC = () => {
 
   const setField = (
     field: keyof ILivestock,
-    value: string | boolean | string[] | number,
+    value: string | boolean | number[] | number,
   ) => {
     setLivestock((livestockField) => ({
       ...livestockField,
@@ -87,91 +89,133 @@ export const LivestockForm: React.FC = () => {
     navigate(`/calculation/${id}/livestock`);
   };
 
+  const handleCoverChange = (id: number) => {
+    const newRyzyka = livestock.ryzyka.includes(id)
+      ? livestock.ryzyka.filter((item) => item !== id)
+      : [...livestock.ryzyka, id];
+
+    setField("ryzyka", newRyzyka);
+  };
+
   return (
     <>
-      <div className="calc-form-title">
-        <h1>zwierzeta</h1>
+      <div className="admin-title-container">
+        <h1>Zwierzeta</h1>
       </div>
       <div>
-        <form onSubmit={handleSubmit}>
-          <div className="calc-form-section-title">Dodaj zwierzę</div>
-          <div className="calc-form-field">
-            <label className="calc-form-field-label">Rodzaj zwierzęcia</label>
-            <select
-              value={livestock.idRodzajZwierzecia}
-              onChange={(e) => setField("idRodzajZwierzecia", e.target.value)}
-            >
-              <option value="">Wybierz zwierzę</option>
-              {livestockList.map((l) => (
-                <option key={l.id} value={l.id}>
-                  {l.nazwa}
-                </option>
-              ))}
-            </select>
-          </div>
-          <div className="calc-form-field">
-            <label className="calc-form-field-label">Liczba</label>
-            <input
-              type="number"
-              className="calc-form-field-input"
-              value={livestock.liczba}
-              onChange={(e) => setField("liczba", e.target.value)}
-            />
-          </div>
-          <div className="calc-form-field">
-            <label className="calc-form-field-label">Hodowla na mięso</label>
-            <input
-              type="checkbox"
-              className="calc-form-field-input"
-              checked={livestock.naMieso}
-              onChange={() => setField("naMieso", !livestock.naMieso)}
-            />
-          </div>
-          <div className="calc-form-field">
-            <label className="calc-form-field-label">Wartość</label>
-            <input
-              className="calc-form-field-input"
-              type="number"
-              value={livestock.wartosc}
-              onChange={(e) => setField("wartosc", e.target.value)}
-            />
-          </div>
-          <div className="calc-form-field">
-            <label className="calc-form-field-label">Ochrona</label>
-            <select
-              multiple
-              value={livestock.ryzyka.map(String)}
-              onChange={(e) => {
-                setField(
-                  "ryzyka",
-                  Array.from(
-                    e.target.selectedOptions,
-                    (option) => option.value,
-                  ),
-                );
-              }}
-              size={coverList.length}
-            >
-              <option value="">Wybierz ochronę</option>
-              {coverList.map((cover) => (
-                <option key={cover.idOchrona} value={cover.idOchrona}>
-                  {cover.nazwa}
-                </option>
-              ))}
-            </select>
-          </div>
+        <Form onSubmit={handleSubmit}>
+          <div className="section-heading">Dodaj zwierzę</div>
+          <Row className="form-indent mb-3">
+            <Row className="mt-3">
+              <Form.Label column lg="2">
+                Rodzaj zwierzęcia
+              </Form.Label>
+              <Col lg="4">
+                <Form.Select
+                  value={livestock.idRodzajZwierzecia}
+                  onChange={(e) =>
+                    setField("idRodzajZwierzecia", e.target.value)
+                  }
+                >
+                  <option value="">Wybierz zwierzę</option>
+                  {livestockList.map((l) => (
+                    <option key={l.id} value={l.id}>
+                      {l.nazwa}
+                    </option>
+                  ))}
+                </Form.Select>
+              </Col>
+            </Row>
+
+            <Row className="mt-3">
+              <Form.Label column lg="2">
+                Liczba
+              </Form.Label>
+              <Col lg="4">
+                <Form.Control
+                  type="number"
+                  className="calc-form-field-input"
+                  value={livestock.liczba}
+                  onChange={(e) => setField("liczba", e.target.value)}
+                />
+              </Col>
+            </Row>
+
+            <Row className="mt-3">
+              <Form.Label column lg="2">
+                Hodowla na mięso
+              </Form.Label>
+              <Col lg="4">
+                <Form.Group className="d-flex">
+                  <Form.Check
+                    type="checkbox"
+                    className="admin-form-checkbox"
+                    checked={livestock.naMieso}
+                    onChange={() => setField("naMieso", !livestock.naMieso)}
+                  />
+                </Form.Group>
+              </Col>
+            </Row>
+
+            <Row className="mt-3">
+              <Form.Label column lg="2">
+                Wartość (za szt.)
+              </Form.Label>
+              <Col lg="4">
+                <Form.Control
+                  type="number"
+                  className="calc-form-field-input"
+                  value={livestock.wartosc}
+                  onChange={(e) => setField("wartosc", e.target.value)}
+                />
+              </Col>
+            </Row>
+
+            <Row className="mt-3">
+              <Form.Label column lg="2">
+                Ochrona
+              </Form.Label>
+              <Col lg="10">
+                <Row>
+                  {coverList.map((cover) => {
+                    return (
+                      <Col xs="6" md="4">
+                        <Form.Group
+                          controlId={`${cover.idOchrona}`}
+                          className="d-flex"
+                        >
+                          <Form.Check
+                            className="admin-form-checkbox"
+                            type="checkbox"
+                            onChange={() => handleCoverChange(cover.idOchrona)}
+                            checked={livestock.ryzyka.includes(cover.idOchrona)}
+                          />
+                          <Form.Label className="admin-form-checkbox px-3">
+                            {cover.nazwa}
+                          </Form.Label>
+                        </Form.Group>
+                      </Col>
+                    );
+                  })}
+                </Row>
+              </Col>
+            </Row>
+          </Row>
           <div>{message && message}</div>
-          <button
-            className="calc-form-previous-button"
-            type="button"
-            onClick={handleGoBack}
-          >
-            Anuluj
-          </button>
-          <button className="calc-form-next-button" type="submit">
-            Dodaj
-          </button>
-        </form>
+
+          <BottomBar
+            button1={{
+              label: "ANULUJ",
+              className: "admin-upsert-cancel",
+              onClick: () => handleGoBack(),
+            }}
+            button2={{
+              label: "DODAJ",
+              className: "admin-upsert-submit",
+              onClick: () => handleSubmit,
+            }}
+          />
+        </Form>
       </div>
     </>
   );

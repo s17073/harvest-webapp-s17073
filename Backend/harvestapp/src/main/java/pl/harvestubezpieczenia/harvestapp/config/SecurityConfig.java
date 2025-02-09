@@ -34,6 +34,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(request -> request
                         .requestMatchers("/user/login","/user/register").permitAll()
                         .requestMatchers("/cropkind/croplist").permitAll()
+                        .requestMatchers("/livestockkind/livestocklist").permitAll()
                         .requestMatchers("/soilclass/soilclasslist").permitAll()
                         .requestMatchers("/cropvariety/cropvarietylist").permitAll()
                         .requestMatchers("/cover/coverlist").permitAll()
