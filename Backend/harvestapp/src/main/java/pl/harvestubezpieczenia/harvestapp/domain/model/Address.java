@@ -1,5 +1,6 @@
 package pl.harvestubezpieczenia.harvestapp.domain.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Data;
 import pl.harvestubezpieczenia.harvestapp.domain.valueObjects.AddressLocalization;
@@ -19,11 +20,17 @@ public class Address {
     @JoinColumn(name = "id_teryt")
     private Teryt teryt;
 
+
     @OneToMany(mappedBy = "address", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JsonManagedReference
     private List<InsuranceCompany> insuranceCompany;
 
     @OneToMany(mappedBy = "address", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Agent> agents;
+
+    @JsonManagedReference
+    @OneToMany(mappedBy = "address", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private List<User> uzytkownik;
 
     @Embedded
     private AddressLocalization lokalizacja;

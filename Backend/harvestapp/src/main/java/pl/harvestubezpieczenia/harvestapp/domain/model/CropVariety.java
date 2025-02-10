@@ -1,5 +1,6 @@
 package pl.harvestubezpieczenia.harvestapp.domain.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Data;
 import pl.harvestubezpieczenia.harvestapp.domain.valueObjects.CropVarietyName;
@@ -24,6 +25,7 @@ public class CropVariety implements GenericCrudModel {
     @Embedded
     private ModificationDate dataModyfikacji;
 
+    @JsonManagedReference
     @OneToMany(mappedBy = "cropVariety", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<CropKindVariety> cropKindVarieties = new ArrayList<>();
 

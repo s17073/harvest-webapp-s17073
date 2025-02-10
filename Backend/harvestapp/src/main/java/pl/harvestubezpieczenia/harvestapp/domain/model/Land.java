@@ -1,5 +1,6 @@
 package pl.harvestubezpieczenia.harvestapp.domain.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -16,6 +17,7 @@ public class Land {
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private Teryt teryt;
 
+    @JsonBackReference
     @JoinColumn(name = "id_uprawa")
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private Crop uprawa;

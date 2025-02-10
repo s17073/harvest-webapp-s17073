@@ -1,5 +1,7 @@
 package pl.harvestubezpieczenia.harvestapp.domain.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -15,6 +17,7 @@ public class Livestock {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int idZwierze;
 
+    @JsonBackReference
     @JoinColumn(name = "id_kalkulacja")
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private Calculation kalkulacja;
@@ -28,6 +31,7 @@ public class Livestock {
     private boolean naMieso;
     private int sumaUbezpieczenia;
 
+    @JsonManagedReference
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinTable(
             name = "ochrona_zwierze",

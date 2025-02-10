@@ -1,5 +1,6 @@
 package pl.harvestubezpieczenia.harvestapp.domain.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.Data;
 import pl.harvestubezpieczenia.harvestapp.domain.valueObjects.ModificationDate;
@@ -14,10 +15,12 @@ public class CropKindVariety implements GenericCrudModel {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int idUprawaGatunek;
 
+    @JsonBackReference
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "id_rodzaj_uprawy")
     private CropKind cropKind;
 
+    @JsonBackReference
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "id_gatunek")
     private CropVariety cropVariety;

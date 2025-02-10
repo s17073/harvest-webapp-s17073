@@ -187,7 +187,7 @@ export const PersonalDataForm: React.FC = () => {
       <Row>
         <Col>
           <div className="admin-title-container">
-            <h1>dane osobowe</h1>
+            <h1>Dane osobowe</h1>
           </div>
         </Col>
       </Row>
@@ -682,7 +682,7 @@ export const PersonalDataForm: React.FC = () => {
               label: "WSTECZ",
               className: "admin-upsert-cancel",
               onClick: () => {
-                handleGoBack;
+                handleGoBack();
               },
             }}
             button2={{

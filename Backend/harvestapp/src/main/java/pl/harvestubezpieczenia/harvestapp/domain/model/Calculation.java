@@ -1,5 +1,6 @@
 package pl.harvestubezpieczenia.harvestapp.domain.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -15,6 +16,7 @@ public class Calculation {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int idKalkulacja;
 
+    @JsonManagedReference
     @OneToMany(mappedBy = "kalkulacja", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<ApkCalculation> apk;
 
@@ -28,9 +30,11 @@ public class Calculation {
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     User posrednik;
 
+    @JsonManagedReference
     @OneToMany(mappedBy = "kalkulacja", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     List<Crop> uprawy;
 
+    @JsonManagedReference
     @OneToMany(mappedBy = "kalkulacja", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     List<Livestock> zwierzeta;
 

@@ -1,5 +1,7 @@
 package pl.harvestubezpieczenia.harvestapp.domain.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -15,6 +17,7 @@ public class Crop {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int idUprawa;
 
+    @JsonBackReference
     @JoinColumn(name = "id_kalkulacja")
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Calculation kalkulacja;
@@ -31,6 +34,7 @@ public class Crop {
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private CropVariety gatunek;
 
+    @JsonManagedReference
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinTable(
             name = "ochrona_uprawa",
@@ -39,6 +43,7 @@ public class Crop {
     )
     private List<Cover> ochrony = new ArrayList<>();
 
+    @JsonManagedReference
     @OneToMany(mappedBy = "uprawa", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private List<Land> dzialki = new ArrayList<>();
 

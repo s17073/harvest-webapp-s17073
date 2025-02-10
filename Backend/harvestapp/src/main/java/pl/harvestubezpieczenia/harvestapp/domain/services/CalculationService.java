@@ -10,6 +10,7 @@ import pl.harvestubezpieczenia.harvestapp.domain.model.*;
 import pl.harvestubezpieczenia.harvestapp.domain.ports.*;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 
@@ -29,8 +30,11 @@ public class CalculationService {
     private final LandRepo landRepo;
     private final LivestockKindRepo livestockKindRepo;
     private final LivestockRepo livestockRepo;
+    private final InsuranceCompanyRepo insuranceCompanyRepo;
+    private final InsuranceCompanyProviderService insuranceCompanyProviderService;
+    private final OfferRepo offerRepo;
 
-    public CalculationService(CalculationRepo calculationRepo, ApkQuestionRepo apkQuestionRepo, ApkCalculationRepo apkCalculationRepo, TerytRepo terytRepo, CalcPersonMapper calcPersonMapper, SoilClassRepo soilClassRepo, CropKindRepo cropKindRepo, CropVarietyRepo cropVarietyRepo, CoverRepo coverRepo, CropRepo cropRepo, LandRepo landRepo, LivestockKindRepo livestockKindRepo, LivestockRepo livestockRepo) {
+    public CalculationService(CalculationRepo calculationRepo, ApkQuestionRepo apkQuestionRepo, ApkCalculationRepo apkCalculationRepo, TerytRepo terytRepo, CalcPersonMapper calcPersonMapper, SoilClassRepo soilClassRepo, CropKindRepo cropKindRepo, CropVarietyRepo cropVarietyRepo, CoverRepo coverRepo, CropRepo cropRepo, LandRepo landRepo, LivestockKindRepo livestockKindRepo, LivestockRepo livestockRepo, InsuranceCompanyRepo insuranceCompanyRepo, InsuranceCompanyProviderService insuranceCompanyProviderService, OfferRepo offerRepo) {
         this.calculationRepo = calculationRepo;
         this.apkQuestionRepo = apkQuestionRepo;
         this.apkCalculationRepo = apkCalculationRepo;
@@ -44,6 +48,9 @@ public class CalculationService {
         this.landRepo = landRepo;
         this.livestockKindRepo = livestockKindRepo;
         this.livestockRepo = livestockRepo;
+        this.insuranceCompanyRepo = insuranceCompanyRepo;
+        this.insuranceCompanyProviderService = insuranceCompanyProviderService;
+        this.offerRepo = offerRepo;
     }
 
     public ResponseEntity<Integer> startNewCalculation() {
@@ -482,5 +489,29 @@ public class CalculationService {
         livestockRepo.saveLivestock(livestock);
 
         return new ResponseEntity<>("successfully modified", HttpStatus.OK);
+    }
+
+    @Transactional
+    public ResponseEntity<List<OfferDto>> calcOffers(int calcId) {
+        List<OfferDto> offerDtos = new ArrayList<>();
+        List<InsuranceCompany> insuranceCompanies = insuranceCompanyRepo.getAllItems();
+        Calculation calculation = calculationRepo.getCalculationById(calcId);
+
+        offerRepo.setUnactiveOfferByCalcId((long) calcId);
+
+        for(InsuranceCompany insuranceCompany: insuranceCompanies){
+            InsuranceCompanyPricing insuranceCompanyPricing = insuranceCompanyProviderService.getInsuranceCompanyPricing(insuranceCompany.getId());
+            if(insuranceCompanyPricing != null){
+                Offer offer = new Offer();
+                List<OfferDto> offerDtoList = new ArrayList<>();
+                offerDtoList = insuranceCompanyPricing.getOffers(calculation, insuranceCompany, offer);
+                offerDtos.addAll(offerDtoList);
+            }
+        }
+
+        offerDtos.sort(Comparator.comparingDouble(OfferDto::getSkladka));
+
+        return new ResponseEntity<>(offerDtos, HttpStatus.OK);
+
     }
 }

@@ -93,4 +93,9 @@ public class CalculationController {
         return calculationService.modifyLivestock(livestockDto, livestockId);
     }
 
+    @PostMapping("{calcid}/offers")
+    public ResponseEntity<List<OfferDto>> calcOffers(@PathVariable("calcid") int calcId){
+        return calculationService.calcOffers(calcId);
+    }
+
 }

@@ -138,12 +138,12 @@ CREATE TABLE Ochrona_zwierze (
 
 -- Table: Oferta
 CREATE TABLE Oferta (
-    id_oferta int GENERATED ALWAYS AS IDENTITY NOT NULL,
+    id_oferta bigint GENERATED ALWAYS AS IDENTITY NOT NULL,
     id_ubezpieczyciel int  NOT NULL,
     id_kalkulacja int  NOT NULL,
     numer_oferty varchar(10)  NOT NULL,
     skladka float8  NOT NULL,
-    data_wygasniecia date  NOT NULL,
+    data_wygasniecia timestamp  NOT NULL,
     status_oferty varchar(15)  NOT NULL,
     CONSTRAINT Oferta_pk PRIMARY KEY (id_oferta)
 );

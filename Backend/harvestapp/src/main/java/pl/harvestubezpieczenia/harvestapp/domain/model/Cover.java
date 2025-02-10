@@ -1,5 +1,7 @@
 package pl.harvestubezpieczenia.harvestapp.domain.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonUnwrapped;
 import jakarta.persistence.*;
 import lombok.Data;
 import pl.harvestubezpieczenia.harvestapp.domain.valueObjects.CoverName;
@@ -19,11 +21,14 @@ public class Cover implements GenericCrudModel{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int idOchrona;
 
+    @JsonUnwrapped
     @Embedded
     private CoverName nazwa;
+    @JsonUnwrapped
     @Embedded
     private InsuranceClass grupaMinisterialna;
 
+    @JsonUnwrapped
     @Embedded
     private Season taryfa;
     private String opis;
@@ -33,8 +38,13 @@ public class Cover implements GenericCrudModel{
 
     private ModificationDate dataModyfikacji;
 
+    @JsonBackReference
     @ManyToMany(mappedBy = "ochrony",cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Livestock> zwierzeta = new ArrayList<>();
+
+    @JsonBackReference
+    @ManyToMany(mappedBy = "ochrony",cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private List<Crop> uprawy = new ArrayList<>();
 
     @Override
     public int getId() {

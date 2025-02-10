@@ -1,5 +1,6 @@
 package pl.harvestubezpieczenia.harvestapp.domain.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Data;
 import pl.harvestubezpieczenia.harvestapp.domain.valueObjects.ModificationDate;
@@ -21,6 +22,7 @@ public class ApkQuestion implements GenericCrudModel {
     private String komunikat;
     private boolean czyAktywna;
 
+    @JsonManagedReference
     @OneToMany(mappedBy = "apk", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<ApkCalculation> calculation;
 

@@ -201,6 +201,7 @@ nav.admin-nav {
   cursor: pointer;
 }
 
+.btn-offer-gold,
 .btn-delete-land,
 .btn-admin-add,
 .admin-upsert-submit,
@@ -509,6 +510,42 @@ span.error-message {
 
 .crop-id-invalid {
   color: red;
+}
+
+.calc-offer-box {
+  border: solid black 1px;
+  border-radius: 23px;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
+  margin: 20px auto 20px auto;
+  padding: 10px 50px;
+  width: 90%;
+}
+
+.calc-offer-title,
+.calc-offer-content {
+  padding: 0;
+  margin-bottom: 10px;
+}
+
+.calc-offer-content {
+  font-weight: bold;
+  font-size: 1.2rem;
+  color: var(--color-darker-feldgrau);
+}
+
+.btn-offer-gold {
+  background-color: var(--color-primary-peru);
+}
+
+.calc-premium {
+  color: var(--color-darker-feldgrau);
+  font-weight: bold;
+  font-size: 1.5rem;
+  margin-right: 20px;
+}
+
+.button-gold {
+  background-color: var(--color-primary-peru);
 }
 
 @media (max-width: 1400px) {
