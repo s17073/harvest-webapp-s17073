@@ -31,7 +31,6 @@ public class InsuranceCompanyB implements InsuranceCompanyPricing {
         for(int i = 0; i<2; i++) {
             offer = new Offer();
 
-            System.out.println("wykonuje u2");
 
             OfferDto offerDto = new OfferDto();
 

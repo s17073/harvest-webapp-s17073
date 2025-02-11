@@ -30,7 +30,6 @@ public class InsuranceCompanyA implements InsuranceCompanyPricing {
         List<OfferDto> offerDtoList = new ArrayList<>();
         double livestockInsuranceSum = 0;
         double cropInsuranceSum = 0;
-        System.out.println("wykonuje u1");
 
         offer.setUbezpieczyciel(insuranceCompany);
         offer.setKalkulacja(calculation);
