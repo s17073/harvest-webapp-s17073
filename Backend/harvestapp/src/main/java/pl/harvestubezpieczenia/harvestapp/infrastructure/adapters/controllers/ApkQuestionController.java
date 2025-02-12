@@ -7,9 +7,6 @@ import pl.harvestubezpieczenia.harvestapp.domain.model.ApkQuestion;
 import pl.harvestubezpieczenia.harvestapp.domain.services.ApkQuestionService;
 import pl.harvestubezpieczenia.harvestapp.domain.services.GenericService;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -51,10 +48,7 @@ public class ApkQuestionController {
 
     @GetMapping("/questions")
     public ResponseEntity<List<ApkQuestionDto>> getApkQuestions() {
-        System.out.println(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))+": wywołuję kontroler!");
-//        return apkQuestionService.getApkQuestions();
-        List<ApkQuestionDto> lista = new ArrayList<>();
-        return ResponseEntity.ok(lista);
+        return apkQuestionService.getApkQuestions();
     }
 
 
