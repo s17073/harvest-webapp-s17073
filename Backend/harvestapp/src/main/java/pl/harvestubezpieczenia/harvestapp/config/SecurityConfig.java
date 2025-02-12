@@ -41,6 +41,7 @@ public class SecurityConfig {
                         .requestMatchers("/").permitAll()
                         .requestMatchers("/teryt/**").permitAll()
                         .requestMatchers("/apk/questions").permitAll()
+                        .requestMatchers("/policy/**").permitAll()
                         .requestMatchers("/calculation/**").permitAll()
                         .requestMatchers("address").hasAuthority("ADMIN")
                         .requestMatchers("cropkind").hasAuthority("ADMIN")

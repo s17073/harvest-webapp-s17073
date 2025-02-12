@@ -33,8 +33,9 @@ public class CalculationService {
     private final InsuranceCompanyRepo insuranceCompanyRepo;
     private final InsuranceCompanyProviderService insuranceCompanyProviderService;
     private final OfferRepo offerRepo;
+    private final PolicyRepo policyRepo;
 
-    public CalculationService(CalculationRepo calculationRepo, ApkQuestionRepo apkQuestionRepo, ApkCalculationRepo apkCalculationRepo, TerytRepo terytRepo, CalcPersonMapper calcPersonMapper, SoilClassRepo soilClassRepo, CropKindRepo cropKindRepo, CropVarietyRepo cropVarietyRepo, CoverRepo coverRepo, CropRepo cropRepo, LandRepo landRepo, LivestockKindRepo livestockKindRepo, LivestockRepo livestockRepo, InsuranceCompanyRepo insuranceCompanyRepo, InsuranceCompanyProviderService insuranceCompanyProviderService, OfferRepo offerRepo) {
+    public CalculationService(CalculationRepo calculationRepo, ApkQuestionRepo apkQuestionRepo, ApkCalculationRepo apkCalculationRepo, TerytRepo terytRepo, CalcPersonMapper calcPersonMapper, SoilClassRepo soilClassRepo, CropKindRepo cropKindRepo, CropVarietyRepo cropVarietyRepo, CoverRepo coverRepo, CropRepo cropRepo, LandRepo landRepo, LivestockKindRepo livestockKindRepo, LivestockRepo livestockRepo, InsuranceCompanyRepo insuranceCompanyRepo, InsuranceCompanyProviderService insuranceCompanyProviderService, OfferRepo offerRepo, PolicyRepo policyRepo) {
         this.calculationRepo = calculationRepo;
         this.apkQuestionRepo = apkQuestionRepo;
         this.apkCalculationRepo = apkCalculationRepo;
@@ -51,6 +52,7 @@ public class CalculationService {
         this.insuranceCompanyRepo = insuranceCompanyRepo;
         this.insuranceCompanyProviderService = insuranceCompanyProviderService;
         this.offerRepo = offerRepo;
+        this.policyRepo = policyRepo;
     }
 
     public ResponseEntity<Integer> startNewCalculation() {
@@ -512,6 +514,38 @@ public class CalculationService {
         offerDtos.sort(Comparator.comparingDouble(OfferDto::getSkladka));
 
         return new ResponseEntity<>(offerDtos, HttpStatus.OK);
+
+    }
+
+    @Transactional
+    public ResponseEntity<Policy> acceptOffer(int calcId, Long offerId) {
+
+        Calculation calculation = calculationRepo.getCalculationById(calcId);
+        Offer offer = offerRepo.findOfferById(offerId).orElse(null);
+
+        if(calculation==null || offer==null){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+        if(!offer.getKalkulacja().equals(calculation)){
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+
+        }
+        if(!offer.getStatusOferty().equals("AKTYWNA")){
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
+        Policy policy = new Policy();
+        policy.setOferta(offer);
+        policy.setStatusPolisy("AKTYWNA");
+        offer.setStatusOferty("POLISA");
+        calculation.setStatusKalkulacji("POLISA");
+
+        policyRepo.savePolicy(policy);
+        offerRepo.saveOffer(offer);
+        calculationRepo.saveCalculation(calculation);
+
+        return new ResponseEntity<>(policy, HttpStatus.OK);
 
     }
 }

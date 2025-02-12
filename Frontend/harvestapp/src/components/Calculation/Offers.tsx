@@ -3,6 +3,7 @@ import BottomBar from "../Shared/BottomBar";
 import { useNavigate, useParams } from "react-router-dom";
 import { handleGenerateOffers } from "../../api/Calculation/handleGenerateOffers";
 import { useEffect, useState } from "react";
+import { handleAcceptOffer } from "../../api/Calculation/handleAcceptOffer";
 
 export const Offers: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -10,6 +11,7 @@ export const Offers: React.FC = () => {
   const [offers, setOffers] = useState<any | null>(null);
   const [offerId, setOfferId] = useState<number | null>(null);
   const [modalShow, setModalShow] = useState(false);
+  const [error, setError] = useState<String | undefined>(undefined);
 
   const handleGoBack = () => {
     navigate(`/calculation/${id}/livestock`);
@@ -29,11 +31,30 @@ export const Offers: React.FC = () => {
     fetchData();
   }, [id]);
 
+  const offerAccept = async () => {
+    if (id && offerId) {
+      const idCalculation = parseInt(id);
+      try {
+        const policy = await handleAcceptOffer(idCalculation, offerId);
+        navigate(`/policyconfirm/${idCalculation}`, {
+          state: { policyData: { policy } },
+        });
+      } catch (e) {
+        setError("Wystąpił błąd");
+      }
+    }
+  };
+
   //https://react-bootstrap.netlify.app/docs/components/modal
-  function MyVerticallyCenteredModal(props: any) {
+  function MyVerticallyCenteredModal(props: {
+    show?: boolean;
+    onAccept: () => void;
+    onHide: () => void;
+  }) {
     return (
       <Modal
-        {...props}
+        show={props.show}
+        onHide={props.onHide}
         size="lg"
         aria-labelledby="contained-modal-title-vcenter"
         centered
@@ -77,7 +98,10 @@ export const Offers: React.FC = () => {
           <Button
             variant="primary"
             className="admin-upsert-submit button-gold"
-            onClick={props.onHide}
+            onClick={() => {
+              props.onAccept();
+              props.onHide();
+            }}
           >
             AKCEPTUJ
           </Button>
@@ -217,6 +241,7 @@ export const Offers: React.FC = () => {
               <MyVerticallyCenteredModal
                 show={modalShow}
                 onHide={() => setModalShow(false)}
+                onAccept={offerAccept}
               />
             </>
           ))}

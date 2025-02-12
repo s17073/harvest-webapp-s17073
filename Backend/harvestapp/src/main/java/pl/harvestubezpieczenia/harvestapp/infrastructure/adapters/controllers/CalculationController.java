@@ -4,6 +4,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import pl.harvestubezpieczenia.harvestapp.domain.DTOs.*;
+import pl.harvestubezpieczenia.harvestapp.domain.model.Policy;
 import pl.harvestubezpieczenia.harvestapp.domain.services.CalculationService;
 
 import java.util.List;
@@ -96,6 +97,11 @@ public class CalculationController {
     @PostMapping("{calcid}/offers")
     public ResponseEntity<List<OfferDto>> calcOffers(@PathVariable("calcid") int calcId){
         return calculationService.calcOffers(calcId);
+    }
+
+    @PostMapping("{calcid}/acceptOffer/{offerid}")
+    public ResponseEntity<Policy> acceptOffer(@PathVariable("calcid") int calcId, @PathVariable("offerid") Long offerId){
+        return calculationService.acceptOffer(calcId, offerId);
     }
 
 }

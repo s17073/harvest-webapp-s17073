@@ -27,6 +27,8 @@ import { AdminAuthentication } from "./components/Dictionaries/AdminAuthenticati
 import "bootstrap/dist/css/bootstrap.min.css";
 import { MainPage } from "./pages/MainPage";
 import { Offers } from "./components/Calculation/Offers";
+import { PolicyConfirmation } from "./components/Calculation/PolicyConfirmation";
+import { Default } from "./pages/Default";
 
 const AdminRoutes = () => (
   <Routes>
@@ -106,6 +108,10 @@ function App() {
         <Route
           path="calculation/:id/offers"
           element={<CalculationForm CalculationStep={Offers} />}
+        />
+        <Route
+          path="policyconfirm/:id"
+          element={<Default Content={PolicyConfirmation} />}
         />
       </Routes>
     </BrowserRouter>
