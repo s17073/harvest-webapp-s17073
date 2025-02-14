@@ -5,7 +5,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { AdminPanelNav } from "../../components/Dictionaries/AdminPanelNav";
 import { iconEdit } from "../../assets/icons/edit";
 import { iconDelete } from "../../assets/icons/delete";
-import { Alert, Container, Table } from "react-bootstrap";
+import { Alert, Button, Container, Modal, Table } from "react-bootstrap";
 import BottomBar from "../Shared/BottomBar";
 
 interface DictionaryData {
@@ -38,6 +38,8 @@ const DictionaryTable: React.FC<DictionaryTableProps> = ({
   const [fetchError, setFetchError] = useState<string | null>(null);
   const [announcement, setAnnouncement] = useState<string | null>(null);
   const navigate = useNavigate();
+  const [modalShow, setModalShow] = useState(false);
+  const [idToDelete, setIdToDelete] = useState(0);
 
   const fetchData = () =>
     fetchDictionaryData(
@@ -75,6 +77,47 @@ const DictionaryTable: React.FC<DictionaryTableProps> = ({
           </div>
         )}
       </>
+    );
+  }
+
+  function MyVerticallyCenteredModal(props: {
+    show?: boolean;
+    onAccept: () => void;
+    onHide: () => void;
+  }) {
+    return (
+      <Modal
+        show={props.show}
+        onHide={props.onHide}
+        size="lg"
+        aria-labelledby="contained-modal-title-vcenter"
+        centered
+      >
+        <Modal.Header closeButton>
+          <Modal.Title id="contained-modal-title-vcenter">
+            Czy na pewno chcesz usunąć rekord?
+          </Modal.Title>
+        </Modal.Header>
+        <Modal.Footer>
+          <Button
+            variant="secondary"
+            className="admin-upsert-submit"
+            onClick={props.onHide}
+          >
+            ANULUJ
+          </Button>
+          <Button
+            variant="primary"
+            className="admin-upsert-submit button-gold"
+            onClick={() => {
+              props.onAccept();
+              props.onHide();
+            }}
+          >
+            USUŃ
+          </Button>
+        </Modal.Footer>
+      </Modal>
     );
   }
 
@@ -137,7 +180,13 @@ const DictionaryTable: React.FC<DictionaryTableProps> = ({
                         </div>
                       </td>
                       <td className="text-center align-middle lh-1 px-0 px-xl-4 dict-delete-icon">
-                        <div onClick={() => deleteData(item.id)}>
+                        {/* <div onClick={() => deleteData(item.id)}> */}
+                        <div
+                          onClick={() => {
+                            setIdToDelete(item.id);
+                            setModalShow(true);
+                          }}
+                        >
                           {iconDelete()}
                         </div>
                       </td>
@@ -168,6 +217,14 @@ const DictionaryTable: React.FC<DictionaryTableProps> = ({
               }}
             />
           </div>
+
+          <MyVerticallyCenteredModal
+            show={modalShow}
+            onHide={() => setModalShow(false)}
+            onAccept={() => {
+              deleteData(idToDelete);
+            }}
+          />
         </Container>
       </div>
     </>
