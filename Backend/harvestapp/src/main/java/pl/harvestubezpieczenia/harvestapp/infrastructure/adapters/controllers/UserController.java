@@ -3,9 +3,12 @@ package pl.harvestubezpieczenia.harvestapp.infrastructure.adapters.controllers;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import pl.harvestubezpieczenia.harvestapp.domain.DTOs.UserCalcDto;
+import pl.harvestubezpieczenia.harvestapp.domain.DTOs.UserPolDto;
 import pl.harvestubezpieczenia.harvestapp.domain.model.User;
 import pl.harvestubezpieczenia.harvestapp.domain.services.UserService;
 
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -42,6 +45,16 @@ public class UserController {
     @GetMapping("{email}")
     public ResponseEntity<User> getUser(@PathVariable String email) {
         return userService.getUser(email);
+    }
+
+    @GetMapping("{email}/calc")
+    public ResponseEntity<List<UserCalcDto>> getUserCalc(@PathVariable String email) {
+        return userService.getUserCalc(email);
+    }
+
+    @GetMapping("{email}/pol")
+    public ResponseEntity<List<UserPolDto>> getUserPol(@PathVariable String email) {
+        return userService.getUserPol(email);
     }
 
 }

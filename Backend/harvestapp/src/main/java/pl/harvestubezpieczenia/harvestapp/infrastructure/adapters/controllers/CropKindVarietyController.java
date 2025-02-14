@@ -5,6 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pl.harvestubezpieczenia.harvestapp.domain.DTOs.CropKindVarietyDto;
 import pl.harvestubezpieczenia.harvestapp.domain.model.CropKindVariety;
+import pl.harvestubezpieczenia.harvestapp.domain.services.CropKindVarietyService;
 import pl.harvestubezpieczenia.harvestapp.domain.services.GenericService;
 
 import java.util.List;
@@ -14,10 +15,12 @@ import java.util.List;
 public class CropKindVarietyController {
 
     private final GenericService<CropKindVariety, CropKindVarietyDto> genericService;
+    private final CropKindVarietyService cropKindVarietyService;
 
     @Autowired
-    public CropKindVarietyController(GenericService<CropKindVariety, CropKindVarietyDto> genericService) {
+    public CropKindVarietyController(GenericService<CropKindVariety, CropKindVarietyDto> genericService, CropKindVarietyService cropKindVarietyService) {
         this.genericService = genericService;
+        this.cropKindVarietyService = cropKindVarietyService;
     }
 
     @GetMapping

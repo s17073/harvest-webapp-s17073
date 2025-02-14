@@ -8,10 +8,13 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import pl.harvestubezpieczenia.harvestapp.domain.DTOs.UserCalcDto;
+import pl.harvestubezpieczenia.harvestapp.domain.DTOs.UserPolDto;
 import pl.harvestubezpieczenia.harvestapp.domain.model.User;
 import pl.harvestubezpieczenia.harvestapp.domain.ports.UserRepo;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
@@ -84,5 +87,17 @@ public class UserService {
 
     public ResponseEntity<User> getUser(String email) {
         return new ResponseEntity<>(userRepo.getUserByUsername(email), HttpStatus.OK);
+    }
+
+    public ResponseEntity<List<UserCalcDto>> getUserCalc(String email) {
+
+        return new ResponseEntity<>(userRepo.getUserCalc(email), HttpStatus.OK);
+
+    }
+
+    public ResponseEntity<List<UserPolDto>> getUserPol(String email) {
+
+        return new ResponseEntity<>(userRepo.getUserPol(email), HttpStatus.OK);
+
     }
 }

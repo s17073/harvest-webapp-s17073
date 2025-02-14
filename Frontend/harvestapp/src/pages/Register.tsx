@@ -85,11 +85,7 @@ export const Register: React.FC = () => {
 
     kodPosrednika: yup.string().nullable().notRequired(),
 
-    idAgenta: yup
-      .number()
-      .nullable()
-      .notRequired()
-      .min(1, "Id Agenta musi być większe niż 0"),
+    idAgenta: yup.number().nullable().notRequired(),
   });
 
   useEffect(() => {
@@ -121,24 +117,22 @@ export const Register: React.FC = () => {
     try {
       await userSchema.validate(user, { abortEarly: false });
 
-      if (user.idAgenta === 0 && user.kodPosrednika === undefined) {
-        setUser((prevUser) => ({
-          ...prevUser,
-          rola: "USER",
-        }));
+      console.log(user);
 
-        setTimeout(async () => {
-          const token = await signInUser(user);
+      setTimeout(async () => {
+        const token = await signInUser(user);
 
-          if (token !== false) {
-            const response = await logInUser(user.email, user.haslo);
+        if (token !== false) {
+          const response = await logInUser(user.email, user.haslo);
 
-            if (response === true) {
-              console.log("Zalogowano!");
-            }
+          if (response === true) {
+            console.log("ok");
+            navigate("/");
+
+            console.log("Zalogowano!");
           }
-        }, 0);
-      }
+        }
+      }, 0);
     } catch (e) {
       if (e instanceof yup.ValidationError) {
         const fieldErrors: any = {};
@@ -150,7 +144,6 @@ export const Register: React.FC = () => {
         setErrors(fieldErrors);
       }
     }
-    navigate("/");
   };
 
   return (
@@ -361,9 +354,7 @@ export const Register: React.FC = () => {
                         button2={{
                           label: "ZAŁÓŻ KONTO",
                           className: "admin-upsert-submit",
-                          onClick: () => {
-                            handleSubmit;
-                          },
+                          onClick: () => handleSubmit,
                         }}
                       />
                     </Form>

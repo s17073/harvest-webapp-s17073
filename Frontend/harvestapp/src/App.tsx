@@ -32,6 +32,8 @@ import { Default } from "./pages/Default";
 import { Login } from "./pages/Login";
 import { Register } from "./pages/Register";
 import { Profile } from "./pages/Profile";
+import { UserCalc } from "./pages/UserCalc";
+import { UserPol } from "./pages/UserPol";
 
 const AdminRoutes = () => (
   <Routes>
@@ -78,6 +80,10 @@ function App() {
         <Route path="/register" element={<Register />} />
 
         <Route path="/login" element={<Login />} />
+
+        <Route path="/usercalc" element={<UserCalc />} />
+
+        <Route path="/userpol" element={<UserPol />} />
 
         <Route path="/profile" element={<Profile />} />
 

@@ -20,7 +20,6 @@ public class CropKindVariety implements GenericCrudModel {
     @JoinColumn(name = "id_rodzaj_uprawy")
     private CropKind cropKind;
 
-    @JsonBackReference
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "id_gatunek")
     private CropVariety cropVariety;
