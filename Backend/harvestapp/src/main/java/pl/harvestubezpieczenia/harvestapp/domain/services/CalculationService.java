@@ -104,33 +104,21 @@ public class CalculationService {
             Calculation calculation = calculationRepo.getCalculationById(id);
             Teryt policyHolderTeryt = terytRepo.getTeryt(dto.getUbezpieczajacy().getTeryt());
 
-            ResponseEntity<User> response  = userService.getUser(dto.getUbezpieczajacy().getAdresEmail());
-            User policyHolder = new User();
-            if (response.getStatusCode().is2xxSuccessful() && response.getBody() != null) {
-                policyHolder = response.getBody();
-            } else {
+            User policyHolder = calcPersonMapper.mapToEntity(dto.getUbezpieczajacy(), policyHolderTeryt);
 
-            }
-
-            policyHolder = calcPersonMapper.mapToEntity(dto.getUbezpieczajacy(), policyHolderTeryt);
             calculation.setUbezpieczajacy(policyHolder);
 
             if (dto.getUbezpieczajacy().equals(dto.getUbezpieczony())) {
                 calculation.setUbezpieczony(policyHolder);
             } else {
 
-                ResponseEntity<User> response2  = userService.getUser(dto.getUbezpieczony().getAdresEmail());
-                User policyInsured = new User();
-                if (response.getStatusCode().is2xxSuccessful() && response.getBody() != null) {
-                    policyInsured = response.getBody();
-                } else {
-
-                }
-
                 Teryt policyInsuredTeryt = terytRepo.getTeryt(dto.getUbezpieczony().getTeryt());
 
-                policyInsured = calcPersonMapper.mapToEntity(dto.getUbezpieczony(), policyInsuredTeryt);
+                User policyInsured = calcPersonMapper.mapToEntity(dto.getUbezpieczony(), policyInsuredTeryt);
+
                 calculation.setUbezpieczony(policyInsured);
+
+
             }
             calculationRepo.saveCalculation(calculation);
 
