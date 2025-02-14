@@ -11,6 +11,8 @@ import org.springframework.stereotype.Service;
 import pl.harvestubezpieczenia.harvestapp.domain.model.User;
 import pl.harvestubezpieczenia.harvestapp.domain.ports.UserRepo;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
 @Service
@@ -28,42 +30,50 @@ public class UserService {
     }
 
     public ResponseEntity<String> registerUser(User user) {
-        user.setRola("AGENT");
+
         user.setHaslo(encoder.encode(user.getHaslo()));
         userRepo.saveUser(user);
         return new ResponseEntity<>("User created", HttpStatus.OK);
     }
 
-    public ResponseEntity<String> verifyAgent(User user) {
+    public ResponseEntity<Map<String, String>> verifyAgent(User user) {
+        Map<String, String> response = new HashMap<>();
+
         if (Objects.equals(getUserRole(user.getEmail()), "AGENT")){
             return verify(user);
         } else {
-            return new ResponseEntity<>("Unauthorized", HttpStatus.UNAUTHORIZED);
+            return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
         }
     }
 
-    public ResponseEntity<String> verifyAdmin(User user) {
+    public ResponseEntity<Map<String, String>> verifyAdmin(User user) {
+        Map<String, String> response = new HashMap<>();
 
         if (Objects.equals(getUserRole(user.getEmail()), "ADMIN")){
             return verify(user);
         } else {
-            return new ResponseEntity<>("Unauthorized", HttpStatus.UNAUTHORIZED);
+            return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
         }
     }
 
-    public ResponseEntity<String> verify(User user) {
+    public ResponseEntity<Map<String, String>> verify(User user) {
+
+        Map<String, String> response = new HashMap<>();
 
         try{
         Authentication authentication =
                 authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(user.getEmail(), user.getHaslo()));
 
         if (authentication.isAuthenticated()) {
-            return new ResponseEntity<>(jwtService.generateToken(user.getEmail()), HttpStatus.OK);
+            response.put("role", getUserRole(user.getEmail()));
+            response.put("token", jwtService.generateToken(user.getEmail()));
+
+            return new ResponseEntity<>(response, HttpStatus.OK);
         } else {
-            return new ResponseEntity<>("Something went wrong", HttpStatus.UNAUTHORIZED);
+            return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
         }
         } catch (AuthenticationException e){
-            return new ResponseEntity<>("Unauthorized", HttpStatus.UNAUTHORIZED);
+            return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
         }
 
     }
@@ -72,4 +82,7 @@ public class UserService {
         return userRepo.getUserRole(email);
     }
 
+    public ResponseEntity<User> getUser(String email) {
+        return new ResponseEntity<>(userRepo.getUserByUsername(email), HttpStatus.OK);
+    }
 }

@@ -38,7 +38,10 @@ const additionalValidationSchema = yup.object().shape({
     .max(50, "pole może zawierać maksymalnie 50 znaków"),
   kodAgencji: yup
     .string()
-    .matches(/^A\d{4}$/, "wpisz właściwy kod agencji")
+    .matches(
+      /^A\d{4}$/,
+      "Kod agencji powinien wyglądać w następujący sposób: A0000",
+    )
     .required("pole jest wymagane")
     .min(5, "kod agencji ma 5 znaków")
     .max(5, "kod agencji ma 5 znaków"),

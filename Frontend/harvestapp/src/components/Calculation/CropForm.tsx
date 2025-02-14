@@ -15,6 +15,8 @@ import { handleAddCrop } from "../../api/Calculation/handleAddCrop";
 import { fetchUprawa } from "../../api/Calculation/fetchUprawa";
 import { Col, Form, Row } from "react-bootstrap";
 import BottomBar from "../Shared/BottomBar";
+import * as yup from "yup";
+import { Loading } from "../Shared/Loading";
 
 export const CropForm: React.FC = () => {
   const [cropsList, setCropsList] = useState<ICrop[]>([]);
@@ -24,12 +26,14 @@ export const CropForm: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const { cropid } = useParams<{ cropid: string }>();
   const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [cropVarietyList, setCropVarietyList] = useState<ICropVarietyList[]>(
     [],
   );
   const [terytIsIncorrect, setTerytIsIncorrect] = useState<boolean | undefined>(
     undefined,
   );
+  const [errors, setErrors] = useState<any>({});
   const [message, setMessage] = useState<string | undefined>(undefined);
   const [crop, setCrop] = useState<ICropData>({
     id: 0,
@@ -59,6 +63,45 @@ export const CropForm: React.FC = () => {
     ],
   });
 
+  const landSchema = yup.object().shape({
+    teryt: yup
+      .string()
+      .length(8, "Teryt musi mieć 8 znaków")
+      .required("Teryt jest wymagany"),
+    numerDzialki: yup.string().required("Numer działki jest wymagany"),
+    czyPoprawna: yup
+      .boolean()
+      .required("Informacja o poprawności działki jest wymagana"),
+    kodObrebu: yup.string().required("Kod obrębu jest wymagany"),
+    // obreb: yup.string().required("Obręb jest wymagany"),
+  });
+
+  const cropSchema = yup.object().shape({
+    idUprawy: yup.string().required("Rodzaj uprawy jest wymagany"),
+    idGatunek: yup.number().required("Gatunek jest wymagany"),
+    idKlasaGleby: yup
+      .number()
+      .required("Klasa gleby jest wymagana")
+      .min(1, "Klasa gleby jest wymagana"),
+    czyNasienna: yup
+      .boolean()
+      .required("Informacja o nasiennej uprawie jest wymagana"),
+    powierzchnia: yup
+      .number()
+      .required("Powierzchnia jest wymagana")
+      .min(1, "Powierzchnia jest wymagana"),
+    wartosc: yup
+      .number()
+      .required("Wartość jest wymagana")
+      .min(1, "Wartość jest wymagana"),
+    ryzyka: yup.array().min(1, "Musisz dodać co najmniej jedną ochronę"),
+    dzialki: yup
+      .array()
+      .of(landSchema)
+      .min(1, "Musisz dodać co najmniej jedną działkę")
+      .required("Działki są wymagane"),
+  });
+
   useEffect(() => {
     fetchUprawy().then(setCropsList);
   }, []);
@@ -77,54 +120,75 @@ export const CropForm: React.FC = () => {
 
   useEffect(() => {
     const fetchData = async () => {
+      setIsLoading(true);
       if (id && cropid) {
         const crop = await fetchUprawa(parseInt(id), parseInt(cropid));
         if (crop) {
           setCrop(crop);
         }
       }
+      setIsLoading(false);
     };
     fetchData();
   }, [cropid]);
 
   const handleSubmit = async (event: React.FormEvent) => {
-    event.preventDefault();
+    try {
+      event.preventDefault();
 
-    const landsToAdd: ILand[] = crop.dzialki.map((dzialka) => {
-      const land: ILand = {
-        teryt: dzialka.teryt,
-        numerDzialki: dzialka.numerDzialki,
-        czyPoprawna: dzialka.czyPoprawna,
-        kodObrebu: dzialka.kodObrebu,
-        obreb: dzialka.obreb,
+      const landsToAdd: ILand[] = crop.dzialki.map((dzialka) => {
+        const land: ILand = {
+          teryt: dzialka.teryt,
+          numerDzialki: dzialka.numerDzialki,
+          czyPoprawna: dzialka.czyPoprawna,
+          kodObrebu: dzialka.kodObrebu,
+          obreb: dzialka.obreb,
+        };
+        return land;
+      });
+
+      const cropDataToAdd: IStepCrop = {
+        idRodzajUprawy: crop.idUprawy,
+        idGatunek: crop.idGatunek,
+        idKlasaGleby: crop.idKlasaGleby,
+        czyNasienna: crop.czyNasienna,
+        powierzchnia: crop.powierzchnia,
+        wartosc: crop.wartosc,
+        ryzyka: crop.ryzyka,
+        dzialki: landsToAdd,
       };
-      return land;
-    });
 
-    const cropDataToAdd: IStepCrop = {
-      idRodzajUprawy: crop.idUprawy,
-      idGatunek: crop.idGatunek,
-      idKlasaGleby: crop.idKlasaGleby,
-      czyNasienna: crop.czyNasienna,
-      powierzchnia: crop.powierzchnia,
-      wartosc: crop.wartosc,
-      ryzyka: crop.ryzyka,
-      dzialki: landsToAdd,
-    };
+      console.log(cropDataToAdd);
 
-    if (id) {
-      const idCalculation = parseInt(id);
-      try {
-        if (cropid) {
-          const idCrop = parseInt(cropid);
-          await handleAddCrop(idCalculation, cropDataToAdd, idCrop);
-          navigate(`/calculation/${id}/crops`);
-        } else {
-          await handleAddCrop(idCalculation, cropDataToAdd);
-          navigate(`/calculation/${id}/crops`);
+      await cropSchema.validate(crop, { abortEarly: false });
+
+      if (id) {
+        const idCalculation = parseInt(id);
+        try {
+          if (cropid) {
+            const idCrop = parseInt(cropid);
+            await handleAddCrop(idCalculation, cropDataToAdd, idCrop);
+            navigate(`/calculation/${id}/crops`);
+          } else {
+            await handleAddCrop(idCalculation, cropDataToAdd);
+            navigate(`/calculation/${id}/crops`);
+          }
+        } catch (e) {
+          setError("Nie udało się wysłać danych");
         }
-      } catch (e) {
-        setError("Nie udało się wysłać danych");
+      }
+    } catch (err) {
+      if (err instanceof yup.ValidationError) {
+        const fieldErrors: any = {};
+
+        err.inner.forEach((error) => {
+          if (error.path) {
+            fieldErrors[error.path] = error.message;
+          }
+          console.log(errors);
+        });
+
+        setErrors(fieldErrors);
       }
     }
   };
@@ -228,6 +292,9 @@ export const CropForm: React.FC = () => {
                   ))}
                 </Form.Select>
               </Col>
+              {errors.idUprawy && (
+                <span className="error-message">{errors.idUprawy}</span>
+              )}
             </Row>
 
             {!(cropVarietyList.length == 0) ? (
@@ -274,6 +341,9 @@ export const CropForm: React.FC = () => {
                   ))}
                 </Form.Select>
               </Col>
+              {errors?.idKlasaGleby && (
+                <span className="error-message">{errors?.idKlasaGleby}</span>
+              )}
             </Row>
 
             <Row className="mt-3">
@@ -288,6 +358,9 @@ export const CropForm: React.FC = () => {
                   onChange={() => setField("czyNasienna", !crop.czyNasienna)}
                 />
               </Col>
+              {errors?.czyNasienna && (
+                <span className="error-message">{errors?.czyNasienna}</span>
+              )}
             </Row>
 
             <Row className="mt-3">
@@ -302,6 +375,9 @@ export const CropForm: React.FC = () => {
                   onChange={(e) => setField("powierzchnia", e.target.value)}
                 />
               </Col>
+              {errors?.powierzchnia && (
+                <span className="error-message">{errors?.powierzchnia}</span>
+              )}
             </Row>
 
             <Row className="mt-3">
@@ -316,6 +392,9 @@ export const CropForm: React.FC = () => {
                   onChange={(e) => setField("wartosc", e.target.value)}
                 />
               </Col>
+              {errors?.wartosc && (
+                <span className="error-message">{errors?.wartosc}</span>
+              )}
             </Row>
 
             <Row className="mt-3">
@@ -346,6 +425,9 @@ export const CropForm: React.FC = () => {
                   })}
                 </Row>
               </Col>
+              {errors?.ryzyka && (
+                <span className="error-message">{errors?.ryzyka}</span>
+              )}
             </Row>
           </Row>
 
@@ -364,8 +446,15 @@ export const CropForm: React.FC = () => {
                 />
               </div>
             ))}
+            {errors?.dzialki?.[0].teryt && (
+              <span className="error-message">
+                {errors?.dzialki?.[0].teryt}
+              </span>
+            )}
           </Row>
+
           <div className="admin-title-container p-1"></div>
+
           <button
             className="btn-delete-land m-0 mt-2"
             type="button"
@@ -374,9 +463,9 @@ export const CropForm: React.FC = () => {
           >
             Dodaj działkę
           </button>
-          {terytIsIncorrect &&
+          {/* {terytIsIncorrect &&
             "Dane przynajmniej w zakresie teryt muszą się zgadzać"}
-          <div>{message && message}</div>
+          <div>{message && message}</div> */}
 
           <BottomBar
             button1={{
@@ -391,6 +480,7 @@ export const CropForm: React.FC = () => {
             }}
           ></BottomBar>
         </Form>
+        {isLoading && <Loading />}
         {error && error}
       </div>
     </>

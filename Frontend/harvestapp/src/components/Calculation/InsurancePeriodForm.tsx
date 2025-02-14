@@ -10,6 +10,9 @@ import {
 import { fetchInsurancePeriodData } from "../../api/Calculation/fetchInsurancePeriodData";
 import { Col, Form, Row } from "react-bootstrap";
 import BottomBar from "../Shared/BottomBar";
+import { Message } from "../Shared/Message";
+import { Loading } from "../Shared/Loading";
+import * as yup from "yup";
 
 interface IInsurancePeriodData {
   dateFrom: string;
@@ -23,22 +26,38 @@ export const InsurancePeriodForm: React.FC = () => {
     dateTo: String(""),
     apkQuestions: [],
   });
-  const [error, setError] = useState<string | undefined>(undefined);
   const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
+  const [message, setMessage] = useState<string | undefined>(undefined);
+  const [isLoadingApk, setIsLoadingApk] = useState<boolean>(false);
+  const [isLoadingDate, setIsLoadingDate] = useState<boolean>(false);
+  const [errors, setErrors] = useState<any>({});
+
+  const validationSchema = yup.object().shape({
+    dateFrom: yup.string().required("Data jest wymagana"),
+    apkQuestions: yup.array().of(
+      yup.object().shape({
+        odpowiedz: yup.boolean().required("Odpowiedź na pytanie jest wymagana"),
+      }),
+    ),
+  });
 
   useEffect(() => {
+    setIsLoadingApk(true);
+
     const fetchData = async () => {
       const apkQuestions = await fetchApkQuestions();
       setData((prevData) => ({
         ...prevData,
         apkQuestions: apkQuestions,
       }));
+      setIsLoadingApk(false);
     };
     fetchData();
   }, []);
 
   useEffect(() => {
+    setIsLoadingDate(true);
     const fetchData = async () => {
       if (id && data.apkQuestions.length > 0) {
         const insurancePeriodData = await fetchInsurancePeriodData(
@@ -63,6 +82,7 @@ export const InsurancePeriodForm: React.FC = () => {
           }));
         }
       }
+      setIsLoadingDate(false);
     };
     fetchData();
   }, [id, data.apkQuestions.length]);
@@ -97,24 +117,38 @@ export const InsurancePeriodForm: React.FC = () => {
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
 
-    const apkToAdd: IApkCalculation[] = data.apkQuestions.map((apk) => ({
-      idApk: apk.id,
-      apkOdpowiedz: apk.odpowiedz ?? false,
-    }));
+    try {
+      await validationSchema.validate(data, { abortEarly: false });
+      const apkToAdd: IApkCalculation[] = data.apkQuestions.map((apk) => ({
+        idApk: apk.id,
+        apkOdpowiedz: apk.odpowiedz ?? false,
+      }));
 
-    const insurancePeriodData: IStepInsurancePeriod = {
-      dataPoczatkuOchrony: new Date(data.dateFrom),
-      dataKoncaOchrony: new Date(data.dateTo),
-      apk: apkToAdd,
-    };
+      const insurancePeriodData: IStepInsurancePeriod = {
+        dataPoczatkuOchrony: new Date(data.dateFrom),
+        dataKoncaOchrony: new Date(data.dateTo),
+        apk: apkToAdd,
+      };
 
-    if (id) {
-      const idCalculation = parseInt(id);
-      try {
-        await handleAddInsurancePeriod(idCalculation, insurancePeriodData);
-        navigate(`/calculation/${id}/personaldata`);
-      } catch (e) {
-        setError("Nie udało się wysłać danych");
+      if (id) {
+        const idCalculation = parseInt(id);
+        try {
+          await handleAddInsurancePeriod(idCalculation, insurancePeriodData);
+          navigate(`/calculation/${id}/personaldata`);
+        } catch (e) {
+          setMessage(`${Date.now()} Wystąpił błąd, spróbuj ponownie później.`);
+        }
+      }
+    } catch (err) {
+      if (err instanceof yup.ValidationError) {
+        const fieldErrors: any = {};
+        err.inner.forEach((error) => {
+          if (error.path) {
+            fieldErrors[error.path] = error.message;
+          }
+        });
+        setErrors(fieldErrors);
+        console.log(errors);
       }
     }
   };
@@ -148,6 +182,11 @@ export const InsurancePeriodForm: React.FC = () => {
                       onChange={(e) => setDates(e.target.value)}
                       min={new Date().toISOString().split("T")[0]}
                     />
+                    {(errors.dateFrom as string) && (
+                      <span className="error-message">
+                        {errors.dateFrom as string}
+                      </span>
+                    )}
                   </Col>
                 </Row>
               </Col>
@@ -203,6 +242,7 @@ export const InsurancePeriodForm: React.FC = () => {
                       >
                         <Form.Check
                           type="radio"
+                          required={true}
                           id={`question-${q.id}-false`}
                           name={`question-${q.id}`}
                           value={"Nie"}
@@ -216,6 +256,13 @@ export const InsurancePeriodForm: React.FC = () => {
                           Nie
                         </Form.Label>
                       </Col>
+                      {errors?.apkQuestions &&
+                        errors.apkQuestions[1]?.odpowiedz && (
+                          <span className="error-message">
+                            {errors.apkQuestions[1].odpowiedz}
+                          </span>
+                        )}
+
                       <Col lg="8">
                         <div>{q.odpowiedz ? q.komunikat : null}</div>
                       </Col>
@@ -238,7 +285,8 @@ export const InsurancePeriodForm: React.FC = () => {
             }}
           />
         </Form>
-        <div>{error && error}</div>
+        {(isLoadingApk || isLoadingDate) && <Loading />}
+        <Message key={message} message={message} />
       </div>
     </>
   );

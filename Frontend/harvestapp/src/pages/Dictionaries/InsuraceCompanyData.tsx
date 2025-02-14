@@ -3,6 +3,7 @@ import { fetchDictionaryData } from "../../api/Dictionaries/fetchDictionaryData"
 import { AdminPanelNav } from "../../components/Dictionaries/AdminPanelNav";
 import { useNavigate } from "react-router-dom";
 import { Container, Table } from "react-bootstrap";
+import BottomBar from "../../components/Shared/BottomBar";
 export interface IInsuranceCompanyData {
   id: number;
   nazwa: string;
@@ -100,12 +101,14 @@ export const InsuranceCompanyData: React.FC = () => {
               </Table>
               {noData && <p>{noData}</p>}
             </div>
-            <button
-              className="admin-table-cancel"
-              onClick={() => navigate("/admin")}
-            >
-              POWRÓT
-            </button>
+            <BottomBar
+              button1={{
+                label: "POWRÓT",
+                className: "admin-table-cancel",
+                onClick: () => navigate("/admin"),
+              }}
+              button2={undefined}
+            />
           </div>
         </Container>
       </div>

@@ -9,6 +9,7 @@ import { handleAddLivestock } from "../../api/Calculation/handleAddLivestock";
 import { fetchZwierze } from "../../api/Calculation/fetchZwierze";
 import { Col, Form, Row } from "react-bootstrap";
 import BottomBar from "../Shared/BottomBar";
+import * as yup from "yup";
 
 export const LivestockForm: React.FC = () => {
   const [error, setError] = useState<String | undefined>(undefined);
@@ -18,6 +19,7 @@ export const LivestockForm: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const { livestockid } = useParams<{ livestockid: string }>();
   const navigate = useNavigate();
+  const [errors, setErrors] = useState<any>({});
   const [livestock, setLivestock] = useState<ILivestock>({
     id: 0,
     idRodzajZwierzecia: 0,
@@ -30,9 +32,22 @@ export const LivestockForm: React.FC = () => {
     ryzyka: [],
   });
 
-  //TODO
-  console.log(error);
-  console.log(setMessage);
+  const livestockSchema = yup.object().shape({
+    idRodzajZwierzecia: yup
+      .number()
+      .positive("Rodzaj zwierzęcia musi być wybrany")
+      .required("Rodzaj zwierzęcia jest wymagany"),
+    liczba: yup
+      .number()
+      .positive("Liczba zwierząt musi być większa od zera")
+      .integer("Liczba zwierząt musi być liczbą całkowitą")
+      .required("Liczba zwierząt jest wymagana"),
+    wartosc: yup
+      .number()
+      .min(1, "Wartość musi być większa od zera")
+      .required("Wartość jest wymagana"),
+    ryzyka: yup.array().min(1, "Musisz dodać co najmniej jedną ochronę"),
+  });
 
   useEffect(() => {
     fetchOchrony("zwierzeta").then(setCoverList);
@@ -65,22 +80,39 @@ export const LivestockForm: React.FC = () => {
   };
 
   const handleSubmit = async (event: React.FormEvent) => {
-    event.preventDefault();
-    console.log(livestock);
+    try {
+      event.preventDefault();
+      console.log(livestock);
 
-    if (id) {
-      const idCalculation = parseInt(id);
-      try {
-        if (livestockid) {
-          const idLivestock = parseInt(livestockid);
-          await handleAddLivestock(idCalculation, livestock, idLivestock);
-          navigate(`/calculation/${id}/livestock`);
-        } else {
-          await handleAddLivestock(idCalculation, livestock);
-          navigate(`/calculation/${id}/livestock`);
+      await livestockSchema.validate(livestock, { abortEarly: false });
+
+      if (id) {
+        const idCalculation = parseInt(id);
+        try {
+          if (livestockid) {
+            const idLivestock = parseInt(livestockid);
+            await handleAddLivestock(idCalculation, livestock, idLivestock);
+            navigate(`/calculation/${id}/livestock`);
+          } else {
+            await handleAddLivestock(idCalculation, livestock);
+            navigate(`/calculation/${id}/livestock`);
+          }
+        } catch (e) {
+          setError("Nie udało się wysłać danych");
         }
-      } catch (e) {
-        setError("Nie udało się wysłać danych");
+      }
+    } catch (err) {
+      if (err instanceof yup.ValidationError) {
+        const fieldErrors: any = {};
+
+        err.inner.forEach((error) => {
+          if (error.path) {
+            fieldErrors[error.path] = error.message;
+          }
+          console.log(errors);
+        });
+
+        setErrors(fieldErrors);
       }
     }
   };
@@ -125,6 +157,11 @@ export const LivestockForm: React.FC = () => {
                   ))}
                 </Form.Select>
               </Col>
+              {errors?.idRodzajZwierzecia && (
+                <span className="error-message">
+                  {errors?.idRodzajZwierzecia}
+                </span>
+              )}
             </Row>
 
             <Row className="mt-3">
@@ -139,6 +176,9 @@ export const LivestockForm: React.FC = () => {
                   onChange={(e) => setField("liczba", e.target.value)}
                 />
               </Col>
+              {errors?.liczba && (
+                <span className="error-message">{errors?.liczba}</span>
+              )}
             </Row>
 
             <Row className="mt-3">
@@ -169,6 +209,9 @@ export const LivestockForm: React.FC = () => {
                   onChange={(e) => setField("wartosc", e.target.value)}
                 />
               </Col>
+              {errors?.wartosc && (
+                <span className="error-message">{errors?.wartosc}</span>
+              )}
             </Row>
 
             <Row className="mt-3">
@@ -200,8 +243,10 @@ export const LivestockForm: React.FC = () => {
                 </Row>
               </Col>
             </Row>
+            {errors?.ryzyka && (
+              <span className="error-message">{errors?.ryzyka}</span>
+            )}
           </Row>
-          <div>{message && message}</div>
 
           <BottomBar
             button1={{

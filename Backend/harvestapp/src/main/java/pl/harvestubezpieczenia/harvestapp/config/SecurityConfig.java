@@ -39,6 +39,8 @@ public class SecurityConfig {
                         .requestMatchers("/cropvariety/cropvarietylist").permitAll()
                         .requestMatchers("/cover/coverlist").permitAll()
                         .requestMatchers("/").permitAll()
+                        .requestMatchers("/user/*").permitAll()
+                        .requestMatchers("/agent").permitAll()
                         .requestMatchers("/teryt/**").permitAll()
                         .requestMatchers("/apk/questions").permitAll()
                         .requestMatchers("/policy/**").permitAll()

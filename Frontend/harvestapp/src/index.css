@@ -201,6 +201,7 @@ nav.admin-nav {
   cursor: pointer;
 }
 
+.btn-start,
 .btn-offer-gold,
 .btn-delete-land,
 .btn-admin-add,
@@ -244,6 +245,7 @@ nav.admin-nav {
   margin-bottom: 30px;
 }
 
+.btn-start,
 .btn-delete-land,
 .btn-admin-add,
 .admin-table-cancel,
@@ -269,7 +271,7 @@ span.error-message {
   /* visibility: visible; */
   pointer-events: auto;
   width: 300px;
-  bottom: 20px;
+  top: 120px;
   right: -300px;
   /* right: 20px; */
   z-index: 9999;
@@ -278,7 +280,7 @@ span.error-message {
 }
 
 .floating-alert .alert {
-  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
   margin: 0;
 }
 
@@ -533,8 +535,17 @@ span.error-message {
   color: var(--color-darker-feldgrau);
 }
 
+.btn-start,
 .btn-offer-gold {
   background-color: var(--color-primary-peru);
+}
+
+.btn-start {
+  height: 90%;
+  width: 90%;
+  margin: 20px 0;
+  padding: 20px 5px;
+  font-size: 1.5rem;
 }
 
 .calc-premium {
@@ -546,6 +557,27 @@ span.error-message {
 
 .button-gold {
   background-color: var(--color-primary-peru);
+}
+
+.loading-page {
+  z-index: 999;
+  background: rgba(0, 0, 0, 0.3);
+}
+
+.loading-spinner {
+  height: 100px;
+  width: 100px;
+  font-size: 3rem;
+  color: var(--color-primary-peru);
+}
+
+.copy-policy-holder {
+  color: var(--color-primary-peru);
+  text-decoration: underline;
+}
+
+.copy-policy-holder:hover {
+  cursor: pointer;
 }
 
 @media (max-width: 1400px) {

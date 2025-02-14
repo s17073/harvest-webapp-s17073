@@ -37,25 +37,55 @@ export const CropFormLandField: React.FC<ICropFormLandFieldProps> = ({
   }, []);
 
   useEffect(() => {
+    if (dzialka.kodObrebu) {
+      fetchWojewodztwa().then(setWojewodztwa);
+      fetchPowiaty(dzialka.teryt.substring(0, 2)).then(setPowiaty);
+      fetchGminy(dzialka.teryt.substring(0, 4)).then(setGminy);
+      setLoading(undefined);
+      setObreby([
+        {
+          kodTeryt: dzialka.kodObrebu,
+          nazwa: dzialka.obreb,
+        },
+      ]);
+      console.log(dzialka);
+      console.log(obreby);
+      handleTypeFieldId(dzialka.kodObrebu + "." + dzialka.numerDzialki);
+    }
+  }, []);
+
+  useEffect(() => {
+    setLoading(undefined);
     if (dzialka.teryt.length === 2)
       fetchPowiaty(dzialka.teryt).then(setPowiaty);
+
+    setGminy([]);
+    setPowiaty([]);
+    setObreby([]);
   }, [dzialka.teryt.substring(0, 2)]);
 
   useEffect(() => {
+    setLoading(undefined);
     if (dzialka.teryt.length === 4) fetchGminy(dzialka.teryt).then(setGminy);
   }, [dzialka.teryt.substring(2, 4)]);
 
   useEffect(() => {
     if (dzialka.teryt.length >= 8) {
+      const controller = new AbortController();
+      const signal = controller.signal;
+
       setObreby([]);
-      fetchObreby(dzialka.teryt, setLoading).then(setObreby);
+
+      fetchObreby(dzialka.teryt, setLoading, signal).then(setObreby);
+      // setLoading(undefined);
+      return () => controller.abort();
     }
   }, [dzialka.teryt.substring(4, 8)]);
 
   useEffect(() => {
     const checkId = setTimeout(() => {
       checkFieldId(dzialka.identyfikatorDzialki);
-    }, 1000);
+    }, 500);
 
     return () => clearTimeout(checkId);
   }, [dzialka.identyfikatorDzialki]);
@@ -132,6 +162,7 @@ export const CropFormLandField: React.FC<ICropFormLandFieldProps> = ({
               onUpdateField("teryt", e.target.value);
               onUpdateField("identyfikatorDzialki", e.target.value);
             }}
+            disabled={dzialka.teryt.length < 2}
           >
             <option value="">Wybierz powiat</option>
             {powiaty.map((powiat) => (
@@ -150,6 +181,7 @@ export const CropFormLandField: React.FC<ICropFormLandFieldProps> = ({
               onUpdateField("teryt", e.target.value);
               onUpdateField("identyfikatorDzialki", e.target.value);
             }}
+            disabled={dzialka.teryt.length < 4}
           >
             <option value="">Wybierz gminę</option>
             {gminy.map((gmina) => (
@@ -174,6 +206,7 @@ export const CropFormLandField: React.FC<ICropFormLandFieldProps> = ({
                 onUpdateField("identyfikatorDzialki", selectedObreb.kodTeryt);
               }
             }}
+            disabled={dzialka.teryt.length < 8 || loading !== undefined}
           >
             <option value="">Wybierz obręb</option>
             {obreby.map((obreb) => (
@@ -202,6 +235,7 @@ export const CropFormLandField: React.FC<ICropFormLandFieldProps> = ({
                 dzialka.kodObrebu + "." + e.target.value,
               );
             }}
+            disabled={dzialka.kodObrebu == ""}
           />
         </Col>
       </Row>

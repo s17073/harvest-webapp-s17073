@@ -18,20 +18,20 @@ const additionalValidationSchema = yup.object().shape({
     .string()
     .matches(
       /^[a-zA-ZąćęłńóśźżĄĆĘŁŃÓŚŹŻ\s\–\-\(\)\:\.\+\=\*\%\,\?]+$/,
-      "nazwa ochrony może zawierać tylko litery i spacje",
+      "nazwa może zawierać tylko litery i spacje",
     )
-    .required("nazwa ochrony is required")
-    .min(3, "nazwa ochrony nie może zawierać mniej niż 3 znaki")
-    .max(30, "nazwa ochrony nie może zawierać więcej niż 30 znakow"),
+    .required("nazwa is required")
+    .min(3, "nazwa nie może zawierać mniej niż 3 znaki")
+    .max(30, "nazwa nie może zawierać więcej niż 30 znakow"),
   komunikat: yup
     .string()
     .matches(
       /^[a-zA-ZąćęłńóśźżĄĆĘŁŃÓŚŹŻ\s\–\-\(\)\:\.\+\=\*\%\,\?]+$/,
-      "nazwa ochrony może zawierać tylko litery i spacje",
+      "nazwa może zawierać tylko litery i spacje",
     )
-    .required("nazwa ochrony is required")
-    .min(3, "nazwa ochrony nie może zawierać mniej niż 3 znaki")
-    .max(30, "nazwa ochrony nie może zawierać więcej niż 30 znakow"),
+    .required("nazwa is required")
+    .min(3, "nazwa nie może zawierać mniej niż 3 znaki")
+    .max(30, "nazwa nie może zawierać więcej niż 30 znakow"),
 });
 
 export const ApkForm: React.FC = () => {

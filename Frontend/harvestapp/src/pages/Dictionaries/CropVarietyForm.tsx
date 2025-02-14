@@ -20,11 +20,11 @@ const additionalValidationSchema = yup.object().shape({
     .string()
     .matches(
       /^[a-zA-ZąćęłńóśźżĄĆĘŁŃÓŚŹŻ\s\–\-\(\)\:\.\+\=\*\%\,\?]+$/,
-      "nazwa ochrony może zawierać tylko litery i spacje",
+      "nazwa gatunku może zawierać tylko litery i spacje",
     )
-    .required("nazwa ochrony is required")
-    .min(3, "nazwa ochrony nie może zawierać mniej niż 3 znaki")
-    .max(30, "nazwa ochrony nie może zawierać więcej niż 30 znakow"),
+    .required("nazwa gatunku is required")
+    .min(3, "nazwa gatunku nie może zawierać mniej niż 3 znaki")
+    .max(30, "nazwa gatunku nie może zawierać więcej niż 30 znakow"),
 });
 
 export const CropVarietyFrom: React.FC = () => {

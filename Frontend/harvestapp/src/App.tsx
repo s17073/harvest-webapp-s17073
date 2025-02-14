@@ -29,6 +29,9 @@ import { MainPage } from "./pages/MainPage";
 import { Offers } from "./components/Calculation/Offers";
 import { PolicyConfirmation } from "./components/Calculation/PolicyConfirmation";
 import { Default } from "./pages/Default";
+import { Login } from "./pages/Login";
+import { Register } from "./pages/Register";
+import { Profile } from "./pages/Profile";
 
 const AdminRoutes = () => (
   <Routes>
@@ -72,7 +75,14 @@ function App() {
         />
         <Route path="/admin/login" element={<AdminPanelLogin />} />
 
-        <Route path="" element={<MainPage />} />
+        <Route path="/register" element={<Register />} />
+
+        <Route path="/login" element={<Login />} />
+
+        <Route path="/profile" element={<Profile />} />
+
+        <Route path="" element={<Default Content={MainPage} />} />
+
         <Route
           path="calculation/:id/insuranceperiod"
           element={<CalculationForm CalculationStep={InsurancePeriodForm} />}

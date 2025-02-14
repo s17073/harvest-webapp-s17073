@@ -23,7 +23,7 @@ export const AdminPanelLogin: React.FC = () => {
         `${apiUrl}/user/admin/login`,
         loginData,
       );
-      const token = response.data;
+      const token = response.data.token;
       localStorage.setItem("token", token);
       navigate("/admin");
     } catch (error) {

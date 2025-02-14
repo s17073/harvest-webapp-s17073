@@ -7,6 +7,7 @@ import { Table } from "react-bootstrap";
 import { iconDelete } from "../../assets/icons/delete";
 import { iconEdit } from "../../assets/icons/edit";
 import BottomBar from "../Shared/BottomBar";
+import { Loading } from "../Shared/Loading";
 
 export interface ICropData {
   id: number;
@@ -28,19 +29,19 @@ export interface ICropData {
 
 export const CropsFormTable: React.FC = () => {
   const [crops, setCrops] = useState<ICropData[]>([]);
-  const [loading, setLoading] = useState<string | null>(null);
-  const [info, setInfo] = useState<string | null>(null);
+  // const [loading, setLoading] = useState<string | null>(null);
+  // const [info, setInfo] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const { id } = useParams<{ id: string }>();
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const navigate = useNavigate();
 
-  //TODO
-  // console.log(loading, setLoading(null), info, setInfo(null));
-
   const fetchData = async () => {
+    setIsLoading(true);
     if (id) {
       const cropsData = await fetchCrops(parseInt(id));
       if (cropsData) {
+        setIsLoading(false);
         setCrops(cropsData);
       }
     }
@@ -124,7 +125,7 @@ export const CropsFormTable: React.FC = () => {
                   className={`row-${crop.id} text-center align-middle lh-1 px-0 px-xl-4`}
                 >
                   <td>{crop.uprawa}</td>
-                  <td>{crop.czyNasienna}</td>
+                  <td>{crop.czyNasienna ? "TAK" : "NIE"}</td>
                   <td>{crop.powierzchnia}</td>
                   <td>{crop.wartosc}</td>
                   <td>{crop.sumaUbezpieczenia}</td>
@@ -164,6 +165,7 @@ export const CropsFormTable: React.FC = () => {
             onClick: () => handleSubmit(),
           }}
         />
+        {isLoading && <Loading />}
         <div>{error && error}</div>
       </div>
     </>

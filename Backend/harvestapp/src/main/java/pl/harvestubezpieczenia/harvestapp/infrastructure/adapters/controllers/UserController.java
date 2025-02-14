@@ -6,6 +6,8 @@ import org.springframework.web.bind.annotation.*;
 import pl.harvestubezpieczenia.harvestapp.domain.model.User;
 import pl.harvestubezpieczenia.harvestapp.domain.services.UserService;
 
+import java.util.Map;
+
 @RestController
 @RequestMapping("user")
 public class UserController {
@@ -22,9 +24,10 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody User user) {
+    public ResponseEntity<Map<String, String>> login(@RequestBody User user) {
         return userService.verify(user);
     }
+
 
     @GetMapping("admin/session")
     public ResponseEntity<Boolean> getSession() {
@@ -32,8 +35,13 @@ public class UserController {
     }
 
     @PostMapping("admin/login")
-    public ResponseEntity<String> adminLogin(@RequestBody User user) {
+    public ResponseEntity<Map<String, String>> adminLogin(@RequestBody User user) {
         return userService.verifyAdmin(user);
+    }
+
+    @GetMapping("{email}")
+    public ResponseEntity<User> getUser(@PathVariable String email) {
+        return userService.getUser(email);
     }
 
 }

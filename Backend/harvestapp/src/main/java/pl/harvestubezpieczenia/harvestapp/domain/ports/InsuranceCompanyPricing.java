@@ -1,4 +1,4 @@
-package pl.harvestubezpieczenia.harvestapp.domain.services;
+package pl.harvestubezpieczenia.harvestapp.domain.ports;
 
 import pl.harvestubezpieczenia.harvestapp.domain.DTOs.OfferDto;
 import pl.harvestubezpieczenia.harvestapp.domain.model.Calculation;

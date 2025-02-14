@@ -1,12 +1,12 @@
-package pl.harvestubezpieczenia.harvestapp.domain.services.Pricing;
+package pl.harvestubezpieczenia.harvestapp.infrastructure.adapters.adapters.Pricing;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import pl.harvestubezpieczenia.harvestapp.domain.DTOs.OfferDto;
 import pl.harvestubezpieczenia.harvestapp.domain.mappers.OfferMapper;
 import pl.harvestubezpieczenia.harvestapp.domain.model.*;
+import pl.harvestubezpieczenia.harvestapp.domain.ports.InsuranceCompanyPricing;
 import pl.harvestubezpieczenia.harvestapp.domain.ports.OfferRepo;
-import pl.harvestubezpieczenia.harvestapp.domain.services.InsuranceCompanyPricing;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;

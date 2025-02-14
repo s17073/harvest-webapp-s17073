@@ -9,6 +9,8 @@ import { handleAddPersonalData } from "../../api/Calculation/handleAddPersonalDa
 import { fetchPersonalData } from "../../api/Calculation/fetchPersonalData";
 import { Col, FloatingLabel, Form, Row } from "react-bootstrap";
 import BottomBar from "../Shared/BottomBar";
+import * as yup from "yup";
+import { Loading } from "../Shared/Loading";
 
 interface IPersonalData {
   imie: string;
@@ -31,6 +33,8 @@ export const PersonalDataForm: React.FC = () => {
   const [powiatyInsurer, setPowiatyInsurer] = useState<PartOfTeryt[]>([]);
   const [gminyInsurer, setGminyInsurer] = useState<PartOfTeryt[]>([]);
   const [error, setError] = useState<string | undefined>(undefined);
+  const [errors, setErrors] = useState<any>({});
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [policyHolder, setPolicyHolder] = useState<IPersonalData>({
     imie: "",
     nazwisko: "",
@@ -59,6 +63,51 @@ export const PersonalDataForm: React.FC = () => {
   });
   const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
+
+  const validationSchema = yup.object().shape({
+    policyHolder: yup.object().shape({
+      imie: yup.string().required("Imię jest wymagane"),
+      nazwisko: yup.string().required("Nazwisko jest wymagane"),
+      pesel: yup
+        .string()
+        .required("PESEL jest wymagany")
+        .length(11, "PESEL musi mieć 11 znaków"),
+      dataUrodzenia: yup.string().required("Data urodzenia jest wymagana"),
+      adresEmail: yup
+        .string()
+        .email("Podaj poprawny adres email")
+        .required("Adres email jest wymagany"),
+      teryt: yup
+        .string()
+        .length(8, "Pole jest wymagane")
+        .required("Pole jest wymagane"),
+      kodPocztowy: yup.string().required("Kod pocztowy jest wymagany"),
+      miejscowosc: yup.string().required("Miejscowość jest wymagana"),
+      ulica: yup.string().required("Ulica jest wymagana"),
+      numerDomu: yup.string().required("Numer domu jest wymagany"),
+    }),
+    insured: yup.object().shape({
+      imie: yup.string().required("Imię jest wymagane"),
+      nazwisko: yup.string().required("Nazwisko jest wymagane"),
+      pesel: yup
+        .string()
+        .required("PESEL jest wymagany")
+        .length(11, "PESEL musi mieć 11 znaków"),
+      dataUrodzenia: yup.string().required("Data urodzenia jest wymagana"),
+      adresEmail: yup
+        .string()
+        .email("Podaj poprawny adres email")
+        .required("Adres email jest wymagany"),
+      teryt: yup
+        .string()
+        .length(8, "Pole jest wymagane")
+        .required("Pole jest wymagane"),
+      kodPocztowy: yup.string().required("Kod pocztowy jest wymagany"),
+      miejscowosc: yup.string().required("Miejscowość jest wymagana"),
+      ulica: yup.string().required("Ulica jest wymagana"),
+      numerDomu: yup.string().required("Numer domu jest wymagany"),
+    }),
+  });
 
   useEffect(() => {
     fetchWojewodztwa().then(setWojewodztwa);
@@ -94,54 +143,93 @@ export const PersonalDataForm: React.FC = () => {
   };
 
   const handleSubmit = async (event: React.FormEvent) => {
-    event.preventDefault();
+    try {
+      event.preventDefault();
+      await validationSchema.validate(
+        { policyHolder, insured },
+        { abortEarly: false },
+      );
 
-    const personalDataToAdd: IStepPersonalData = {
-      ubezpieczajacy: {
-        imie: policyHolder.imie,
-        nazwisko: policyHolder.nazwisko,
-        pesel: policyHolder.pesel,
-        dataUrodzenia: new Date(policyHolder.dataUrodzenia),
-        adresEmail: policyHolder.adresEmail,
-        teryt: policyHolder.teryt,
-        kodPocztowy: policyHolder.kodPocztowy,
-        miejscowosc: policyHolder.miejscowosc,
-        ulica: policyHolder.ulica,
-        numerDomu: policyHolder.numerDomu,
-        numerMieszkania: policyHolder.numerMieszkania,
-      },
-      ubezpieczony: {
-        imie: insured.imie,
-        nazwisko: insured.nazwisko,
-        pesel: insured.pesel,
-        dataUrodzenia: new Date(insured.dataUrodzenia),
-        adresEmail: insured.adresEmail,
-        teryt: insured.teryt,
-        kodPocztowy: insured.kodPocztowy,
-        miejscowosc: insured.miejscowosc,
-        ulica: insured.ulica,
-        numerDomu: insured.numerDomu,
-        numerMieszkania: insured.numerMieszkania,
-      },
-    };
+      const personalDataToAdd: IStepPersonalData = {
+        ubezpieczajacy: {
+          imie: policyHolder.imie,
+          nazwisko: policyHolder.nazwisko,
+          pesel: policyHolder.pesel,
+          dataUrodzenia: new Date(policyHolder.dataUrodzenia),
+          adresEmail: policyHolder.adresEmail,
+          teryt: policyHolder.teryt,
+          kodPocztowy: policyHolder.kodPocztowy,
+          miejscowosc: policyHolder.miejscowosc,
+          ulica: policyHolder.ulica,
+          numerDomu: policyHolder.numerDomu,
+          numerMieszkania: policyHolder.numerMieszkania,
+        },
+        ubezpieczony: {
+          imie: insured.imie,
+          nazwisko: insured.nazwisko,
+          pesel: insured.pesel,
+          dataUrodzenia: new Date(insured.dataUrodzenia),
+          adresEmail: insured.adresEmail,
+          teryt: insured.teryt,
+          kodPocztowy: insured.kodPocztowy,
+          miejscowosc: insured.miejscowosc,
+          ulica: insured.ulica,
+          numerDomu: insured.numerDomu,
+          numerMieszkania: insured.numerMieszkania,
+        },
+      };
 
-    if (id) {
-      const idCalculation = parseInt(id);
-      try {
-        await handleAddPersonalData(idCalculation, personalDataToAdd);
-        navigate(`/calculation/${id}/crops`);
-      } catch (e) {
-        setError("Nie udało się wysłać danych");
+      if (id) {
+        const idCalculation = parseInt(id);
+        try {
+          await handleAddPersonalData(idCalculation, personalDataToAdd);
+          navigate(`/calculation/${id}/crops`);
+        } catch (e) {
+          setError("Nie udało się wysłać danych");
+        }
+      }
+    } catch (err) {
+      if (err instanceof yup.ValidationError) {
+        const fieldErrors: any = {
+          policyHolder: {},
+          insured: {},
+        };
+
+        err.inner.forEach((error) => {
+          if (error.path) {
+            const [parentField, field] = error.path.split(".");
+
+            if (parentField === "policyHolder") {
+              fieldErrors.policyHolder[field] = error.message;
+            } else if (parentField === "insured") {
+              fieldErrors.insured[field] = error.message;
+            }
+          }
+          console.log(error);
+        });
+
+        setErrors(fieldErrors);
       }
     }
   };
 
   useEffect(() => {
+    setIsLoading(true);
     const fetchData = async () => {
       if (id) {
         const personalData = await fetchPersonalData(parseInt(id));
 
+        console.log(personalData?.ubezpieczajacy.teryt.substring(0, 2));
+
         if (personalData) {
+          fetchPowiaty(personalData.ubezpieczajacy.teryt.substring(0, 2)).then(
+            setPowiaty,
+          );
+
+          fetchGminy(personalData.ubezpieczajacy.teryt.substring(0, 4)).then(
+            setGminy,
+          );
+
           const policyHolder: IPersonalData = {
             imie: personalData.ubezpieczajacy.imie,
             nazwisko: personalData.ubezpieczajacy.nazwisko,
@@ -155,6 +243,14 @@ export const PersonalDataForm: React.FC = () => {
             numerDomu: personalData.ubezpieczajacy.numerDomu,
             numerMieszkania: personalData.ubezpieczajacy.numerMieszkania,
           };
+
+          fetchPowiaty(personalData.ubezpieczony.teryt.substring(0, 2)).then(
+            setPowiatyInsurer,
+          );
+
+          fetchGminy(personalData.ubezpieczony.teryt.substring(0, 4)).then(
+            setGminyInsurer,
+          );
 
           const policyInsured: IPersonalData = {
             imie: personalData.ubezpieczony.imie,
@@ -174,6 +270,7 @@ export const PersonalDataForm: React.FC = () => {
           setInsured(policyInsured);
         }
       }
+      setIsLoading(false);
     };
     fetchData();
   }, [id]);
@@ -210,6 +307,11 @@ export const PersonalDataForm: React.FC = () => {
                     }
                   />
                 </Col>
+                {errors.policyHolder?.imie && (
+                  <span className="error-message">
+                    {errors.policyHolder?.imie}
+                  </span>
+                )}
               </Row>
               <Row className="mt-3">
                 <Form.Label column lg="2">
@@ -225,6 +327,11 @@ export const PersonalDataForm: React.FC = () => {
                     }
                   />
                 </Col>
+                {errors.policyHolder?.nazwisko && (
+                  <span className="error-message">
+                    {errors.policyHolder?.nazwisko}
+                  </span>
+                )}
               </Row>
               <Row className="mt-3">
                 <Form.Label column lg="2">
@@ -240,6 +347,11 @@ export const PersonalDataForm: React.FC = () => {
                     }
                   />
                 </Col>
+                {errors.policyHolder?.pesel && (
+                  <span className="error-message">
+                    {errors.policyHolder?.pesel}
+                  </span>
+                )}
               </Row>
               <Row className="mt-3">
                 <Form.Label column lg="2">
@@ -255,6 +367,11 @@ export const PersonalDataForm: React.FC = () => {
                     }
                   />
                 </Col>
+                {errors.policyHolder?.dataUrodzenia && (
+                  <span className="error-message">
+                    {errors.policyHolder?.dataUrodzenia}
+                  </span>
+                )}
               </Row>
               <Row className="mt-3">
                 <Form.Label column lg="2">
@@ -270,6 +387,11 @@ export const PersonalDataForm: React.FC = () => {
                     }
                   />
                 </Col>
+                {errors.policyHolder?.adresEmail && (
+                  <span className="error-message">
+                    {errors.policyHolder?.adresEmail}
+                  </span>
+                )}
               </Row>
             </Row>
             <div className="section-heading ml-0">Adres do korespondencji</div>
@@ -300,6 +422,11 @@ export const PersonalDataForm: React.FC = () => {
                     </option>
                   ))}
                 </Form.Select>
+                {errors.policyHolder?.teryt && (
+                  <span className="error-message">
+                    {errors.policyHolder?.teryt}
+                  </span>
+                )}
               </Form.Group>
 
               <Form.Group as={Col} lg="4" controlId="powiat" className="mb-3">
@@ -310,6 +437,7 @@ export const PersonalDataForm: React.FC = () => {
                   onChange={(e) =>
                     setField("teryt", setPolicyHolder, e.target.value)
                   }
+                  disabled={policyHolder.teryt.length < 2}
                 >
                   <option value="">Wybierz powiat</option>
                   {powiaty.map((powiat) => (
@@ -318,6 +446,11 @@ export const PersonalDataForm: React.FC = () => {
                     </option>
                   ))}
                 </Form.Select>
+                {errors.policyHolder?.teryt && (
+                  <span className="error-message">
+                    {errors.policyHolder?.teryt}
+                  </span>
+                )}
               </Form.Group>
 
               <Form.Group as={Col} lg="4" controlId="powiat" className="mb-3">
@@ -328,6 +461,7 @@ export const PersonalDataForm: React.FC = () => {
                   onChange={(e) =>
                     setField("teryt", setPolicyHolder, e.target.value)
                   }
+                  disabled={policyHolder.teryt.length < 4}
                 >
                   <option value="">Wybierz gminę</option>
                   {gminy.map((gmina) => (
@@ -336,6 +470,11 @@ export const PersonalDataForm: React.FC = () => {
                     </option>
                   ))}
                 </Form.Select>
+                {errors.policyHolder?.teryt && (
+                  <span className="error-message">
+                    {errors.policyHolder?.teryt}
+                  </span>
+                )}
               </Form.Group>
 
               <Row className="mt-3">
@@ -355,6 +494,11 @@ export const PersonalDataForm: React.FC = () => {
                       setField("kodPocztowy", setPolicyHolder, e.target.value)
                     }
                   />
+                  {errors.policyHolder?.kodPocztowy && (
+                    <span className="error-message">
+                      {errors.policyHolder?.kodPocztowy}
+                    </span>
+                  )}
                 </FloatingLabel>
 
                 <FloatingLabel
@@ -373,6 +517,11 @@ export const PersonalDataForm: React.FC = () => {
                       setField("miejscowosc", setPolicyHolder, e.target.value)
                     }
                   />
+                  {errors.policyHolder?.miejscowosc && (
+                    <span className="error-message">
+                      {errors.policyHolder?.miejscowosc}
+                    </span>
+                  )}
                 </FloatingLabel>
 
                 <FloatingLabel
@@ -391,6 +540,11 @@ export const PersonalDataForm: React.FC = () => {
                       setField("ulica", setPolicyHolder, e.target.value)
                     }
                   />
+                  {errors.policyHolder?.ulica && (
+                    <span className="error-message">
+                      {errors.policyHolder?.ulica}
+                    </span>
+                  )}
                 </FloatingLabel>
 
                 <FloatingLabel
@@ -409,6 +563,11 @@ export const PersonalDataForm: React.FC = () => {
                       setField("numerDomu", setPolicyHolder, e.target.value)
                     }
                   />
+                  {errors.policyHolder?.numerDomu && (
+                    <span className="error-message">
+                      {errors.policyHolder?.numerDomu}
+                    </span>
+                  )}
                 </FloatingLabel>
 
                 <FloatingLabel
@@ -431,11 +590,16 @@ export const PersonalDataForm: React.FC = () => {
                       )
                     }
                   />
+                  {errors.policyHolder?.numerMieszkania && (
+                    <span className="error-message">
+                      {errors.policyHolder?.numerMieszkania}
+                    </span>
+                  )}
                 </FloatingLabel>
               </Row>
             </Row>
             <div>
-              <div className="section-heading">Dane ubezpieczającego</div>
+              <div className="section-heading">Dane ubezpieczonego</div>
               <div
                 className="copy-policy-holder"
                 onClick={copyPolicyHolderData}
@@ -458,6 +622,9 @@ export const PersonalDataForm: React.FC = () => {
                     }
                   />
                 </Col>
+                {errors.insured?.imie && (
+                  <span className="error-message">{errors.insured?.imie}</span>
+                )}
               </Row>
               <Row className="mt-3">
                 <Form.Label column lg="2">
@@ -473,6 +640,11 @@ export const PersonalDataForm: React.FC = () => {
                     }
                   />
                 </Col>
+                {errors.insured?.nazwisko && (
+                  <span className="error-message">
+                    {errors.insured?.nazwisko}
+                  </span>
+                )}
               </Row>
               <Row className="mt-3">
                 <Form.Label column lg="2">
@@ -488,6 +660,9 @@ export const PersonalDataForm: React.FC = () => {
                     }
                   />
                 </Col>
+                {errors.insured?.pesel && (
+                  <span className="error-message">{errors.insured?.pesel}</span>
+                )}
               </Row>
               <Row className="mt-3">
                 <Form.Label column lg="2">
@@ -503,6 +678,11 @@ export const PersonalDataForm: React.FC = () => {
                     }
                   />
                 </Col>
+                {errors.insured?.dataUrodzenia && (
+                  <span className="error-message">
+                    {errors.insured?.dataUrodzenia}
+                  </span>
+                )}
               </Row>
               <Row className="mt-3">
                 <Form.Label column lg="2">
@@ -518,6 +698,11 @@ export const PersonalDataForm: React.FC = () => {
                     }
                   />
                 </Col>
+                {errors.insured?.adresEmail && (
+                  <span className="error-message">
+                    {errors.insured?.adresEmail}
+                  </span>
+                )}
               </Row>
             </Row>
             <div className="section-heading ml-0">Adres do korespondencji</div>
@@ -546,6 +731,9 @@ export const PersonalDataForm: React.FC = () => {
                     </option>
                   ))}
                 </Form.Select>
+                {errors.insured?.teryt && (
+                  <span className="error-message">{errors.insured?.teryt}</span>
+                )}
               </Form.Group>
 
               <Form.Group as={Col} lg="4" controlId="powiat" className="mb-3">
@@ -564,6 +752,9 @@ export const PersonalDataForm: React.FC = () => {
                     </option>
                   ))}
                 </Form.Select>
+                {errors.insured?.teryt && (
+                  <span className="error-message">{errors.insured?.teryt}</span>
+                )}
               </Form.Group>
 
               <Form.Group as={Col} lg="4" controlId="powiat" className="mb-3">
@@ -582,6 +773,9 @@ export const PersonalDataForm: React.FC = () => {
                     </option>
                   ))}
                 </Form.Select>
+                {errors.insured?.teryt && (
+                  <span className="error-message">{errors.insured?.teryt}</span>
+                )}
               </Form.Group>
 
               <Row className="mt-3">
@@ -601,6 +795,11 @@ export const PersonalDataForm: React.FC = () => {
                       setField("kodPocztowy", setInsured, e.target.value)
                     }
                   />
+                  {errors.insured?.kodPocztowy && (
+                    <span className="error-message">
+                      {errors.insured?.kodPocztowy}
+                    </span>
+                  )}
                 </FloatingLabel>
 
                 <FloatingLabel
@@ -619,6 +818,11 @@ export const PersonalDataForm: React.FC = () => {
                       setField("miejscowosc", setInsured, e.target.value)
                     }
                   />
+                  {errors.insured?.miejscowosc && (
+                    <span className="error-message">
+                      {errors.insured?.miejscowosc}
+                    </span>
+                  )}
                 </FloatingLabel>
 
                 <FloatingLabel
@@ -637,6 +841,11 @@ export const PersonalDataForm: React.FC = () => {
                       setField("ulica", setInsured, e.target.value)
                     }
                   />
+                  {errors.insured?.ulica && (
+                    <span className="error-message">
+                      {errors.insured?.ulica}
+                    </span>
+                  )}
                 </FloatingLabel>
 
                 <FloatingLabel
@@ -655,6 +864,11 @@ export const PersonalDataForm: React.FC = () => {
                       setField("numerDomu", setInsured, e.target.value)
                     }
                   />
+                  {errors.insured?.numerDomu && (
+                    <span className="error-message">
+                      {errors.insured?.numerDomu}
+                    </span>
+                  )}
                 </FloatingLabel>
 
                 <FloatingLabel
@@ -673,6 +887,11 @@ export const PersonalDataForm: React.FC = () => {
                       setField("numerMieszkania", setInsured, e.target.value)
                     }
                   />
+                  {errors.insured?.numerMieszkania && (
+                    <span className="error-message">
+                      {errors.insured?.numerMieszkania}
+                    </span>
+                  )}
                 </FloatingLabel>
               </Row>
             </Row>
@@ -692,6 +911,7 @@ export const PersonalDataForm: React.FC = () => {
             }}
           />
         </Form>
+        {isLoading && <Loading />}
         <div>{error && error}</div>
       </div>
     </>

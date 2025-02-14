@@ -2,6 +2,7 @@ package pl.harvestubezpieczenia.harvestapp.domain.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import pl.harvestubezpieczenia.harvestapp.domain.ports.InsuranceCompanyPricing;
 
 import java.util.HashMap;
 import java.util.List;

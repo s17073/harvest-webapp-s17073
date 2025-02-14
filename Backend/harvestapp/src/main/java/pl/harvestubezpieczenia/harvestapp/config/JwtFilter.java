@@ -28,25 +28,32 @@ public class JwtFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        String authHeader = request.getHeader("Authorization");
-        String token = null;
-        String username = null;
+        try {
+            String authHeader = request.getHeader("Authorization");
+            String token = null;
+            String username = null;
 
-        if (authHeader != null && authHeader.startsWith("Bearer ")) {
-            token = authHeader.substring(7);
-            username = jwtService.extractUserName(token);
-        }
-
-        if(username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-
-            UserDetails userDetails = context.getBean(MyUserDetailService.class).loadUserByUsername(username);
-
-            if(jwtService.validateToken(token, userDetails)){
-                UsernamePasswordAuthenticationToken authentication =
-                        new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
-                authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-                SecurityContextHolder.getContext().setAuthentication(authentication);
+            if (authHeader != null && authHeader.startsWith("Bearer ")) {
+                token = authHeader.substring(7);
+                username = jwtService.extractUserName(token);
             }
+
+            if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+
+                UserDetails userDetails = context.getBean(MyUserDetailService.class).loadUserByUsername(username);
+
+                if (jwtService.validateToken(token, userDetails)) {
+                    UsernamePasswordAuthenticationToken authentication =
+                            new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+                    authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                    SecurityContextHolder.getContext().setAuthentication(authentication);
+                }
+            }
+        } catch (Exception e)
+        {
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            response.getWriter().println(e.getMessage());
+            return;
         }
         filterChain.doFilter(request, response);
     }

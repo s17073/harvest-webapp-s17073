@@ -22,7 +22,7 @@ const additionalValidationSchema = yup.object().shape({
       /^[a-zA-ZąćęłńóśźżĄĆĘŁŃÓŚŹŻ\s]+$/,
       "nazwa zwierzęcia nie może zawierać tylko litery i spacje",
     )
-    .required("name is required")
+    .required("nazwa jest wymagana")
     .min(3, "nazwa zwierzęcia nie może zawierać mniej niż 3 znaki")
     .max(30, "nazwa zwierzęcia nie może zawierać więcej niż 30 znakow"),
 });
