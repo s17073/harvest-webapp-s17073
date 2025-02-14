@@ -37,6 +37,10 @@ export const MainNav: React.FC = () => {
     navigate("/");
   };
 
+  const adminPanel = () => {
+    navigate("/admin");
+  };
+
   return (
     <nav className="admin-nav">
       <Link to="/" className="admin-nav-text admin-nav-main-text">
@@ -57,6 +61,7 @@ export const MainNav: React.FC = () => {
           <Link to="/" className="admin-nav-text px-2 admin-nav-main-text">
             Polisy
           </Link> */}
+
           <div
             onClick={removeToken}
             className="admin-nav-text h-100 px-2 admin-nav-main-text color-white"
@@ -65,9 +70,20 @@ export const MainNav: React.FC = () => {
           </div>
         </div>
       ) : (
-        <Link to="/login" className="admin-nav-text admin-nav-main-text">
-          Zaloguj się
-        </Link>
+        <div className="h-100 admin-nav-text admin-nav-main-text ">
+          <div
+            onClick={adminPanel}
+            className="admin-nav-text h-100 px-2 admin-nav-main-text color-white"
+          >
+            Panel Administratora
+          </div>
+          <Link
+            to="/login"
+            className="admin-nav-text h-100 px-2 admin-nav-main-text color-white"
+          >
+            Zaloguj się
+          </Link>
+        </div>
       )}
     </nav>
   );

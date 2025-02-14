@@ -6,6 +6,7 @@ import { fetchAgenci } from "../api/Shared/fetchAgenci";
 import { signInUser } from "../api/Shared/signInUser";
 import { logInUser } from "../api/Shared/logInUser";
 import * as yup from "yup";
+import { useNavigate } from "react-router-dom";
 
 interface IUser {
   imie: string;
@@ -35,6 +36,7 @@ export const Register: React.FC = () => {
     rola: "",
   });
   const [errors, setErrors] = useState<any>({});
+  const navigate = useNavigate();
 
   const userSchema = yup.object().shape({
     imie: yup
@@ -148,6 +150,7 @@ export const Register: React.FC = () => {
         setErrors(fieldErrors);
       }
     }
+    navigate("/");
   };
 
   return (
@@ -359,7 +362,7 @@ export const Register: React.FC = () => {
                           label: "ZAŁÓŻ KONTO",
                           className: "admin-upsert-submit",
                           onClick: () => {
-                            console.log(user);
+                            handleSubmit;
                           },
                         }}
                       />
