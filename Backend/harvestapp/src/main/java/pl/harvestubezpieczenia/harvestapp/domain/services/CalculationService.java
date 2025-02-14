@@ -34,8 +34,9 @@ public class CalculationService {
     private final InsuranceCompanyProviderService insuranceCompanyProviderService;
     private final OfferRepo offerRepo;
     private final PolicyRepo policyRepo;
+    private final UserService userService;
 
-    public CalculationService(CalculationRepo calculationRepo, ApkQuestionRepo apkQuestionRepo, ApkCalculationRepo apkCalculationRepo, TerytRepo terytRepo, CalcPersonMapper calcPersonMapper, SoilClassRepo soilClassRepo, CropKindRepo cropKindRepo, CropVarietyRepo cropVarietyRepo, CoverRepo coverRepo, CropRepo cropRepo, LandRepo landRepo, LivestockKindRepo livestockKindRepo, LivestockRepo livestockRepo, InsuranceCompanyRepo insuranceCompanyRepo, InsuranceCompanyProviderService insuranceCompanyProviderService, OfferRepo offerRepo, PolicyRepo policyRepo) {
+    public CalculationService(CalculationRepo calculationRepo, ApkQuestionRepo apkQuestionRepo, ApkCalculationRepo apkCalculationRepo, TerytRepo terytRepo, CalcPersonMapper calcPersonMapper, SoilClassRepo soilClassRepo, CropKindRepo cropKindRepo, CropVarietyRepo cropVarietyRepo, CoverRepo coverRepo, CropRepo cropRepo, LandRepo landRepo, LivestockKindRepo livestockKindRepo, LivestockRepo livestockRepo, InsuranceCompanyRepo insuranceCompanyRepo, InsuranceCompanyProviderService insuranceCompanyProviderService, OfferRepo offerRepo, PolicyRepo policyRepo, UserService userService) {
         this.calculationRepo = calculationRepo;
         this.apkQuestionRepo = apkQuestionRepo;
         this.apkCalculationRepo = apkCalculationRepo;
@@ -53,6 +54,7 @@ public class CalculationService {
         this.insuranceCompanyProviderService = insuranceCompanyProviderService;
         this.offerRepo = offerRepo;
         this.policyRepo = policyRepo;
+        this.userService = userService;
     }
 
     public ResponseEntity<Integer> startNewCalculation() {
@@ -102,14 +104,32 @@ public class CalculationService {
             Calculation calculation = calculationRepo.getCalculationById(id);
             Teryt policyHolderTeryt = terytRepo.getTeryt(dto.getUbezpieczajacy().getTeryt());
 
-            User policyHolder = calcPersonMapper.mapToEntity(dto.getUbezpieczajacy(), policyHolderTeryt);
+            ResponseEntity<User> response  = userService.getUser(dto.getUbezpieczajacy().getAdresEmail());
+            User policyHolder = new User();
+            if (response.getStatusCode().is2xxSuccessful() && response.getBody() != null) {
+                policyHolder = response.getBody();
+            } else {
+
+            }
+
+            policyHolder = calcPersonMapper.mapToEntity(dto.getUbezpieczajacy(), policyHolderTeryt);
             calculation.setUbezpieczajacy(policyHolder);
 
             if (dto.getUbezpieczajacy().equals(dto.getUbezpieczony())) {
                 calculation.setUbezpieczony(policyHolder);
             } else {
+
+                ResponseEntity<User> response2  = userService.getUser(dto.getUbezpieczony().getAdresEmail());
+                User policyInsured = new User();
+                if (response.getStatusCode().is2xxSuccessful() && response.getBody() != null) {
+                    policyInsured = response.getBody();
+                } else {
+
+                }
+
                 Teryt policyInsuredTeryt = terytRepo.getTeryt(dto.getUbezpieczony().getTeryt());
-                User policyInsured = calcPersonMapper.mapToEntity(dto.getUbezpieczony(), policyInsuredTeryt);
+
+                policyInsured = calcPersonMapper.mapToEntity(dto.getUbezpieczony(), policyInsuredTeryt);
                 calculation.setUbezpieczony(policyInsured);
             }
             calculationRepo.saveCalculation(calculation);
