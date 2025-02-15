@@ -35,7 +35,7 @@ public class InsuranceCompany implements GenericCrudModel{
 
     @ManyToOne
     @JoinColumn(name = "id_adres")
-    @JsonBackReference
+    @JsonBackReference(value = "teryt-ubezpieczyciel")
     private Address address;
 
     private boolean czyAktywna;

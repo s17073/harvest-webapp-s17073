@@ -1,5 +1,6 @@
 package pl.harvestubezpieczenia.harvestapp.domain.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Data;
@@ -16,19 +17,20 @@ public class Address {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int idAdres;
 
+    @JsonBackReference(value = "teryt-adres")
     @ManyToOne
     @JoinColumn(name = "id_teryt")
     private Teryt teryt;
 
 
     @OneToMany(mappedBy = "address", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JsonManagedReference
+    @JsonManagedReference(value = "teryt-ubezpieczyciel")
     private List<InsuranceCompany> insuranceCompany;
 
     @OneToMany(mappedBy = "address", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Agent> agents;
 
-    @JsonManagedReference
+    @JsonManagedReference(value = "teryt-uzytkownik")
     @OneToMany(mappedBy = "address", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<User> uzytkownik;
 

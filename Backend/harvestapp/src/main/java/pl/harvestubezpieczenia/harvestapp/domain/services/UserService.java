@@ -91,6 +91,7 @@ public class UserService {
             return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
         }
         } catch (AuthenticationException e){
+
             return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
         }
 

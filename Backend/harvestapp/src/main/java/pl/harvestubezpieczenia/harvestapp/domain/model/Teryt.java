@@ -1,5 +1,6 @@
 package pl.harvestubezpieczenia.harvestapp.domain.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Data;
 import pl.harvestubezpieczenia.harvestapp.domain.valueObjects.ModificationDate;
@@ -22,6 +23,7 @@ public class Teryt implements GenericCrudModel {
     private String typKod;
     private String typ;
 
+    @JsonManagedReference(value = "teryt-adres")
     @OneToMany(mappedBy = "teryt", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Address> addresses = new ArrayList<>();
 

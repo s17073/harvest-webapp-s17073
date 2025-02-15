@@ -15,7 +15,7 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int idUzytkownik;
 
-    @JsonBackReference
+    @JsonBackReference(value = "teryt-uzytkownik")
     @JoinColumn(name = "id_adres")
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Address address;
