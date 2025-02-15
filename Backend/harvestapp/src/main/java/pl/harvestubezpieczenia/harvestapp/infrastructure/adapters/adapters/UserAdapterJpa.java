@@ -48,6 +48,7 @@ public class UserAdapterJpa implements UserRepo {
             dto.setDataKoncaOchrony((Date) o[3]);
             dto.setImie((String) o[4]);
             dto.setNazwisko((String) o[5]);
+            dto.setStatusKalkulacji((String) o[6]);
 
             dtos.add(dto);
         }

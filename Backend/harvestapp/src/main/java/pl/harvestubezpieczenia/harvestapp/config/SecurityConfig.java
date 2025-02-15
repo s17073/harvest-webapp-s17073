@@ -42,6 +42,7 @@ public class SecurityConfig {
                         .requestMatchers("/").permitAll()
                         .requestMatchers("/user/*/calc").permitAll()
                         .requestMatchers("/user/*/pol").permitAll()
+                        .requestMatchers("/user/*/pol").permitAll()
                         .requestMatchers("/user/*").permitAll()
                         .requestMatchers("/agent").permitAll()
                         .requestMatchers("/teryt/**").permitAll()

@@ -8,10 +8,14 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import pl.harvestubezpieczenia.harvestapp.domain.DTOs.CalcPerson;
 import pl.harvestubezpieczenia.harvestapp.domain.DTOs.UserCalcDto;
 import pl.harvestubezpieczenia.harvestapp.domain.DTOs.UserPolDto;
+import pl.harvestubezpieczenia.harvestapp.domain.mappers.CalcPersonMapper;
+import pl.harvestubezpieczenia.harvestapp.domain.model.Teryt;
 import pl.harvestubezpieczenia.harvestapp.domain.model.User;
 import pl.harvestubezpieczenia.harvestapp.domain.ports.UserRepo;
+import pl.harvestubezpieczenia.harvestapp.infrastructure.adapters.repositories.TerytRepoJpa;
 
 import java.util.HashMap;
 import java.util.List;
@@ -23,19 +27,30 @@ public class UserService {
 
     private final UserRepo userRepo;
     private final JWTService jwtService;
+    private final CalcPersonMapper calcPersonMapper;
+    private final TerytRepoJpa terytRepoJpa;
     private BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(5);
     private final AuthenticationManager authenticationManager;
 
-    public UserService(UserRepo userRepo, JWTService jwtService, AuthenticationManager authenticationManager) {
+    public UserService(UserRepo userRepo, JWTService jwtService, AuthenticationManager authenticationManager, CalcPersonMapper calcPersonMapper, TerytRepoJpa terytRepoJpa) {
         this.userRepo = userRepo;
         this.jwtService = jwtService;
         this.authenticationManager = authenticationManager;
+        this.calcPersonMapper = calcPersonMapper;
+        this.terytRepoJpa = terytRepoJpa;
     }
 
-    public ResponseEntity<String> registerUser(User user) {
+    public ResponseEntity<String> registerUser(CalcPerson calcPerson) {
 
+        Teryt teryt = terytRepoJpa.getTeryt(calcPerson.getTeryt());
+        User user = calcPersonMapper.mapToEntity(calcPerson, teryt);
+        user.setHaslo(calcPerson.getHaslo());
+        user.setRola(calcPerson.getRola());
         user.setHaslo(encoder.encode(user.getHaslo()));
+
         userRepo.saveUser(user);
+
+
         return new ResponseEntity<>("User created", HttpStatus.OK);
     }
 

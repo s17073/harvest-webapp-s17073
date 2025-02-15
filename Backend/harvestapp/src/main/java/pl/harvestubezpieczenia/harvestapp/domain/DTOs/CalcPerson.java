@@ -1,5 +1,6 @@
 package pl.harvestubezpieczenia.harvestapp.domain.DTOs;
 
+
 import lombok.Data;
 
 import java.sql.Date;
@@ -18,5 +19,7 @@ public class CalcPerson {
     private String ulica;
     private String numerDomu;
     private String numerMieszkania;
+    private String haslo;
+    private String rola;
 
 }

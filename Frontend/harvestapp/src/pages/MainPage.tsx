@@ -4,12 +4,32 @@ import { startNewCalculation } from "../api/Calculation/startNewCalculation";
 import { Loading } from "../components/Shared/Loading";
 import { Col, Row } from "react-bootstrap";
 import { Message } from "../components/Shared/Message";
+import { handleAddPersonalData } from "../api/Calculation/handleAddPersonalData";
+import { IStepPersonalData } from "../interfaces/IStepPersonalData";
+import { startNewCalculationWithUserData } from "../api/Calculation/startNewCalculationWithUserData";
+
+interface IPersonalData {
+  imie: string;
+  nazwisko: string;
+  pesel: string;
+  dataUrodzenia: string;
+  adresEmail: string;
+  teryt: string;
+  kodPocztowy: string;
+  miejscowosc: string;
+  ulica: string;
+  numerDomu: string;
+  numerMieszkania: string | undefined;
+}
 
 export const MainPage: React.FC = () => {
   const [log, setLog] = useState<boolean>(false);
   const [message, setMessage] = useState<string | undefined>(undefined);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const navigate = useNavigate();
+  const [profile, setProfile] = useState<string | null>(
+    localStorage.getItem("userName"),
+  );
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -36,6 +56,10 @@ export const MainPage: React.FC = () => {
       if (calculationId === undefined) {
         setMessage(`${Date.now()} Wystąpił błąd, spróbuj ponownie później.`);
       } else {
+        if (profile !== null) {
+          await startNewCalculationWithUserData(calculationId, profile);
+        }
+
         navigate(`/calculation/${calculationId}/insuranceperiod`);
       }
     } catch (e) {

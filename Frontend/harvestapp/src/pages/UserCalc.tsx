@@ -56,6 +56,9 @@ export const UserCalc: React.FC = () => {
                                 Numer kalkulacji
                               </th>
                               <th className="text-center align-middle lh-base px-0 px-xl-4">
+                                Status
+                              </th>
+                              <th className="text-center align-middle lh-base px-0 px-xl-4">
                                 Początek ubezpieczenia
                               </th>
                               <th className="text-center align-middle lh-base px-0 px-xl-4">
@@ -79,16 +82,22 @@ export const UserCalc: React.FC = () => {
                                 className={`row-${c?.idKalkulacja} text-center align-middle lh-1 px-0 px-xl-4`}
                               >
                                 <td>{c.numerKalkulacji}</td>
+                                <td>
+                                  {c.statusKalkulacji
+                                    ? c.statusKalkulacji
+                                    : "KALKULACJA"}
+                                </td>
                                 <td>{c.dataPoczatkuOchrony}</td>
                                 <td>{c.dataKoncaOchrony}</td>
                                 <td>{c.imie}</td>
                                 <td>{c.nazwisko}</td>
                                 <td
                                   onClick={() => {
-                                    goToCalc(c.idKalkulacja);
+                                    !c.statusKalkulacji &&
+                                      goToCalc(c.idKalkulacja);
                                   }}
                                 >
-                                  {iconEdit()}
+                                  {!c.statusKalkulacji && iconEdit()}
                                 </td>
                               </tr>
                             ))}

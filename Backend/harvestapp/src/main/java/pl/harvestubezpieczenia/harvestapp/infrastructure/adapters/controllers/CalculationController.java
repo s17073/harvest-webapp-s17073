@@ -24,6 +24,12 @@ public class CalculationController {
         return calculationService.startNewCalculation();
     }
 
+    @PutMapping("/new/{id}/{email}")
+    public ResponseEntity<Boolean> startNewCalculationWithUserData(@PathVariable("id") int id, @PathVariable("email") String email){
+        return calculationService.startNewCalculationWithUserData(id, email);
+    }
+
+
     @PutMapping("{id}/insuranceperiod")
     public ResponseEntity<String> addInsurancePeriod(@RequestBody CalcInsurancePeriodDto dto, @PathVariable("id") Integer id){
         return calculationService.addInsurancePeriod(dto, id);
@@ -42,6 +48,11 @@ public class CalculationController {
     @GetMapping("{id}/personaldata")
     public ResponseEntity<CalcGetPersonalDataDto> getPersonalData(@PathVariable("id") int id){
         return calculationService.getPersonalData(id);
+    }
+
+    @GetMapping("{id}/personaldata/{email}")
+    public ResponseEntity<CalcPerson> getPersonalDataFromProfile(@PathVariable("id") int id, @PathVariable("email") String email){
+        return calculationService.getPersonalDataFromProfile(id, email);
     }
 
     @PutMapping("{id}/crop")

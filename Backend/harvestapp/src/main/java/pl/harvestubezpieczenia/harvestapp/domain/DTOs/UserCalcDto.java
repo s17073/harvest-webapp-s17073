@@ -13,5 +13,6 @@ public class UserCalcDto {
     private Date dataKoncaOchrony;
     private String imie;
     private String nazwisko;
+    private String statusKalkulacji;
 
 }

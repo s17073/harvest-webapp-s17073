@@ -8,6 +8,7 @@ import pl.harvestubezpieczenia.harvestapp.domain.DTOs.*;
 import pl.harvestubezpieczenia.harvestapp.domain.mappers.CalcPersonMapper;
 import pl.harvestubezpieczenia.harvestapp.domain.model.*;
 import pl.harvestubezpieczenia.harvestapp.domain.ports.*;
+import pl.harvestubezpieczenia.harvestapp.infrastructure.adapters.repositories.UserRepoJpa;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -35,8 +36,9 @@ public class CalculationService {
     private final OfferRepo offerRepo;
     private final PolicyRepo policyRepo;
     private final UserService userService;
+    private final UserRepoJpa userRepoJpa;
 
-    public CalculationService(CalculationRepo calculationRepo, ApkQuestionRepo apkQuestionRepo, ApkCalculationRepo apkCalculationRepo, TerytRepo terytRepo, CalcPersonMapper calcPersonMapper, SoilClassRepo soilClassRepo, CropKindRepo cropKindRepo, CropVarietyRepo cropVarietyRepo, CoverRepo coverRepo, CropRepo cropRepo, LandRepo landRepo, LivestockKindRepo livestockKindRepo, LivestockRepo livestockRepo, InsuranceCompanyRepo insuranceCompanyRepo, InsuranceCompanyProviderService insuranceCompanyProviderService, OfferRepo offerRepo, PolicyRepo policyRepo, UserService userService) {
+    public CalculationService(CalculationRepo calculationRepo, ApkQuestionRepo apkQuestionRepo, ApkCalculationRepo apkCalculationRepo, TerytRepo terytRepo, CalcPersonMapper calcPersonMapper, SoilClassRepo soilClassRepo, CropKindRepo cropKindRepo, CropVarietyRepo cropVarietyRepo, CoverRepo coverRepo, CropRepo cropRepo, LandRepo landRepo, LivestockKindRepo livestockKindRepo, LivestockRepo livestockRepo, InsuranceCompanyRepo insuranceCompanyRepo, InsuranceCompanyProviderService insuranceCompanyProviderService, OfferRepo offerRepo, PolicyRepo policyRepo, UserService userService, UserRepoJpa userRepoJpa) {
         this.calculationRepo = calculationRepo;
         this.apkQuestionRepo = apkQuestionRepo;
         this.apkCalculationRepo = apkCalculationRepo;
@@ -55,6 +57,7 @@ public class CalculationService {
         this.offerRepo = offerRepo;
         this.policyRepo = policyRepo;
         this.userService = userService;
+        this.userRepoJpa = userRepoJpa;
     }
 
     public ResponseEntity<Integer> startNewCalculation() {
@@ -554,6 +557,33 @@ public class CalculationService {
         calculationRepo.saveCalculation(calculation);
 
         return new ResponseEntity<>(policy, HttpStatus.OK);
+
+    }
+
+    public ResponseEntity<CalcPerson> getPersonalDataFromProfile(int id, String email) {
+
+        User user = userRepoJpa.getPersonalDataFromProfile(email);
+
+        if(user == null) {
+            return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
+        } else {
+            return new ResponseEntity<>(calcPersonMapper.mapToDto(user), HttpStatus.OK);
+        }
+
+    }
+@Transactional
+    public ResponseEntity<Boolean> startNewCalculationWithUserData(int id, String email) {
+        try{
+            Calculation calculation = calculationRepo.getCalculationById(id);
+            User user = userRepoJpa.getUserByUsername(email);
+
+            calculation.setUbezpieczony(user);
+
+            return new ResponseEntity<>(true, HttpStatus.OK);
+        } catch (Exception e){
+            return new ResponseEntity<>(false, HttpStatus.BAD_REQUEST);
+        }
+
 
     }
 }

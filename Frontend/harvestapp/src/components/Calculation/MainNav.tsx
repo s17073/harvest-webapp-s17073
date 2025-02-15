@@ -16,10 +16,8 @@ export const MainNav: React.FC = () => {
 
       if (token !== null && (userType === "USER" || userType === "AGENT")) {
         setLog(true);
-        console.log("nawigacja OK!" + token);
       } else {
         setLog(false);
-        console.log("nawigacja NIE OK!" + token);
       }
     };
 

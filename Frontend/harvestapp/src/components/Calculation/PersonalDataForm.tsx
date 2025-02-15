@@ -11,6 +11,7 @@ import { Col, FloatingLabel, Form, Row } from "react-bootstrap";
 import BottomBar from "../Shared/BottomBar";
 import * as yup from "yup";
 import { Loading } from "../Shared/Loading";
+import { fetchPersonalDataUser } from "../../api/Calculation/fetchPersonalDataUser";
 
 interface IPersonalData {
   imie: string;
@@ -35,6 +36,9 @@ export const PersonalDataForm: React.FC = () => {
   const [error, setError] = useState<string | undefined>(undefined);
   const [errors, setErrors] = useState<any>({});
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [profile, setProfile] = useState<string | null>(
+    localStorage.getItem("userName"),
+  );
   const [policyHolder, setPolicyHolder] = useState<IPersonalData>({
     imie: "",
     nazwisko: "",
@@ -205,12 +209,38 @@ export const PersonalDataForm: React.FC = () => {
               fieldErrors.insured[field] = error.message;
             }
           }
-          console.log(error);
         });
 
         setErrors(fieldErrors);
       }
     }
+  };
+
+  const fetchDataUser = async () => {
+    const profileData: any = await fetchPersonalDataUser(
+      1,
+      profile ? profile : "",
+    );
+
+    fetchPowiaty(profileData.teryt.substring(0, 2)).then(setPowiaty);
+
+    fetchGminy(profileData.teryt.substring(0, 4)).then(setGminy);
+
+    const policyHolder: IPersonalData = {
+      imie: profileData.imie,
+      nazwisko: profileData.nazwisko,
+      pesel: profileData.pesel,
+      dataUrodzenia: profileData.dataUrodzenia,
+      adresEmail: profileData.adresEmail,
+      teryt: profileData.teryt,
+      kodPocztowy: profileData.kodPocztowy,
+      miejscowosc: profileData.miejscowosc,
+      ulica: profileData.ulica,
+      numerDomu: profileData.numerDomu,
+      numerMieszkania: profileData.numerMieszkania,
+    };
+
+    setPolicyHolder(policyHolder);
   };
 
   useEffect(() => {
@@ -219,9 +249,7 @@ export const PersonalDataForm: React.FC = () => {
       if (id) {
         const personalData = await fetchPersonalData(parseInt(id));
 
-        console.log(personalData?.ubezpieczajacy.teryt.substring(0, 2));
-
-        if (personalData) {
+        if (personalData?.ubezpieczajacy && profile === null) {
           fetchPowiaty(personalData.ubezpieczajacy.teryt.substring(0, 2)).then(
             setPowiaty,
           );
@@ -243,7 +271,11 @@ export const PersonalDataForm: React.FC = () => {
             numerDomu: personalData.ubezpieczajacy.numerDomu,
             numerMieszkania: personalData.ubezpieczajacy.numerMieszkania,
           };
-
+          setPolicyHolder(policyHolder);
+        } else {
+          fetchDataUser();
+        }
+        if (personalData?.ubezpieczony) {
           fetchPowiaty(personalData.ubezpieczony.teryt.substring(0, 2)).then(
             setPowiatyInsurer,
           );
@@ -266,14 +298,14 @@ export const PersonalDataForm: React.FC = () => {
             numerMieszkania: personalData.ubezpieczony.numerMieszkania,
           };
 
-          setPolicyHolder(policyHolder);
           setInsured(policyInsured);
         }
       }
+
       setIsLoading(false);
     };
     fetchData();
-  }, [id]);
+  }, [id, profile]);
 
   const copyPolicyHolderData = () => {
     setInsured(policyHolder);
@@ -291,7 +323,10 @@ export const PersonalDataForm: React.FC = () => {
       <div>
         <Form onSubmit={handleSubmit}>
           <div className="admin-upsert-fields">
-            <div className="section-heading">Dane ubezpieczającego</div>
+            <div className="section-heading">
+              Dane ubezpieczającego
+              {profile ? " - dane pobrane z konta użytkownika" : ""}
+            </div>
             <Row className="form-indent mb-3">
               <Row className="mt-3">
                 <Form.Label column lg="2">
@@ -305,6 +340,7 @@ export const PersonalDataForm: React.FC = () => {
                     onChange={(e) =>
                       setField("imie", setPolicyHolder, e.target.value)
                     }
+                    disabled={profile ? true : false}
                   />
                 </Col>
                 {errors.policyHolder?.imie && (
@@ -325,6 +361,7 @@ export const PersonalDataForm: React.FC = () => {
                     onChange={(e) =>
                       setField("nazwisko", setPolicyHolder, e.target.value)
                     }
+                    disabled={profile ? true : false}
                   />
                 </Col>
                 {errors.policyHolder?.nazwisko && (
@@ -345,6 +382,7 @@ export const PersonalDataForm: React.FC = () => {
                     onChange={(e) =>
                       setField("pesel", setPolicyHolder, e.target.value)
                     }
+                    disabled={profile ? true : false}
                   />
                 </Col>
                 {errors.policyHolder?.pesel && (
@@ -365,6 +403,7 @@ export const PersonalDataForm: React.FC = () => {
                     onChange={(e) =>
                       setField("dataUrodzenia", setPolicyHolder, e.target.value)
                     }
+                    disabled={profile ? true : false}
                   />
                 </Col>
                 {errors.policyHolder?.dataUrodzenia && (
@@ -385,6 +424,7 @@ export const PersonalDataForm: React.FC = () => {
                     onChange={(e) =>
                       setField("adresEmail", setPolicyHolder, e.target.value)
                     }
+                    disabled={profile ? true : false}
                   />
                 </Col>
                 {errors.policyHolder?.adresEmail && (
@@ -396,13 +436,12 @@ export const PersonalDataForm: React.FC = () => {
             </Row>
             <div className="section-heading ml-0">Adres do korespondencji</div>
             <Row className="form-indent mt-3">
-              {/* <Col lg="4"> */}
-              {/* <Row className="mb-3 mt-3"> */}
               <Form.Group
                 as={Col}
                 lg="4"
                 controlId="wojewodztwo"
                 className="mb-3"
+                disabled={profile ? true : false}
               >
                 <Form.Label className="teryt-label">Województwo</Form.Label>
 
@@ -411,6 +450,7 @@ export const PersonalDataForm: React.FC = () => {
                   onChange={(e) =>
                     setField("teryt", setPolicyHolder, e.target.value)
                   }
+                  disabled={profile ? true : false}
                 >
                   <option value="">Wybierz województwo</option>
                   {wojewodztwa.map((wojewodztwo) => (
@@ -437,7 +477,9 @@ export const PersonalDataForm: React.FC = () => {
                   onChange={(e) =>
                     setField("teryt", setPolicyHolder, e.target.value)
                   }
-                  disabled={policyHolder.teryt.length < 2}
+                  disabled={
+                    policyHolder.teryt.length < 2 || profile ? true : false
+                  }
                 >
                   <option value="">Wybierz powiat</option>
                   {powiaty.map((powiat) => (
@@ -461,7 +503,9 @@ export const PersonalDataForm: React.FC = () => {
                   onChange={(e) =>
                     setField("teryt", setPolicyHolder, e.target.value)
                   }
-                  disabled={policyHolder.teryt.length < 4}
+                  disabled={
+                    policyHolder.teryt.length < 4 || profile ? true : false
+                  }
                 >
                   <option value="">Wybierz gminę</option>
                   {gminy.map((gmina) => (
@@ -493,6 +537,7 @@ export const PersonalDataForm: React.FC = () => {
                     onChange={(e) =>
                       setField("kodPocztowy", setPolicyHolder, e.target.value)
                     }
+                    disabled={profile ? true : false}
                   />
                   {errors.policyHolder?.kodPocztowy && (
                     <span className="error-message">
@@ -516,6 +561,7 @@ export const PersonalDataForm: React.FC = () => {
                     onChange={(e) =>
                       setField("miejscowosc", setPolicyHolder, e.target.value)
                     }
+                    disabled={profile ? true : false}
                   />
                   {errors.policyHolder?.miejscowosc && (
                     <span className="error-message">
@@ -539,6 +585,7 @@ export const PersonalDataForm: React.FC = () => {
                     onChange={(e) =>
                       setField("ulica", setPolicyHolder, e.target.value)
                     }
+                    disabled={profile ? true : false}
                   />
                   {errors.policyHolder?.ulica && (
                     <span className="error-message">
@@ -562,6 +609,7 @@ export const PersonalDataForm: React.FC = () => {
                     onChange={(e) =>
                       setField("numerDomu", setPolicyHolder, e.target.value)
                     }
+                    disabled={profile ? true : false}
                   />
                   {errors.policyHolder?.numerDomu && (
                     <span className="error-message">
@@ -589,6 +637,7 @@ export const PersonalDataForm: React.FC = () => {
                         e.target.value,
                       )
                     }
+                    disabled={profile ? true : false}
                   />
                   {errors.policyHolder?.numerMieszkania && (
                     <span className="error-message">

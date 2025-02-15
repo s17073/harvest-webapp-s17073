@@ -3,6 +3,7 @@ package pl.harvestubezpieczenia.harvestapp.infrastructure.adapters.controllers;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import pl.harvestubezpieczenia.harvestapp.domain.DTOs.CalcPerson;
 import pl.harvestubezpieczenia.harvestapp.domain.DTOs.UserCalcDto;
 import pl.harvestubezpieczenia.harvestapp.domain.DTOs.UserPolDto;
 import pl.harvestubezpieczenia.harvestapp.domain.model.User;
@@ -22,8 +23,8 @@ public class UserController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<String> regiserUser(@RequestBody User user) {
-        return userService.registerUser(user);
+    public ResponseEntity<String> regiserUser(@RequestBody CalcPerson calcPerson) {
+        return userService.registerUser(calcPerson);
     }
 
     @PostMapping("/login")
