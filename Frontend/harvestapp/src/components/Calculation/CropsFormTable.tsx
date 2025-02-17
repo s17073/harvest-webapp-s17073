@@ -128,7 +128,7 @@ export const CropsFormTable: React.FC = () => {
                   <td>{crop.czyNasienna ? "TAK" : "NIE"}</td>
                   <td>{crop.powierzchnia}</td>
                   <td>{crop.wartosc}</td>
-                  <td>{crop.sumaUbezpieczenia}</td>
+                  <td>{crop.powierzchnia * crop.wartosc} zł</td>
                   <td className="dict-delete-icon">
                     <div onClick={() => handleEditCrop(crop.id)}>
                       {iconEdit()}

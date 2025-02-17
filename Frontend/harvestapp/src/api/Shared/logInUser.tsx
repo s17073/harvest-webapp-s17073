@@ -15,9 +15,6 @@ export const logInUser = async (
   const token = response.data.token;
   const role = response.data.role;
 
-  console.log(response);
-  console.log(token);
-
   localStorage.setItem("token", await token);
   localStorage.setItem("userType", await role);
   localStorage.setItem("userName", loginData.email);

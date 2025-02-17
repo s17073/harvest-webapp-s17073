@@ -2,6 +2,11 @@ import { Col, Container, Row } from "react-bootstrap";
 import { MainNav } from "../components/Calculation/MainNav";
 import { InsurancePeriodForm } from "../components/Calculation/InsurancePeriodForm";
 import { PersonalDataForm } from "../components/Calculation/PersonalDataForm";
+import { CropForm } from "../components/Calculation/CropForm";
+import { CropsFormTable } from "../components/Calculation/CropsFormTable";
+import { LivestockForm } from "../components/Calculation/LivestockForm";
+import { LivestockFormTable } from "../components/Calculation/LivestockFromTable";
+import { Offers } from "../components/Calculation/Offers";
 
 interface CalculationFormProps {
   CalculationStep: React.ComponentType;
@@ -42,17 +47,35 @@ export const CalculationForm: React.FC<CalculationFormProps> = ({
                     <div className="steps-section-name">2. dane osobowe</div>
                   </div>
                   <div className="steps-section-separator"></div>
-                  <div className="steps-section-step">
+                  <div
+                    className={`steps-section-step ${
+                      CalculationStep === CropsFormTable ||
+                      CalculationStep === CropForm
+                        ? "selected"
+                        : ""
+                    }`}
+                  >
                     <div className="steps-section-circle"></div>
                     <div className="steps-section-name">3. uprawy</div>
                   </div>
                   <div className="steps-section-separator"></div>
-                  <div className="steps-section-step">
+                  <div
+                    className={`steps-section-step ${
+                      CalculationStep === LivestockForm ||
+                      CalculationStep === LivestockFormTable
+                        ? "selected"
+                        : ""
+                    }`}
+                  >
                     <div className="steps-section-circle"></div>
                     <div className="steps-section-name">4. zwierzęta</div>
                   </div>
                   <div className="steps-section-separator"></div>
-                  <div className="steps-section-step">
+                  <div
+                    className={`steps-section-step ${
+                      CalculationStep === Offers ? "selected" : ""
+                    }`}
+                  >
                     <div className="steps-section-circle"></div>
                     <div className="steps-section-name">5. oferty</div>
                   </div>

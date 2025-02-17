@@ -65,10 +65,10 @@ export const UserCalc: React.FC = () => {
                                 Koniec ubezpieczenia
                               </th>
                               <th className="text-center align-middle lh-base px-0 px-xl-4">
-                                Imię ubezpieczonego
+                                Imię ubezpieczającego
                               </th>
                               <th className="text-center align-middle lh-base px-0 px-xl-4">
-                                Nazwisko ubezpieczonego
+                                Nazwisko ubezpieczającego
                               </th>
                               <th className="text-center align-middle lh-base px-0 px-xl-4">
                                 Wróć do kalkulacji

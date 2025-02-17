@@ -134,7 +134,7 @@ export const Offers: React.FC = () => {
 
                   <Col xl="4">
                     <p className="calc-offer-title">Składka:</p>
-                    <p className="calc-offer-content">{offer.skladka}</p>
+                    <p className="calc-offer-content">{offer.skladka} zł</p>
                   </Col>
                 </Row>
               </Col>
@@ -209,20 +209,20 @@ export const Offers: React.FC = () => {
                   <Row className="mt-3">
                     <Col lg="5">Suma ubezpieczenia upraw: </Col>
                     <Col lg="7" className="fst-italic">
-                      {offer.sumaUbezpieczeniaUpraw}
+                      {offer.sumaUbezpieczeniaUpraw} zł
                     </Col>
                   </Row>
                   <Row className="mt-3">
                     <Col lg="5">Suma ubezpieczenia zwierząt: </Col>
                     <Col lg="7" className="fst-italic">
-                      {offer.sumaUbezpieczeniaZwierzat}
+                      {offer.sumaUbezpieczeniaZwierzat} zł
                     </Col>
                   </Row>
                 </Row>
               </Row>
               <Row className="mx-3 my-3">
                 <Col className="d-flex justify-content-end calc-premium">
-                  Składka: {offer.skladka}
+                  Składka: {offer.skladka} zł
                 </Col>
               </Row>
               <BottomBar

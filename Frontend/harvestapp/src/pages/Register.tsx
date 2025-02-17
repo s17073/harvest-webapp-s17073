@@ -425,7 +425,7 @@ export const Register: React.FC = () => {
                           <Form.Group
                             as={Col}
                             lg="4"
-                            controlId="powiat"
+                            controlId="gmina"
                             className="mb-3"
                           >
                             <Form.Label className="teryt-label">

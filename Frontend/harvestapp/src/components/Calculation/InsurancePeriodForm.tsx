@@ -226,6 +226,7 @@ export const InsurancePeriodForm: React.FC = () => {
                           id={`question-${q.id}-true`}
                           name={`question-${q.id}`}
                           value={"Tak"}
+                          key={q.id}
                           checked={q.odpowiedz === true}
                           onChange={() => setChangeApkResponse(q.id, true)}
                         />

@@ -107,7 +107,7 @@ export const LivestockFormTable: React.FC = () => {
                   <td>{animal.liczba}</td>
                   <td>{animal.wartosc}</td>
                   <td>{animal.naMieso ? "TAK" : "NIE"}</td>
-                  <td>{animal.sumaUbezpieczenia}</td>
+                  <td>{animal.sumaUbezpieczenia} zł</td>
                   <td className="dict-delete-icon">
                     <div onClick={() => handleEditAnimal(animal.id)}>
                       {iconEdit()}

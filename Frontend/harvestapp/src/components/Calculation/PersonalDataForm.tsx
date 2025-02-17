@@ -36,9 +36,7 @@ export const PersonalDataForm: React.FC = () => {
   const [error, setError] = useState<string | undefined>(undefined);
   const [errors, setErrors] = useState<any>({});
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [profile, setProfile] = useState<string | null>(
-    localStorage.getItem("userName"),
-  );
+  const [profile] = useState<string | null>(localStorage.getItem("userName"));
   const [policyHolder, setPolicyHolder] = useState<IPersonalData>({
     imie: "",
     nazwisko: "",
@@ -272,6 +270,10 @@ export const PersonalDataForm: React.FC = () => {
             numerMieszkania: personalData.ubezpieczajacy.numerMieszkania,
           };
           setPolicyHolder(policyHolder);
+        } else if (
+          personalData?.ubezpieczajacy === undefined &&
+          profile === null
+        ) {
         } else {
           fetchDataUser();
         }
@@ -528,7 +530,7 @@ export const PersonalDataForm: React.FC = () => {
                   xl={2}
                   label="Kod pocztowy"
                   className="mb-3"
-                  contolId="kodPocztowy"
+                  controlId="kodPocztowy"
                 >
                   <Form.Control
                     type="text"
@@ -552,7 +554,7 @@ export const PersonalDataForm: React.FC = () => {
                   xl={10}
                   label="Miejscowość"
                   className="mb-3"
-                  contolId="miejscowosc"
+                  controlId="miejscowosc"
                 >
                   <Form.Control
                     type="text"
@@ -576,7 +578,7 @@ export const PersonalDataForm: React.FC = () => {
                   xl={8}
                   label="Ulica"
                   className="mb-3"
-                  contolId="ulica"
+                  controlId="ulica"
                 >
                   <Form.Control
                     type="text"
@@ -600,7 +602,7 @@ export const PersonalDataForm: React.FC = () => {
                   xl={2}
                   label="Nr. domu"
                   className="mb-3"
-                  contolId="numerDomu"
+                  controlId="numerDomu"
                 >
                   <Form.Control
                     type="text"
@@ -624,7 +626,7 @@ export const PersonalDataForm: React.FC = () => {
                   xl={2}
                   label="Nr. mieszkania"
                   className="mb-3"
-                  contolId="numerMieszkania"
+                  controlId="numerMieszkania"
                 >
                   <Form.Control
                     type="text"
@@ -834,7 +836,7 @@ export const PersonalDataForm: React.FC = () => {
                   xl={2}
                   label="Kod pocztowy"
                   className="mb-3"
-                  contolId="kodPocztowy"
+                  controlId="kodPocztowy"
                 >
                   <Form.Control
                     type="text"
@@ -857,7 +859,7 @@ export const PersonalDataForm: React.FC = () => {
                   xl={10}
                   label="Miejscowość"
                   className="mb-3"
-                  contolId="miejscowosc"
+                  controlId="miejscowosc"
                 >
                   <Form.Control
                     type="text"
@@ -880,7 +882,7 @@ export const PersonalDataForm: React.FC = () => {
                   xl={8}
                   label="Ulica"
                   className="mb-3"
-                  contolId="ulica"
+                  controlId="ulica"
                 >
                   <Form.Control
                     type="text"
@@ -903,7 +905,7 @@ export const PersonalDataForm: React.FC = () => {
                   xl={2}
                   label="Nr. domu"
                   className="mb-3"
-                  contolId="numerDomu"
+                  controlId="numerDomu"
                 >
                   <Form.Control
                     type="text"
@@ -926,7 +928,7 @@ export const PersonalDataForm: React.FC = () => {
                   xl={2}
                   label="Nr. mieszkania"
                   className="mb-3"
-                  contolId="numerMieszkania"
+                  controlId="numerMieszkania"
                 >
                   <Form.Control
                     type="text"

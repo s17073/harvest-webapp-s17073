@@ -20,11 +20,8 @@ export const Login: React.FC = () => {
       if ((await response) === true) {
         navigate("/");
       } else {
-        console.log("NIE UDAŁO SIĘ :< " + localStorage.getItem("token"));
       }
-    } catch (e) {
-      console.log("NIE UDAŁO SIĘ :< " + localStorage.getItem("token"));
-    }
+    } catch (e) {}
   };
 
   const handleSignin = async () => {

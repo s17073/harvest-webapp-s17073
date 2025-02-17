@@ -23,9 +23,7 @@ export const Profile: React.FC = () => {
   const [userName, setUserName] = useState<string | null>(
     localStorage.getItem("userName"),
   );
-  const [userRole, setUserRole] = useState<string | null>(
-    localStorage.getItem("userType"),
-  );
+  const [userRole] = useState<string | null>(localStorage.getItem("userType"));
   const navigate = useNavigate();
   const [user, setUser] = useState<IUser>({
     imie: "",
@@ -59,7 +57,6 @@ export const Profile: React.FC = () => {
         };
 
         setUser(userToSet);
-        console.log(user);
       } catch (e) {}
     };
     loadUser();
