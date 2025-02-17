@@ -1,7 +1,7 @@
 package pl.harvestubezpieczenia.harvestapp.domain.valueObjects;
 
 import jakarta.persistence.Embeddable;
-import pl.harvestubezpieczenia.harvestapp.domain.exceptions.EmptyCropKindNameException;
+import pl.harvestubezpieczenia.harvestapp.domain.exceptions.EmptyInsuranceCompanyNumberException;
 
 //TODO
 // Add validation rules
@@ -11,9 +11,9 @@ public record InsuranceCompanyNumber(String numerZakladu) {
 
     public InsuranceCompanyNumber{
         if(numerZakladu == null)
-            throw new EmptyCropKindNameException();
+            throw new EmptyInsuranceCompanyNumberException();
         if(numerZakladu.trim().isEmpty())
-            throw new EmptyCropKindNameException();
+            throw new EmptyInsuranceCompanyNumberException();
     }
 
 }
