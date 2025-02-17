@@ -4,11 +4,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import pl.harvestubezpieczenia.harvestapp.adapter.repositoryJpa.UserRepoJpa;
 import pl.harvestubezpieczenia.harvestapp.domain.DTOs.*;
 import pl.harvestubezpieczenia.harvestapp.domain.mappers.CalcPersonMapper;
 import pl.harvestubezpieczenia.harvestapp.domain.model.*;
 import pl.harvestubezpieczenia.harvestapp.domain.ports.*;
-import pl.harvestubezpieczenia.harvestapp.infrastructure.adapters.repositories.UserRepoJpa;
 
 import java.util.ArrayList;
 import java.util.Comparator;

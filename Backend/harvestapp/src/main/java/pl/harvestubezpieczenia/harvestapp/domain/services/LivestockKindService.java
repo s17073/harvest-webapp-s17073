@@ -29,13 +29,14 @@ public class LivestockKindService extends GenericService<LivestockKind, Livestoc
         List<LivestockListDto> livestockListDtos = new ArrayList<>();
 
         for(LivestockKind l: livestockKindRepo.getLivestockList()){
-            LivestockListDto livestockListDto = new LivestockListDto();
+            if(l.getDataModyfikacji().dataUsuniecia() == null) {
+                LivestockListDto livestockListDto = new LivestockListDto();
 
-            livestockListDto.setId(l.getIdRodzajZwierzecia());
-            livestockListDto.setNazwa(l.getNazwa().nazwa());
+                livestockListDto.setId(l.getIdRodzajZwierzecia());
+                livestockListDto.setNazwa(l.getNazwa().nazwa());
 
-            livestockListDtos.add(livestockListDto);
-
+                livestockListDtos.add(livestockListDto);
+            }
         }
 
         return new ResponseEntity<>(livestockListDtos, HttpStatus.OK);

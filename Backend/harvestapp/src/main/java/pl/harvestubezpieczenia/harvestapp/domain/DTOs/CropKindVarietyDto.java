@@ -1,5 +1,6 @@
 package pl.harvestubezpieczenia.harvestapp.domain.DTOs;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import pl.harvestubezpieczenia.harvestapp.domain.model.CropKind;
 import pl.harvestubezpieczenia.harvestapp.domain.model.CropVariety;
@@ -15,7 +16,9 @@ public class CropKindVarietyDto implements GenericDto {
     private String nazwaGatunku;
     private boolean czyAktywna;
 
+    @JsonIgnore
     private CropKind uprawa;
+    @JsonIgnore
     private CropVariety gatunek;
 
 }

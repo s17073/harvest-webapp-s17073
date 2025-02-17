@@ -37,7 +37,10 @@ public class CropKindVarietyService extends  GenericService<CropKindVariety, Cro
         for(CropKindVariety ckv: repo.getAllItems()){
             if (ckv.getCropVariety().getDataModyfikacji().dataUsuniecia() == null
             && ckv.getCropKind().getDataModyfikacji().dataUsuniecia() == null) activeItemsDto.add(map.mapToDto(ckv));
+            System.out.println(ckv.getCropVariety().getIdGatunek());
+            System.out.println(map.mapToDto(ckv).getIdGatunek());
         }
+
         if(activeItemsDto.isEmpty()) return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 
         return new ResponseEntity<>(activeItemsDto, HttpStatus.OK);
@@ -69,7 +72,8 @@ public class CropKindVarietyService extends  GenericService<CropKindVariety, Cro
     @Transactional
     public ResponseEntity<String> updateItem(CropKindVarietyDto dto, int id) {
         String nameOfRemovedItem;
-        CropVariety itemToUpdate = findCropVarietyForModify(id);
+
+        CropVariety itemToUpdate = findCropVarietyForModify(dto.getIdGatunek());
 
         if(itemToUpdate == null){
             return new ResponseEntity<>("ID: " + id + " not found.", HttpStatus.NOT_FOUND);
@@ -78,9 +82,11 @@ public class CropKindVarietyService extends  GenericService<CropKindVariety, Cro
         }
         nameOfRemovedItem = itemToUpdate.getName();
 
+
         itemToUpdate.setDataModyfikacji(new ModificationDate(itemToUpdate.getDataModyfikacji().dataDodania()));
 
         addItem(dto);
+
         cropVarietyRepo.addItem(itemToUpdate);
 
         return new ResponseEntity<>(nameOfRemovedItem + " successfully updated.", HttpStatus.OK);

@@ -8,6 +8,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import pl.harvestubezpieczenia.harvestapp.adapter.repositoryJpa.TerytRepoJpa;
 import pl.harvestubezpieczenia.harvestapp.domain.DTOs.CalcPerson;
 import pl.harvestubezpieczenia.harvestapp.domain.DTOs.UserCalcDto;
 import pl.harvestubezpieczenia.harvestapp.domain.DTOs.UserPolDto;
@@ -15,7 +16,6 @@ import pl.harvestubezpieczenia.harvestapp.domain.mappers.CalcPersonMapper;
 import pl.harvestubezpieczenia.harvestapp.domain.model.Teryt;
 import pl.harvestubezpieczenia.harvestapp.domain.model.User;
 import pl.harvestubezpieczenia.harvestapp.domain.ports.UserRepo;
-import pl.harvestubezpieczenia.harvestapp.infrastructure.adapters.repositories.TerytRepoJpa;
 
 import java.util.HashMap;
 import java.util.List;
